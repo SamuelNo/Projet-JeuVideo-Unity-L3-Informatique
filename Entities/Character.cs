@@ -21,7 +21,7 @@ abstract public class Character : MonoBehaviour
     public void setCurrentMP(int n){ currentMP = n; }
     public void setBaseAtk(int n){ baseAtk = n; }
     public void setDodgePrbability(float n){ dodgePrbability = n; } 
-    public void setDamageMultiplier(float n){ dammageMultiplier = n; } 
+    public void setDammageMultiplier(float n){ dammageMultiplier = n; } 
     public void setWeakenedMultiplier(float n){ weakenedMultiplier = n; } 
     public void setStrengthenedMultiplier(float n){ strengthenedMultiplier = n; } 
     public void setAttackType(AttackType t){ attackType = t; }
@@ -34,7 +34,7 @@ abstract public class Character : MonoBehaviour
     public int getCurrentMP(){ return currentMP; }
     public int getBaseAtk(){ return baseAtk; }
     public float getDodgePrbability(){ return dodgePrbability; }
-    public float getDamageMultiplier(){ return dammageMultiplier; }
+    public float getDammageMultiplier(){ return dammageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
@@ -53,11 +53,12 @@ abstract public class Character : MonoBehaviour
             return;
         }
 
-        // if dodge fails, damage is taken
+        // if dodge fails, dammage is taken
         currentHP -= n;
         if (currentHP < 0){
             currentHP = 0;
         }
+        Debug.Log("Le personnage a perdu "+n+"PV");
     }
     
 
