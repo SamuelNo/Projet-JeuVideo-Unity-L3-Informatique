@@ -52,20 +52,20 @@ public class Fighter : Character
             Debug.Log("Classe Fighter : Cette compétence ne doit viser qu'un personnage");
             return;
         }
-        // increases the dammage of the attack 
-        int dammageReceived = (int) ((float) baseAtk * strengthenedMultiplier);
-
-        // loses HP (50% of dammageReceived) 
-        currentHP -= (int) ((float) dammageReceived * .5f); // placed here so the lost HP is not influenced by the healer's lvl2 skill
-        if (currentHP < 0){
-            currentHP = 0;
-        }
-
         // increases dammage if the healer's lvl2 skill is used
-        dammageReceived = (int) ((float) dammageReceived * dammageMultiplier);
+        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier);
+
+        // increases the dammage of the attack 
+        dammageReceived = (int) ((float) dammageReceived * strengthenedMultiplier);
 
         // applies dammage to the target
         target[0].GetComponent<Character>().receiveDammage(dammageReceived, attackType, false); 
+
+        // loses HP (1/3 of maxHP)
+        this.currentHP -= (int) ((float) maxHP * .33f);
+        if (this.currentHP < 0){
+            this.currentHP = 0;
+        }
     }
 }
 

@@ -39,7 +39,7 @@ public class Protector : Character
 
         // for each target
         for (int i=0; i<target.Length; i++){
-            // applies dammage to the target
+            // applies basic attack to the target
             target[i].GetComponent<Character>().receiveDammage(dammageReceived, attackType, false); 
         }
     }

@@ -28,6 +28,14 @@ public class Mage : Character
         receiveDammage(dammageReceived);
     }
 
+    public new void baseAttack(GameObject target){
+        ///<param> target : the target of the attack </param> 
+        ///<summary> Calculate the amount of dammage and attacks the target </summary>
+
+        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier); 
+        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); // override so the attack is elemental
+    }
+
     override public void skillLvl1(GameObject target){
         ///<param> target : the target of the attack </param> 
         ///<summary> Calculates the amount of dammage and attacks the target (the amount of dammage is higher than the base attack) </summary>
@@ -39,7 +47,7 @@ public class Mage : Character
         dammageReceived = (int) ((float) dammageReceived * strengthenedMultiplier); 
 
         // uses target's receiveDammage() to apply dammage
-        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, false); // might be an elemental attack ? not sure, so not elemental for now. 
+        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); // might be an elemental attack ? not sure, so not elemental for now. 
     }
 
     override public void skillLvl2(GameObject [] target){} // to do (needs information from class Combat)
@@ -54,18 +62,14 @@ public class Mage : Character
         // increases dammage because the skill has to be stronger than a basic attack
         dammageReceived = (int) ((float) dammageReceived * strengthenedMultiplier); 
         
-        /*
-        // increases dammage x3 (multiple targets)
+        // dammage is increased (x3 for now) (multiple targets) and shared equally by all targets
         dammageReceived *= 3; 
-
-        // damage is shared equally by all targets
-        dammageReceived /= target.Lenght
-        */
+        dammageReceived /= target.Length;
 
         // for each target
         for (int i=0; i<target.Length; i++){
             // applies dammage to the target
-            target[i].GetComponent<Character>().receiveDammage(dammageReceived, attackType, false); 
+            target[i].GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); 
         }
     }
 }
