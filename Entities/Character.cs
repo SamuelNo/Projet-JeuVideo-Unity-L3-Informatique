@@ -5,11 +5,11 @@ abstract public class Character : MonoBehaviour
     // ---------- Attributes ---------- //
 
     [SerializeField] protected int lvl, maxHP, currentHP, maxMP, currentMP, baseAtk;
-    [SerializeField] protected float dodgePrbability, dammageMultiplier, weakenedMultiplier, strengthenedMultiplier;
+    [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
-    // weakenedMultiplier multiplies the dammage received : the attack's type is the character's weakness
-    // strengthenedMultiplier multiplies the dammage sent : a skill is used instead of a basic attack
+    // weakenedMultiplier multiplies the damage received : the attack's type is the character's weakness
+    // strengthenedMultiplier multiplies the damage sent : a skill is used instead of a basic attack
 
     
     // ---------- Set and Get ---------- //
@@ -20,8 +20,8 @@ abstract public class Character : MonoBehaviour
     public void setMaxMP(int n){ maxMP = n; }
     public void setCurrentMP(int n){ currentMP = n; }
     public void setBaseAtk(int n){ baseAtk = n; }
-    public void setDodgePrbability(float n){ dodgePrbability = n; } 
-    public void setDammageMultiplier(float n){ dammageMultiplier = n; } 
+    public void setDodgeProbability(float n){ dodgeProbability = n; } 
+    public void setDamageMultiplier(float n){ damageMultiplier = n; } 
     public void setWeakenedMultiplier(float n){ weakenedMultiplier = n; } 
     public void setStrengthenedMultiplier(float n){ strengthenedMultiplier = n; } 
     public void setAttackType(AttackType t){ attackType = t; }
@@ -33,8 +33,8 @@ abstract public class Character : MonoBehaviour
     public int getMaxMP(){ return maxMP; }
     public int getCurrentMP(){ return currentMP; }
     public int getBaseAtk(){ return baseAtk; }
-    public float getDodgePrbability(){ return dodgePrbability; }
-    public float getDammageMultiplier(){ return dammageMultiplier; }
+    public float getDodgeProbability(){ return dodgeProbability; }
+    public float getDamageMultiplier(){ return damageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
@@ -43,19 +43,20 @@ abstract public class Character : MonoBehaviour
 
     // ---------- Methods ---------- //
 
-    public void receiveDammage(int n){
-        ///<param> n : amount of dammage to be received by the character </param>
+    public void receiveDamage(int n){
+        ///<param> n : amount of damage to be received by the character </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
 
         // tries to dodge the attack 
-        if (Random.value < dodgePrbability){
+        if (Random.value < dodgeProbability){
             Debug.Log("esquivé !");
             return;
         }
 
-        // if dodge fails, dammage is taken
+        // if dodge fails, damage is taken
         currentHP -= n;
         if (currentHP < 0){
+            n += currentHP;
             currentHP = 0;
         }
         Debug.Log("Le personnage a perdu "+n+"PV");
@@ -76,26 +77,26 @@ abstract public class Character : MonoBehaviour
         ///<param>  amount of MP used by the character </param> 
         ///<summary> Reduces n amount of MP </summary>
 
-        if (currentMP > n){
+        if (currentMP >= n){
             currentMP -= n;
         } else {
-            currentMP = 0;
+            Debug.Log("Il n'y a pas assez de points de magie, cette méthode ne devrait pas être utilisée"); // might change to exception
         }
     }
 
     public void baseAttack(GameObject target){
         ///<param> target : the target of the attack </param> 
-        ///<summary> Calculate the amount of dammage and attacks the target </summary>
+        ///<summary> Calculate the amount of damage and attacks the target </summary>
 
-        // calculates dammage (dammage is increased if the healer's lvl2 skill is used)
-        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier); 
+        // calculates damage (damage is increased if the healer's lvl2 skill is used)
+        int damageReceived = (int) ((float) baseAtk * damageMultiplier); 
 
-        // uses target's receiveDammage() to apply dammage
-        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, false); 
+        // uses target's receiveDamage() to apply damage
+        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
     }
 
     abstract public void onClick(); 
-    abstract public void receiveDammage(int attack, AttackType attackType, bool elemental);
+    abstract public void receiveDamage(int attack, AttackType attackType, bool elemental);
     abstract public void skillLvl1(GameObject target);
     abstract public void skillLvl2(GameObject [] target);
     abstract public void skillLvl3(GameObject [] target);

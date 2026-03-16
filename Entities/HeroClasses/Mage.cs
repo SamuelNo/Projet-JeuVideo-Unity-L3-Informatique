@@ -3,7 +3,11 @@ using UnityEngine;
 public class Mage : Character
 {
     // ---------- Initialisation ---------- //
-    void Start(){
+    void Awake(){
+        this.attackType = AttackType.Ranged;
+        this.weakness = Weakness.Melee;
+    }
+    void Reset(){
         this.attackType = AttackType.Ranged;
         this.weakness = Weakness.Melee;
     }
@@ -12,64 +16,70 @@ public class Mage : Character
     
     override public void onClick(){}
 
-    override public void receiveDammage(int attack, AttackType atkType, bool elemental){
-        ///<param> attack : the amount of dammage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
-        ///<summary> Calculates the dammage to be received depending on character's weaknesses and applies it </summary>
+    override public void receiveDamage(int attack, AttackType atkType, bool elemental){
+        ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
+        ///<summary> Calculates the damage to be received depending on character's weaknesses and applies it </summary>
 
-        // takes original amount of attack dammage
-        int dammageReceived = attack;
+        // takes original amount of attack damage
+        int damageReceived = attack;
 
-        // if the attack type is this character's weakness (ranged), dammage worsens 
+        // if the attack type is this character's weakness (ranged), damage worsens 
         if (string.Equals(this.weakness.ToString(), atkType.ToString())){ 
-            dammageReceived = (int) ((float)dammageReceived * weakenedMultiplier); 
+            damageReceived = (int) ((float)damageReceived * weakenedMultiplier); 
         }
 
-        // applies dammage (and tries dodging)
-        receiveDammage(dammageReceived);
+        // applies damage (and tries dodging)
+        receiveDamage(damageReceived);
     }
 
     public new void baseAttack(GameObject target){
         ///<param> target : the target of the attack </param> 
-        ///<summary> Calculate the amount of dammage and attacks the target </summary>
+        ///<summary> Calculate the amount of damage and attacks the target </summary>
 
-        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier); 
-        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); // override so the attack is elemental
+        int damageReceived = (int) ((float) baseAtk * damageMultiplier); 
+        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true); // override so the attack is elemental
     }
 
     override public void skillLvl1(GameObject target){
         ///<param> target : the target of the attack </param> 
-        ///<summary> Calculates the amount of dammage and attacks the target (the amount of dammage is higher than the base attack) </summary>
+        ///<summary> Calculates the amount of damage and attacks the target (the amount of damage is higher than the base attack) </summary>
 
-        // increases dammage if the healer's lvl2 skill is used
-        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier);
+        // uses MP (10MP)
+        useMP(10);
+
+        // increases damage if the healer's lvl2 skill is used
+        int damageReceived = (int) ((float) baseAtk * damageMultiplier);
         
-        // increases dammage because the skill has to be stronger than a basic attack
-        dammageReceived = (int) ((float) dammageReceived * strengthenedMultiplier); 
+        // increases damage because the skill has to be stronger than a basic attack
+        damageReceived = (int) ((float) damageReceived * strengthenedMultiplier); 
 
-        // uses target's receiveDammage() to apply dammage
-        target.GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); // might be an elemental attack ? not sure, so not elemental for now. 
+        // uses target's receiveDamage() to apply damage
+        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true); // might be an elemental attack ? not sure, so not elemental for now. 
     }
 
     override public void skillLvl2(GameObject [] target){} // to do (needs information from class Combat)
 
     override public void skillLvl3(GameObject [] target){
         ///<param> target : the targets of the attack </param> 
-        ///<summary> Calculates the amount of dammage and attacks the targets (the amount of dammage is higher than skillLvl1()) </summary>
+        ///<summary> Calculates the amount of damage and attacks the targets (the amount of damage is higher than skillLvl1()) </summary>
          
-        // increases dammage if the healer's lvl2 skill is used
-        int dammageReceived = (int) ((float) baseAtk * dammageMultiplier);
+        // uses MP (30MP)
+        useMP(30);
+
+        // increases damage if the healer's lvl2 skill is used
+        int damageReceived = (int) ((float) baseAtk * damageMultiplier);
         
-        // increases dammage because the skill has to be stronger than a basic attack
-        dammageReceived = (int) ((float) dammageReceived * strengthenedMultiplier); 
+        // increases damage because the skill has to be stronger than a basic attack
+        damageReceived = (int) ((float) damageReceived * strengthenedMultiplier); 
         
-        // dammage is increased (x3 for now) (multiple targets) and shared equally by all targets
-        dammageReceived *= 3; 
-        dammageReceived /= target.Length;
+        // damage is increased (x3 for now) (multiple targets) and shared equally by all targets
+        damageReceived *= 3; 
+        damageReceived /= target.Length;
 
         // for each target
         for (int i=0; i<target.Length; i++){
-            // applies dammage to the target
-            target[i].GetComponent<Character>().receiveDammage(dammageReceived, attackType, true); 
+            // applies damage to the target
+            target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true); 
         }
     }
 }

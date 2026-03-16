@@ -3,7 +3,11 @@ using UnityEngine;
 public class Healer : Character
 {
     // ---------- Initialisation ---------- //
-    void Start(){
+    void Awake(){
+        this.attackType = AttackType.Neutral;
+        this.weakness = Weakness.All;
+    }
+    void Reset(){
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.All;
     }
@@ -12,31 +16,34 @@ public class Healer : Character
     
     override public void onClick(){}
 
-    override public void receiveDammage(int attack, AttackType atkType, bool elemental){
-        ///<param> attack : the amount of dammage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
-        ///<summary> Calculates the dammage to be received depending on character's weaknesses and applies it </summary>
+    override public void receiveDamage(int attack, AttackType atkType, bool elemental){
+        ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
+        ///<summary> Calculates the damage to be received depending on character's weaknesses and applies it </summary>
 
-        // takes original amount of attack dammage
-        int dammageReceived = attack;
+        // takes original amount of attack damage
+        int damageReceived = attack;
         
-        // character is weak to all attack types (except neutral ?), dammage worsens
+        // character is weak to all attack types (except neutral ?), so damage worsens
         if (atkType != AttackType.Neutral){
-            dammageReceived = (int) ((float)dammageReceived * weakenedMultiplier); 
+            damageReceived = (int) ((float)damageReceived * weakenedMultiplier); 
         }
 
-        // if the attack is elemental, dammage worsens
+        // if the attack is elemental, damage worsens
         if (elemental){
-            dammageReceived = (int) ((float)dammageReceived * weakenedMultiplier);
+            damageReceived = (int) ((float)damageReceived * weakenedMultiplier);
         }
 
-        // applies dammage (and tries dodging)
-        receiveDammage(dammageReceived);
+        // applies damage (and tries dodging)
+        receiveDamage(damageReceived);
     }
 
     override public void skillLvl1(GameObject target){
         ///<param> target : the target of the skill </param> 
         ///<summary> Restores a certain amount of HP to the target. For now, 10% of the target's maxHP will be restored </summary>
         
+        // uses MP (10MP)
+        useMP(10);
+
         // calcultates 10% of target's maxHP
         int healAmount = target.GetComponent<Character>().getMaxHP(); 
         healAmount = (int) ((float) healAmount * .1f);
@@ -56,6 +63,9 @@ public class Healer : Character
             Debug.Log("Classe Healer : Seul l'allié doit être entré en paramètres");
             return;
         }
+
+        // uses MP (30MP)
+        useMP(30);
 
         // heals themselves
         int healAmount = (int) ((float) this.maxHP * .5f);
