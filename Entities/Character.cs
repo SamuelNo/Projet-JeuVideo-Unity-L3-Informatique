@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 abstract public class Character : MonoBehaviour
 {
@@ -8,9 +9,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
-    // weakenedMultiplier multiplies the damage received : the attack's type is the character's weakness
-    // strengthenedMultiplier multiplies the damage sent : a skill is used instead of a basic attack
-
+    
     
     // ---------- Set and Get ---------- //
 
@@ -48,7 +47,7 @@ abstract public class Character : MonoBehaviour
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
 
         // tries to dodge the attack 
-        if (Random.value < dodgeProbability){
+        if (UnityEngine.Random.value < dodgeProbability){
             Debug.Log("esquivé !");
             return;
         }
@@ -59,7 +58,7 @@ abstract public class Character : MonoBehaviour
             n += currentHP;
             currentHP = 0;
         }
-        Debug.Log("Le personnage a perdu "+n+"PV");
+        //Debug.Log("Le personnage a perdu "+n+"PV");
     }
     
 
@@ -80,7 +79,7 @@ abstract public class Character : MonoBehaviour
         if (currentMP >= n){
             currentMP -= n;
         } else {
-            Debug.Log("Il n'y a pas assez de points de magie, cette méthode ne devrait pas être utilisée"); // might change to exception
+            Debug.LogException(new Exception("[Classe Character] Il n'y a pas assez de points de magie, cette méthode ne devrait pas être utilisée")); 
         }
     }
 
