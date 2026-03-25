@@ -1,42 +1,30 @@
 using UnityEngine;
 
-abstract public class Enemy : MonoBehavior 
+abstract public class Enemy : MonoBehaviour 
 {
     // ---------- Attributes ---------- //
 
     [SerializeField] protected int maxHP, currentHP, maxMP, currentMP;
     [SerializeField] protected float dodgeProbability;
-    [SerializeField] protected AttackType resistance, attackType;
+    [SerializeField] protected AttackType resistance, attackTypeUsed;
     [SerializeField] protected bool elementalAttack;
 
     // ---------- Set and Get ---------- //
 
-    public void setMaxHP(int n){ maxHP = n; }
-    public void setCurrentHP(int n){ currentHP = n; }
-    public void setMaxMP(int n){ maxMP = n; }
-    public void setCurrentMP(int n){ currentMP = n; }
-    public void setDodgeProbability(float n){ dodgeProbability = n; } 
-    public void setResistance(AttackType t){ resistance = t; }
-    public void setAttackType(AttackType t){ attackType = t; }
-    public void setElementalAttack(bool value){ elementalAttack = value; }
+    public int MaxHP { get => maxHP; protected set => maxHP = value; }
+    public int CurrentHP { get => currentHP; protected set => currentHP = value; }
+    public int MaxMP { get => maxMP; protected set => maxMP = value; }
+    public int CurrentMP { get => currentMP; protected set => currentMP = value; }
+    public float DodgeProbability { get => dodgeProbability; protected set => dodgeProbability = value; } 
+    public AttackType Resistance{ get => resistance; protected set => resistance = value; }
+    public AttackType AttackTypeUsed { get => attackTypeUsed; protected set => attackTypeUsed = value; }
+    public bool ElementalAttack { get => elementalAttack; protected set => elementalAttack = value; }
 
-    public int getMaxHP(){ return maxHP; }
-    public int getCurrentHP(){ return currentHP; }
-    public int getMaxMP(){ return maxMP; }
-    public int getCurrentMP(){ return currentMP; }
-    public float getDodgeProbability(){ return dodgeProbability; }
-    public AttackType getResistance(){ return resistance; }
-    public AttackType getAttackType(){ return attackType; }
 
-    public bool isElementalAttack
-    { 
-        get { return elementalAttack; }
-        set { elementalAttack = value; }
-    }
 
     // ---------- Methods ---------- //
 
-    public void receiveDamage(int n){
+    public void ReceiveDamage(int n){
         ///<param> n : amount of damage to be received by the enemy </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
 
@@ -55,7 +43,7 @@ abstract public class Enemy : MonoBehavior
         Debug.Log("L'adversaire a perdu "+n+"PV");
     }
 
-    public void receiveHeal(int n){
+    public void ReceiveHeal(int n){
         ///<param> n : amount of HP to be received by the enemy </param> 
         ///<summary> Brings back n amount of HP </summary>
 
@@ -65,9 +53,9 @@ abstract public class Enemy : MonoBehavior
         }
     }
 
-    abstract public void onClick(); 
-    abstract public void receiveDamage(int attack, AttackType attackType, bool elemental);
-    abstract public void targetedAttack(GameObject [] target);
-    abstract public void aoeAttack(GameObject [] target);
+    abstract public void OnClick(); 
+    abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);
+    abstract public void TargetedAttack(GameObject target);
+    abstract public void AoeAttack(GameObject [] target);
 
 }
