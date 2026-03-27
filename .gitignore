@@ -1,0 +1,15 @@
+# On ignore les dossiers de cache Unity, où qu'ils soient
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Ll]ogs/
+[MemoryCaptures]/
+
+# Fichiers de solution Visual Studio
+*.csproj
+*.unitypackage
+*.sln
+
+# Fichiers système Mac
+.DS_Store

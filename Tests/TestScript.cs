@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class TestScript
+public class TestScript : MonoBehaviour
 {
     GameObject fighterGameObject, healerGameObject, mageGameObject, protectorGameObject;
     Character fighter, healer, mage, protector;
