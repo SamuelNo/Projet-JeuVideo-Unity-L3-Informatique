@@ -29,7 +29,7 @@ public class Boss : Enemy
     ///<summary> Attacks the target (depends on the HP of the boss) </summary>
     
         int damage = (int)(MaxHP * 0.15); //15% of the boss's HP 
-        target.GetComponent<Character>().ReceiveDamage(damage, this.attackType, this.elementalAttack);
+        target.GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         
     }
 
@@ -41,17 +41,17 @@ public class Boss : Enemy
 
         //will be dealt to multiple target
         for (int i=0; i<target.Length; i++){
-            target[i].GetComponent<Character>().ReceiveDamage(damage, this.attackType, this.elementalAttack);
+            target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
     }
 
-    public void specialAttack(GameObject [] target){
+    public void SpecialAttack(GameObject [] target){
     ///<param> target : the targets of the attack </param> 
     ///<summary> Attacks the targets </summary>
     
-        int damage = (int)(MaxHP * 0.3f); //30% of its HP
+        int damage = (int)(MaxHP * 0.25f); //25% of its HP
         for (int i=0; i<target.Length; i++){
-            target[i].GetComponent<Character>().ReceiveDamage(damage, this.attackType, this.elementalAttack);
+            target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
     }
 }

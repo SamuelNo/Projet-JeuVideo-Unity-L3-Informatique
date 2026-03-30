@@ -28,7 +28,7 @@ public class Monster : Enemy
     ///<summary> Attacks the target (depends on the HP of the monster) </summary>
     
         int damage = (int)(MaxHP * 0.1f); //10% of the monster's HP 
-        target.GetComponent<Character>().ReceiveDamage(damage, this.attackType, this.elementalAttack);
+        target.GetComponent<Character>().receiveDamage(damage, this.AttackTypeUsed, this.ElementalAttack);
         
     }
 
@@ -40,7 +40,7 @@ public class Monster : Enemy
 
         //will be dealt to multiple target
         for (int i=0; i<target.Length; i++){
-            target[i].GetComponent<Character>().ReceiveDamage(damage, this.attackType, this.elementalAttack);
+            target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
     }
 

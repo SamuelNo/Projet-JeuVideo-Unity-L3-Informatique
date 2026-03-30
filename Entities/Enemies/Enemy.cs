@@ -11,14 +11,14 @@ abstract public class Enemy : MonoBehaviour
 
     // ---------- Set and Get ---------- //
 
-    public int MaxHP { get => maxHP; protected set => maxHP = value; }
-    public int CurrentHP { get => currentHP; protected set => currentHP = value; }
-    public int MaxMP { get => maxMP; protected set => maxMP = value; }
-    public int CurrentMP { get => currentMP; protected set => currentMP = value; }
-    public float DodgeProbability { get => dodgeProbability; protected set => dodgeProbability = value; } 
-    public AttackType Resistance{ get => resistance; protected set => resistance = value; }
-    public AttackType AttackTypeUsed { get => attackTypeUsed; protected set => attackTypeUsed = value; }
-    public bool ElementalAttack { get => elementalAttack; protected set => elementalAttack = value; }
+    public int MaxHP { get => maxHP;  set => maxHP = value; }
+    public int CurrentHP { get => currentHP;  set => currentHP = value; }
+    public int MaxMP { get => maxMP;  set => maxMP = value; }
+    public int CurrentMP { get => currentMP;  set => currentMP = value; }
+    public float DodgeProbability { get => dodgeProbability;  set => dodgeProbability = value; } 
+    public AttackType Resistance{ get => resistance;  set => resistance = value; }
+    public AttackType AttackTypeUsed { get => attackTypeUsed;  set => attackTypeUsed = value; }
+    public bool ElementalAttack { get => elementalAttack;  set => elementalAttack = value; }
 
 
 
