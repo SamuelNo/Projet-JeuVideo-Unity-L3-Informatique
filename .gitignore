@@ -5,17 +5,20 @@
 /[Uu]nityProject/[Bb]uild/
 /[Uu]nityProject/[Ll]ogs/
 /[Uu]nityProject/[Uu]serSettings/
-MemoryCaptures/
+/[Uu]nityProject/[Aa]ssets/[Aa]ssetStoreTools*
 
 # Fichiers de solution Visual Studio et IDE
 *.csproj
-*.unitypackageet
 *.sln
+*.slnx
+*.swp
 *.userprefs
 *.mono
 *.pidb
 *.booproj
-*.slnx
+*.unitypackage
 
-# Fichiers système Mac
+# Fichiers système Mac et Windows
 .DS_Store
+**/.DS_Store
+Thumbs.db
