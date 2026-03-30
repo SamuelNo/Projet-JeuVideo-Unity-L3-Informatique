@@ -1,15 +1,20 @@
-# On ignore les dossiers de cache Unity, où qu'ils soient
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Ll]ogs/
-[MemoryCaptures]/
+# On ignore les dossiers de cache Unity
+/[Uu]nityProject/[Ll]ibrary/
+/[Uu]nityProject/[Tt]emp/
+/[Uu]nityProject/[Oo]bj/
+/[Uu]nityProject/[Bb]uild/
+/[Uu]nityProject/[Ll]ogs/
+/[Uu]nityProject/[Uu]serSettings/
+MemoryCaptures/
 
-# Fichiers de solution Visual Studio
+# Fichiers de solution Visual Studio et IDE
 *.csproj
-*.unitypackage
+*.unitypackageet
 *.sln
+*.userprefs
+*.mono
+*.pidb
+*.booproj
 
 # Fichiers système Mac
 .DS_Store
