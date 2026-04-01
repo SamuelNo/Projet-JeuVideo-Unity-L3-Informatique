@@ -14,11 +14,13 @@ public class EnemyTests
     [SetUp]
     public void SetUp()
     {
+        // Create enemies
         monsterGameObject = new GameObject();
         bossGameObject = new GameObject();
         monster = monsterGameObject.AddComponent<Monster>();
         boss = bossGameObject.AddComponent<Boss>();
 
+        // Create characters
         fighterGameObject = new GameObject();
         healerGameObject = new GameObject();
         protectorGameObject = new GameObject();
@@ -32,19 +34,27 @@ public class EnemyTests
     [TearDown]
     public void Teardown()
     {
+        // Clean all created objects after each test
+
+        // Enemies
         UnityEngine.Object.DestroyImmediate(monsterGameObject);
         UnityEngine.Object.DestroyImmediate(bossGameObject);
 
+        // Characters
         UnityEngine.Object.DestroyImmediate(fighterGameObject);
         UnityEngine.Object.DestroyImmediate(healerGameObject);
         UnityEngine.Object.DestroyImmediate(protectorGameObject);
         UnityEngine.Object.DestroyImmediate(mageGameObject);
     }
 
-    // Monster
+
+    // -------- Monster Tests --------
+
     [Test]
     public void MonsterReceiveDamage()
     {
+        //Monster takes normal damage
+
         // Declaration
         monster.MaxHP = 20;
         monster.CurrentHP = 20;
@@ -66,6 +76,8 @@ public class EnemyTests
         monster.Resistance = AttackType.Ranged;
 
         // Test
+        // The monster has resistance -> damage should be reduced
+        // (40% reduction -> 6 damage taken)
         monster.ReceiveDamage(10, AttackType.Ranged, false);
         Assert.AreEqual(14, monster.CurrentHP);
     }
@@ -81,6 +93,7 @@ public class EnemyTests
         monster.ReceiveHeal(10);
         Assert.AreEqual(20, monster.CurrentHP);
 
+        // Heal should not exceed MaxHP
         monster.ReceiveHeal(10);
         Assert.AreEqual(20, monster.CurrentHP);
     }
@@ -88,7 +101,7 @@ public class EnemyTests
     [Test]
     public void MonsterTargetedAttack()
     {
-        // Declaration
+        // Setup targets
         // target 1 : fighter
         fighter.setMaxHP(20);
         fighter.setCurrentHP(20);
@@ -101,27 +114,33 @@ public class EnemyTests
         healer.setDodgeProbability(0);
         healer.setWeakenedMultiplier(2);
 
-        // monster
+        // Setup monster
         monster.MaxHP = 20;
         monster.AttackTypeUsed = AttackType.Ranged;
         monster.ElementalAttack = false;
 
         // Test
-        // attack the fighter, he's weak to ranged attack : monster.MaxHP * 0.1 * fighter.Weakness = 4HP should be removed  
+
+        // -- Ranged attack --
+        // fighter weak -> increased damage : monster.MaxHP * 0.1 * fighter.Weakness = 4HP should be removed  
         monster.TargetedAttack(fighterGameObject);
         Assert.AreEqual(16, fighter.getCurrentHP());
 
-        // attack the healer, he's weak to ranged attack : monster.MaxHP * 0.1 * healer.Weakness = 4HP should be removed
+        // healer weak to ranged attack : monster.MaxHP * 0.1 * healer.Weakness = 4HP should be removed
         monster.TargetedAttack(healerGameObject);
         Assert.AreEqual(16, healer.getCurrentHP());
 
-        // attack type of the monster changed, now it will do melee attack
+
+
+        // attack type of the monster changed -> melee attack type
         monster.AttackTypeUsed = AttackType.Melee;
-        // attack the fighter, he isn't weak to ranged attack : monster.MaxHP * 0.1 = 2HP should be removed
+
+        // -- Melee attack --
+        // fighter not weak -> normal damage : monster.MaxHP * 0.1 = 2HP should be removed
         monster.TargetedAttack(fighterGameObject);
         Assert.AreEqual(14, fighter.getCurrentHP());
 
-        // attack the healer, he's weak to melee attack : monster.MaxHP * 0.1 * healer.Weakness = 4HP should be removed
+        // healer weak : monster.MaxHP * 0.1 * healer.Weakness = 4HP should be removed
         monster.TargetedAttack(healerGameObject);
         Assert.AreEqual(12, healer.getCurrentHP());
 
@@ -130,30 +149,28 @@ public class EnemyTests
     [Test]
     public void MonsterAoeAttack()
     {
-        // Declaration
         // List of targets
         GameObject[] target = new GameObject[2] { protectorGameObject, mageGameObject };
 
-        // Definition of the protector
+        // Protector
         protector.setMaxHP(30);
         protector.setCurrentHP(30);
         protector.setDodgeProbability(0);
         protector.setWeakenedMultiplier(2);
 
-
-        // Definition of the mage
+        // Mage
         mage.setMaxHP(30);
         mage.setCurrentHP(30);
         mage.setDodgeProbability(0);
         mage.setWeakenedMultiplier(2);
 
-        // monster
+        // Monster setup
         monster.MaxHP = 100;
         monster.AttackTypeUsed = AttackType.Melee;
         monster.ElementalAttack = false;
 
         // Test
-        // attack the protector and the mage,
+        // attack the protector and the mage
         // The protector isn't weak to melee attack : monster.MaxHP * 0.1 = 10HP should be removed
         // The mage's weak to melee attack : monster.MaxHP * 0.1 * mage.WeaknessMultiplier = 20HP should be removed
         monster.AoeAttack(target);
@@ -164,11 +181,11 @@ public class EnemyTests
     [Test]
     public void MonsterDodge()
     {
-        // set the dodge probability of the monster to 100 to make sure it will dodge 
+        // 100% dodge -> should take no damage
         monster.DodgeProbability = 100;
         monster.CurrentHP = 20;
         monster.ReceiveDamage(10);
-        Assert.AreEqual(20, monster.CurrentHP); // no damage should be taken
+        Assert.AreEqual(20, monster.CurrentHP); 
     }
 
 
@@ -180,7 +197,7 @@ public class EnemyTests
 
 
 
-    // Boss
+    // -------- Boss Tests --------
     [Test]
     public void BossReceiveDamage()
     {
@@ -190,6 +207,7 @@ public class EnemyTests
         boss.DodgeProbability = 0;
 
         // Test
+        // Receive normal damage
         boss.ReceiveDamage(10);
         Assert.AreEqual(10, boss.CurrentHP);
     }
@@ -204,6 +222,7 @@ public class EnemyTests
         boss.Resistance = AttackType.Melee;
 
         // Test
+        // Resistance reduce damage
         boss.ReceiveDamage(10, AttackType.Melee, false);
         Assert.AreEqual(16, boss.CurrentHP);
     }
@@ -219,6 +238,7 @@ public class EnemyTests
         boss.ReceiveHeal(10);
         Assert.AreEqual(20, boss.CurrentHP);
 
+        // Overheal check
         boss.ReceiveHeal(10);
         Assert.AreEqual(20, boss.CurrentHP);
     }
@@ -235,7 +255,7 @@ public class EnemyTests
     [Test]
     public void BossTargetedAttack()
     {
-        // Declaration
+        // Setup targets
         // target 1 : protector
         protector.setMaxHP(30);
         protector.setCurrentHP(30);
@@ -248,22 +268,26 @@ public class EnemyTests
         mage.setDodgeProbability(0);
         mage.setWeakenedMultiplier(1.5f);
 
-        // boss
+        // Setup boss
         boss.MaxHP = 70;
         boss.CurrentHP = 50;
         boss.AttackTypeUsed = AttackType.Melee;
         boss.ElementalAttack = false;
 
         // Tests
-        // protector isn't weak to melee attack : (int)(boss.MaxHP * 0.15) = 10HP should be removed
-        // mage is weak to melee attack : (int)(boss.MaxHP * 0.15 * mage.WeakenedMultiplier) = 15HP
+
+        // -- Melee attack --
+        // protector not weak -> normal damage : (int)(boss.MaxHP * 0.15) = 10HP should be removed
+        // mage weak -> increased damage : (int)(boss.MaxHP * 0.15 * mage.WeakenedMultiplier) = 15HP
         boss.TargetedAttack(protectorGameObject);
         Assert.AreEqual(20, protector.getCurrentHP());
 
         boss.TargetedAttack(mageGameObject);
         Assert.AreEqual(15, mage.getCurrentHP());
 
-        // attack type of the boss : elemental ranged attack
+
+
+        // Elemental ranged attack
         // protector's weak to elemental attack
         // mage isn't
         boss.AttackTypeUsed = AttackType.Ranged;
@@ -279,24 +303,23 @@ public class EnemyTests
     [Test]
     public void BossAoeAttack()
     {
-        // Declaration
         // List of targets
         GameObject[] target = new GameObject[2] { fighterGameObject, healerGameObject };
 
-        // Definition of the fighter
+        // Fighter
         fighter.setMaxHP(30);
         fighter.setCurrentHP(30);
         fighter.setDodgeProbability(0);
         fighter.setWeakenedMultiplier(2);
 
 
-        // Definition of the healer
+        // Healer
         healer.setMaxHP(30);
         healer.setCurrentHP(30);
         healer.setDodgeProbability(0);
         healer.setWeakenedMultiplier(2);
 
-        // boss
+        // Boss setup
         boss.MaxHP = 80;
         boss.AttackTypeUsed = AttackType.Melee;
         boss.ElementalAttack = false;
@@ -325,7 +348,7 @@ public class EnemyTests
         protector.setDodgeProbability(0);
         protector.setWeakenedMultiplier(1.4f);
 
-        // boss
+        // Boss setup
         Boss boss_var = boss as Boss;
         boss_var.MaxHP = 120;
         boss_var.AttackTypeUsed = AttackType.Melee;
@@ -336,7 +359,7 @@ public class EnemyTests
         boss_var.SpecialAttack(target);
         Assert.AreEqual(30, protector.getCurrentHP());
 
-        //Special attack with 2 targets
+        // Multi-target + elemental
         boss_var.ElementalAttack = true;
         target = new GameObject[2] { fighterGameObject, protectorGameObject };
         boss_var.SpecialAttack(target);
