@@ -10,7 +10,8 @@ public class Principal : MonoBehaviour
 
     // script access
     private GameObject scriptsGameObject; 
-    private MenuButtons buttonScript;
+    private MenuButtons buttonScript; 
+    private Combat combatScript;
 
     // player selection data
     private int[] selectedCharacters1, selectedCharacters2; // saved characters for player1 and player2 respectively
@@ -70,7 +71,8 @@ public class Principal : MonoBehaviour
     void Awake(){
         // ----- script access ----------
         scriptsGameObject = this.gameObject;
-        buttonScript = scriptsGameObject.AddComponent(typeof(MenuButtons)) as MenuButtons; // to access MenuButtons script
+        buttonScript = scriptsGameObject.AddComponent<MenuButtons>(); // to access MenuButtons script
+        combatScript = scriptsGameObject.AddComponent<Combat>();
 
 
         // ----- button initialisation ----------
@@ -117,15 +119,11 @@ public class Principal : MonoBehaviour
 
 
         // ----- stage initialisation ----------
-        stageSprite0 = GameObject.Find("StageSprite0");//.GetComponent<Button>();
-        stageSprite1 = GameObject.Find("StageSprite1");//.GetComponent<Button>();
-        stageSprite2 = GameObject.Find("StageSprite2");//.GetComponent<Button>();
+        stageSprite0 = GameObject.Find("StageSprite0");
+        stageSprite1 = GameObject.Find("StageSprite1");
+        stageSprite2 = GameObject.Find("StageSprite2");
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
-/*
-        stageButton0.onClick.AddListener(delegate{ buttonScript.stageButton(0); });
-        stageButton1.onClick.AddListener(delegate{ buttonScript.stageButton(1); });
-        stageButton2.onClick.AddListener(delegate{ buttonScript.stageButton(2); });
-*/
+        
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
 
         // other
@@ -204,6 +202,9 @@ public class Principal : MonoBehaviour
     public void characterSelection2(){
         ///<summary> puts all element of character selection in place and displays them (PvP mode, player 2) </summary>
 
+        selectedCharacters1 = new int[]{character1, character2}; // saves characters
+        
+
         hideAll();
 
         // positions will be implemented here
@@ -214,6 +215,16 @@ public class Principal : MonoBehaviour
 
         menuButton.gameObject.SetActive(true); // shows menu button
         startPvPFightButton.gameObject.SetActive(true); // shows startPvPFight button
+    }
+
+    public void startPvPFight(){
+        ///<summary> displays the stage and starts the PvP fight </summary>
+
+        selectedCharacters2 = new int[]{character1, character2}; // saves characters
+        
+        //stageList[selectedStage].setEnemyList(selectedCharacters2); // ?
+        //stageList[selectedStage].start(); // displays stage
+        //combatScript.startPvPFight(); // starts fight
     }
 
     // ----- PvM mode ----------
@@ -274,6 +285,15 @@ public class Principal : MonoBehaviour
         menuButton.gameObject.SetActive(true); // shows menu button
         stageButton.gameObject.SetActive(true); // shows back to stage button
         startPvMFightButton.gameObject.SetActive(true); // shows startPvMFight button
+    }
+
+    public void startPvMFight(){
+        ///<summary> displays the stage and starts the PvP fight </summary>
+
+        selectedCharacters1 = new int[]{character1, character2}; // saves characters
+        
+        //stageList[selectedStage].start(); // displays stage
+        //combatScript.startPvMFight(); // starts fight
     }
 
     // ----- character selection ----------

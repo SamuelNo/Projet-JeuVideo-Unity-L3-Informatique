@@ -8,7 +8,6 @@ public class MenuButtons : MonoBehaviour
     // script access
     private GameObject scriptsGameObject;
     private Principal principalScript;
-    private Combat combatScript;
 
     // player selection data
     private int character1, character2;
@@ -19,7 +18,6 @@ public class MenuButtons : MonoBehaviour
     void Awake(){
         scriptsGameObject = GameObject.Find("Script"); // to access scripts (make sure to have a gameobject named "Script")
         principalScript = scriptsGameObject.GetComponent(typeof(Principal)) as Principal; // to access Principal script
-        combatScript = scriptsGameObject.AddComponent(typeof(Combat)) as Combat; // to access combat script
     }
 
     void Reset(){
@@ -77,21 +75,14 @@ public class MenuButtons : MonoBehaviour
     // ----- PvP buttons ---------------
     public void nextPlayerButton(){
         ///<summary> saves the characters selected by the 1st player and moves on to the 2nd character selection </summary>
-
-        principalScript.setSelectedCharacters1(new int[]{principalScript.getCharacter1(), principalScript.getCharacter2()}); // saves characters
-        Debug.Log("Player1 characters : " + principalScript.getcharacterSpriteList1()[principalScript.getSelectedCharacters1()[0]].gameObject.name + ", " + principalScript.getcharacterSpriteList2()[principalScript.getSelectedCharacters1()[1]].gameObject.name);
-
+        
         principalScript.characterSelection2();
     }
 
     public void startPvPFightButton(){
         ///<summary> saves the characters selected by the 2nd player and moves on to the PvP combat </summary>
 
-        principalScript.setSelectedCharacters2(new int[]{principalScript.getCharacter1(), principalScript.getCharacter2()}); // saves characters
-        Debug.Log("Player2 characters : " + principalScript.getcharacterSpriteList1()[principalScript.getSelectedCharacters2()[0]].gameObject.name + ", " + principalScript.getcharacterSpriteList2()[principalScript.getSelectedCharacters2()[1]].gameObject.name);
-
-        //combatScript.startPvPFight(); // starts fight
-        Debug.Log("PvP fight has started");
+        principalScript.startPvPFight();
     }
 
     // ----- PvM buttons ---------------
@@ -106,6 +97,7 @@ public class MenuButtons : MonoBehaviour
         StartCoroutine(principalScript.moveCharacter());
     }
     */
+
     public void choseStageButton(){
         ///<summary> moves on to the character selection </summary>
 
@@ -116,11 +108,6 @@ public class MenuButtons : MonoBehaviour
     public void startPvMFightButton(){
         ///<summary> saves the characters selected by the player and moves on to the PvM fight  </summary>
 
-        principalScript.setSelectedCharacters1(new int[]{principalScript.getCharacter1(), principalScript.getCharacter1()}); // saves characters
-        Debug.Log("Selected characters : " + principalScript.getcharacterSpriteList1()[principalScript.getSelectedCharacters1()[0]].gameObject.name + ", " + principalScript.getcharacterSpriteList2()[principalScript.getSelectedCharacters1()[1]].gameObject.name);
-
-        //stageList[selectedStage].start(); // displays stage
-        //combatScript.startPvMFight(); // starts fight
-        Debug.Log("PvM fight has started");
+        principalScript.startPvMFight();
     }
 }
