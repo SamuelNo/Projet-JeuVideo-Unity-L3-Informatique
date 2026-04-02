@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Mage : Character
 {
@@ -79,7 +80,7 @@ public class Mage : Character
         // for each target
         for (int i=0; i<target.Length; i++){
             // applies damage to the target
-            target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true); 
+            target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true);
         }
     }
 }

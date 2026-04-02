@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class CharacterTests 
+public class CharacterTest
 {
     GameObject fighterGameObject, healerGameObject, mageGameObject, protectorGameObject;
     Character fighter, healer, mage, protector;
@@ -72,7 +72,7 @@ public class CharacterTests
 
         fighter.useMP(100);
         Assert.AreEqual(8,fighter.getCurrentMP()); // if there isn't enough MP, nothing should be taken and an exception should appear
-        LogAssert.Expect(LogType.Exception, "Exception: [Classe Character] Il n'y a pas assez de points de magie, cette méthode ne devrait pas être utilisée");
+        LogAssert.Expect(LogType.Exception, "Exception: [Classe Character] There aren't enough magic points, this method should not be used");
     }
 
     [Test]
@@ -178,7 +178,7 @@ public class CharacterTests
         Assert.AreEqual(100, target.getCurrentHP()); // if more than 1 target is in list, nothing should happen and an exception should appear
         Assert.AreEqual(100, target2.getCurrentHP());
         Assert.AreEqual(100, fighter.getCurrentMP());
-        LogAssert.Expect(LogType.Exception, "Exception: [Classe Fighter] Cette compétence ne doit viser qu'un personnage");
+        LogAssert.Expect(LogType.Exception, "Exception: [Classe Fighter] This skill has to target only 1 character");
         UnityEngine.Object.DestroyImmediate(targetGameObject2); // destroys 2nd target
 
         fighter.skillLvl3(new GameObject[] {targetGameObject});
@@ -260,7 +260,7 @@ public class CharacterTests
         Assert.AreEqual(10, target.getCurrentHP()); // if more than 1 target is in list, nothing should happen and an exception should appear
         Assert.AreEqual(10, target2.getCurrentHP());
         Assert.AreEqual(10, healer.getCurrentHP());
-        LogAssert.Expect(LogType.Exception, "Exception: [Classe Healer] Seul l'allié doit être entré en paramètres");
+        LogAssert.Expect(LogType.Exception, "Exception: [Classe Healer] Only the ally should be entered as a parameter");
         UnityEngine.Object.DestroyImmediate(targetGameObject2); // destroys target
 
         healer.skillLvl3(new GameObject[] {targetGameObject});

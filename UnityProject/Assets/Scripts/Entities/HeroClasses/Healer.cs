@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Healer : Character
 {
@@ -60,7 +61,7 @@ public class Healer : Character
         
         // checks that only 1 taget is chosen (only 2 characters can fight in a battle, so 2 characters to heal : the ally and themselves)
         if (target.Length != 1){
-            Debug.Log("Classe Healer : Seul l'allié doit être entré en paramètres");
+            Debug.LogException(new Exception("[Classe Healer] Only the ally should be entered as a parameter"));
             return;
         }
 

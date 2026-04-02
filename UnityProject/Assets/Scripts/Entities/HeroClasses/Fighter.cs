@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Fighter : Character
 {
@@ -43,7 +44,7 @@ public class Fighter : Character
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);
         
         // attacks target 2 to 4 times
-        for (int i=0; i<Random.Range(2,4); i++){
+        for (int i=0; i<UnityEngine.Random.Range(2,4); i++){
             target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
         }
     }
@@ -52,11 +53,11 @@ public class Fighter : Character
 
     override public void skillLvl3(GameObject [] target){
         ///<param> target : the targets of the attack (only 1 target) </param> 
-        ///<summary> Attacks the target (the amount of damage is higher than the total of damage caused by skillLvl1()), and loses HP in the process (for now, 50% of applied attack damage)</summary>
+        ///<summary> Attacks the target (the amount of damage is higher than the total of damage caused by skillLvl1()), and loses HP in the process (1/3 of maxHP)</summary>
         
         // checks that only 1 taget is chosen
         if (target.Length != 1){
-            Debug.Log("Classe Fighter : Cette compétence ne doit viser qu'un personnage");
+            Debug.LogException(new Exception("[Classe Fighter] This skill has to target only 1 character"));
             return;
         }
 
@@ -73,7 +74,7 @@ public class Fighter : Character
         target[0].GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
 
         // loses HP (1/3 of maxHP)
-        this.currentHP -= (int) ((float) maxHP * .33f);
+        this.currentHP -= (int) ((float) maxHP/3);
         if (this.currentHP < 0){
             this.currentHP = 0;
         }
