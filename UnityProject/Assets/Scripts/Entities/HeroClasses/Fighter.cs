@@ -14,19 +14,6 @@ public class Fighter : Character
     }
 
     // ---------- Methods ---------- //
-    
-    override public void onClick()
-    {
-        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
-    if (controller != null)
-    {
-        controller.HandleSelection(this.gameObject);
-    }
-    else
-    {
-        Debug.LogError("BattleUIController not found in the scene.");
-    }
-    }
 
     override public void receiveDamage(int attack, AttackType atkType, bool elemental){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
@@ -55,8 +42,14 @@ public class Fighter : Character
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);
         
         // attacks target 2 to 4 times
-        for (int i=0; i<UnityEngine.Random.Range(2,4); i++){
-            target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+        if (target.GetComponent<Character>() != null){ // if target is a character
+            for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
+                target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+            }
+        } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
+            for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
+                target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false); 
+            }
         }
     }
 
@@ -82,7 +75,11 @@ public class Fighter : Character
         damageReceived = (int) ((float) damageReceived * strengthenedMultiplier);
 
         // applies damage to the target
-        target[0].GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+        if (target[0].GetComponent<Character>() != null){ // if target is a character
+            target[0].GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+        } else if (target[0].GetComponent<Enemy>() != null){ // if target is an enemy
+            target[0].GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false); 
+        }
 
         // loses HP (1/3 of maxHP)
         this.currentHP -= (int) ((float) maxHP/3);

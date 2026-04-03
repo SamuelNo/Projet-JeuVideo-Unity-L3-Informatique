@@ -5,20 +5,26 @@ using UnityEngine.TestTools;
 
 public class CharacterTest
 {
-    GameObject fighterGameObject, healerGameObject, mageGameObject, protectorGameObject;
+    GameObject fighterGameObject, healerGameObject, mageGameObject, protectorGameObject, enemyGameObject;
     Character fighter, healer, mage, protector;
+    Enemy enemy;
 
     [SetUp]
     public void SetUp(){
+        // characters
         fighterGameObject = new GameObject();
         healerGameObject = new GameObject();
         mageGameObject = new GameObject();
         protectorGameObject = new GameObject();
 
-        fighter = fighterGameObject.AddComponent(typeof(Fighter)) as Fighter;
-        healer = healerGameObject.AddComponent(typeof(Healer)) as Healer;
-        mage = mageGameObject.AddComponent(typeof(Mage)) as Mage;
-        protector = protectorGameObject.AddComponent(typeof(Protector)) as Protector;
+        fighter = fighterGameObject.AddComponent<Fighter>();
+        healer = healerGameObject.AddComponent<Healer>();
+        mage = mageGameObject.AddComponent<Mage>();
+        protector = protectorGameObject.AddComponent<Protector>();
+
+        // enemy
+        enemyGameObject = new GameObject();
+        enemy = enemyGameObject.AddComponent<Monster>();
     }
 
     [TearDown]
@@ -27,19 +33,35 @@ public class CharacterTest
         UnityEngine.Object.DestroyImmediate(healerGameObject);
         UnityEngine.Object.DestroyImmediate(mageGameObject);
         UnityEngine.Object.DestroyImmediate(protectorGameObject);
+        UnityEngine.Object.DestroyImmediate(enemyGameObject);
     }
 
     // -------------------------------------------------- Class Character --------------------------------------------------
+    /*[Test]
+    public void TestOnClick(){
+        GameObject tmpGameObject = new GameObject();
+        BattleUIController controller = tmpGameObject.AddComponent<BattleUIController>(); // creation of a BattleUIController to find
+
+        fighter.onClick();
+        // test smth idk
+
+        UnityEngine.Object.DestroyImmediate(tmpGameObject); // suppression of the BattleUIController
+        fighter.onClick();
+        LogAssert.Expect(LogType.Exception, "Exception: [Classe Character] BattleUIController not found in the scene.");
+    }*/
+
     [Test]
     public void TestReceiveDamage(){
         fighter.setDodgeProbability(0); // makes sure the character won't avoid the damage
         fighter.setCurrentHP(10);
 
+        // the correct amount of HP has to be removed
         fighter.receiveDamage(2);
-        Assert.AreEqual(8,fighter.getCurrentHP()); // the correct amount of HP has to be removed
+        Assert.AreEqual(8,fighter.getCurrentHP());
 
+        // HP should not go lower than 0
         fighter.receiveDamage(100);
-        Assert.IsFalse(0<fighter.getCurrentHP()); // HP should not go lower than 0
+        Assert.IsFalse(0<fighter.getCurrentHP());
     }
 
     [Test]
@@ -47,8 +69,9 @@ public class CharacterTest
         fighter.setDodgeProbability(100); // makes sure the character will dodge
         fighter.setCurrentHP(10);
 
+        // no damage should be taken
         fighter.receiveDamage(10);
-        Assert.AreEqual(10,fighter.getCurrentHP()); // no damage should be taken
+        Assert.AreEqual(10,fighter.getCurrentHP());
     }
 
     [Test]
@@ -56,48 +79,60 @@ public class CharacterTest
         fighter.setCurrentHP(10);
         fighter.setMaxHP(20);
         
+        // the correct amount of HP should be added
         fighter.receiveHeal(5);
-        Assert.AreEqual(15,fighter.getCurrentHP()); // the correct amount of HP should be added
+        Assert.AreEqual(15,fighter.getCurrentHP());
         
+        // HP should not go over the maxHP
         fighter.receiveHeal(100);
-        Assert.IsFalse(30<fighter.getCurrentHP()); // HP should not go over the maxHP
+        Assert.IsFalse(30<fighter.getCurrentHP()); 
     }
 
     [Test]
     public void TestUseMp(){
         fighter.setCurrentMP(10);
 
+        // the correct amount of MP should be removed
         fighter.useMP(2);
-        Assert.AreEqual(8,fighter.getCurrentMP()); // the correct amount of MP should be removed
+        Assert.AreEqual(8,fighter.getCurrentMP());
 
+        // if there isn't enough MP, nothing should be taken and an exception should appear
         fighter.useMP(100);
-        Assert.AreEqual(8,fighter.getCurrentMP()); // if there isn't enough MP, nothing should be taken and an exception should appear
+        Assert.AreEqual(8,fighter.getCurrentMP());
         LogAssert.Expect(LogType.Exception, "Exception: [Classe Character] There aren't enough magic points, this method should not be used");
     }
 
     [Test]
     public void TestBaseAttack(){
         GameObject targetGameObject = new GameObject(); // creates target for the attack
-        Character target = targetGameObject.AddComponent(typeof(Fighter)) as Fighter; // the class might be changed once enemies are implemented
+        Character target = targetGameObject.AddComponent<Fighter>();
+        // character
         target.setCurrentHP(22);
         target.setWeakenedMultiplier(3);
         target.setDodgeProbability(0);
         fighter.setBaseAtk(2);
         fighter.setDamageMultiplier(1);
+        // enemy
+        enemy.CurrentHP = 22;
+        enemy.Resistance = AttackType.Ranged;
+        enemy.DodgeProbability = 0;
 
-
+        // if the correct attack type (melee) is used, only 2HP should be removed
         target.setWeakness(Weakness.Elemental);
-        fighter.baseAttack(targetGameObject);
-        Assert.AreEqual(20, target.getCurrentHP()); // if the correct attack type (melee) is used, only 2HP should be removed
+        fighter.baseAttack(targetGameObject); // character
+        Assert.AreEqual(20, target.getCurrentHP());
+        fighter.baseAttack(enemyGameObject); // enemy
+        Assert.AreEqual(20, enemy.CurrentHP);
 
+        // if the correct attack type (melee) is used, 3*2HP should be removed
         target.setWeakness(Weakness.Melee);
         fighter.baseAttack(targetGameObject);
-        Assert.AreEqual(14, target.getCurrentHP()); // if the correct attack type (melee) is used, 3*2HP should be removed
+        Assert.AreEqual(14, target.getCurrentHP());
 
+        // damageMultiplier is increased, 2*3*2HP should be removed
         fighter.setDamageMultiplier(2);
         fighter.baseAttack(targetGameObject);
-        Assert.AreEqual(2, target.getCurrentHP()); // damageMultiplier is increased, 2*3*2HP should be removed
-
+        Assert.AreEqual(2, target.getCurrentHP());
 
         UnityEngine.Object.DestroyImmediate(targetGameObject); // destroys target
     }
@@ -109,28 +144,40 @@ public class CharacterTest
         fighter.setCurrentHP(10);
         fighter.setWeakenedMultiplier(3);
 
+        // Fighter isn't weak to neutral attacks, only 2HP should be removed
         fighter.receiveDamage(2, AttackType.Neutral, true);
-        Assert.AreEqual(8,fighter.getCurrentHP()); // Fighter isn't weak to neutral attacks, only 2HP should be removed
+        Assert.AreEqual(8,fighter.getCurrentHP());
 
+        // Fighter isn't weak to melee attacks, only 2HP should be removed
         fighter.receiveDamage(2, AttackType.Melee, true);
-        Assert.AreEqual(6,fighter.getCurrentHP()); // Fighter isn't weak to melee attacks, only 2HP should be removed
+        Assert.AreEqual(6,fighter.getCurrentHP());
 
+        // Fighter is weak to ranged attacks, 3*2HP should be removed
         fighter.receiveDamage(2, AttackType.Ranged, true);
-        Assert.AreEqual(0,fighter.getCurrentHP()); // Fighter is weak to ranged attacks, 3*2HP should be removed
+        Assert.AreEqual(0,fighter.getCurrentHP());
     }
 
     [Test]
     public void TestSkillLvl1Fighter(){
         GameObject targetGameObject = new GameObject(); // creates target for the attack
         Character target = targetGameObject.AddComponent(typeof(Fighter)) as Fighter; // the class might be changed once enemies are implemented
-
         target.setCurrentHP(10);
         target.setWeakness(Weakness.Elemental);
         fighter.setCurrentMP(100);
         fighter.setBaseAtk(1);
         fighter.setDamageMultiplier(1);
-        fighter.skillLvl1(targetGameObject);
+
+        // enemy
+        enemy.CurrentHP = 10;
+        enemy.Resistance = AttackType.Ranged;
+        fighter.skillLvl1(enemyGameObject);
         Assert.AreEqual(90,fighter.getCurrentMP()); // 10MP should be used by the skill
+        Assert.IsTrue(8 >= enemy.CurrentHP); // the target is attacked at least 2 times (-2HP)
+        Assert.IsTrue(6 <= enemy.CurrentHP); // the target is attacked at most 4 times (-4HP)
+
+        // character
+        fighter.skillLvl1(targetGameObject);
+        Assert.AreEqual(80,fighter.getCurrentMP()); // 10MP should be used by the skill
         Assert.IsTrue(8 >= target.getCurrentHP()); // the target is attacked at least 2 times (-2HP)
         Assert.IsTrue(6 <= target.getCurrentHP()); // the target is attacked at most 4 times (-4HP)
 
@@ -158,41 +205,52 @@ public class CharacterTest
     [Test]
     public void TestSkillLvl3Fighter(){
         GameObject targetGameObject = new GameObject(); // creates target for the attack
-        Character target = targetGameObject.AddComponent(typeof(Fighter)) as Fighter; // the class might be changed once enemies are implemented
+        Character target = targetGameObject.AddComponent<Fighter>(); // the class might be changed once enemies are implemented
         target.setCurrentHP(100);
         target.setWeakenedMultiplier(2);
         target.setWeakness(Weakness.Elemental);
-        fighter.setCurrentMP(100);
+        fighter.setCurrentMP(130);
         fighter.setDamageMultiplier(1);
         fighter.setBaseAtk(1);
         fighter.setStrengthenedMultiplier(5);
         fighter.setCurrentHP(99);
         fighter.setMaxHP(99);
 
-
+        // if more than 1 target is in list, nothing should happen and an exception should appear
         GameObject targetGameObject2 = new GameObject(); // creates a temporary 2nd target
-        Character target2 = targetGameObject2.AddComponent(typeof(Fighter)) as Fighter;
+        Character target2 = targetGameObject2.AddComponent<Fighter>();
         target2.setCurrentHP(100);
         target.setWeakness(Weakness.Elemental);
         fighter.skillLvl3(new GameObject[] {targetGameObject, targetGameObject2});
-        Assert.AreEqual(100, target.getCurrentHP()); // if more than 1 target is in list, nothing should happen and an exception should appear
+        Assert.AreEqual(100, target.getCurrentHP());
         Assert.AreEqual(100, target2.getCurrentHP());
-        Assert.AreEqual(100, fighter.getCurrentMP());
+        Assert.AreEqual(130, fighter.getCurrentMP());
         LogAssert.Expect(LogType.Exception, "Exception: [Classe Fighter] This skill has to target only 1 character");
         UnityEngine.Object.DestroyImmediate(targetGameObject2); // destroys 2nd target
 
+        // enemy
+        enemy.CurrentHP = 100;
+        enemy.Resistance = AttackType.Ranged;
+        fighter.skillLvl3(new GameObject[] {enemyGameObject});
+        Assert.AreEqual(100, fighter.getCurrentMP()); // 30MP should be used
+        Assert.AreEqual(95, enemy.CurrentHP); // attack is multiplied by strengtenedMultiplier, 5*1HP should be taken 
+        Assert.AreEqual(66, fighter.getCurrentHP()); // 1/3 of maxHP should be lost
+
+        // character
         fighter.skillLvl3(new GameObject[] {targetGameObject});
         Assert.AreEqual(70, fighter.getCurrentMP()); // 30MP should be used
         Assert.AreEqual(95, target.getCurrentHP()); // attack is multiplied by strengtenedMultiplier, 5*1HP should be taken 
-        Assert.AreEqual(66, fighter.getCurrentHP()); // 1/3 of maxHP should be lost
+        Assert.AreEqual(33, fighter.getCurrentHP()); // 1/3 of maxHP should be lost
 
+        // if the correct attack type (melee) is used, 2*5*1=10HP should be removed
         target.setWeakness(Weakness.Melee);
         fighter.skillLvl3(new GameObject[] {targetGameObject});
-        Assert.AreEqual(85, target.getCurrentHP()); // if the correct attack type (melee) is used, 2*5*1=10HP should be removed
+        Assert.AreEqual(85, target.getCurrentHP());
 
+        // damageMultiplier is increased, 1*1*5*1=20HP should be removed
         fighter.setDamageMultiplier(2);
         fighter.skillLvl3(new GameObject[] {targetGameObject});
-        Assert.AreEqual(65, target.getCurrentHP()); // damageMultiplier is increased, 1*1*5*1=20HP should be removed
+        Assert.AreEqual(65, target.getCurrentHP()); 
 
 
         UnityEngine.Object.DestroyImmediate(targetGameObject); // destroys target
@@ -305,9 +363,17 @@ public class CharacterTest
         target.setCurrentHP(100);
         target.setWeakness(Weakness.Melee);
         target.setWeakenedMultiplier(2);
+        enemy.CurrentHP = 100;
+        enemy.Resistance = AttackType.Melee;
         
-        mage.skillLvl1(targetGameObject);
+        // enemy
+        mage.skillLvl1(enemyGameObject);
         Assert.AreEqual(90, mage.getCurrentMP()); // 10MP should be used
+        Assert.AreEqual(97, enemy.CurrentHP); // target should lose baseAtk*strengtenedMultiplier = 1*3 = 3HP
+
+        // character
+        mage.skillLvl1(targetGameObject);
+        Assert.AreEqual(80, mage.getCurrentMP()); // 10MP should be used
         Assert.AreEqual(97, target.getCurrentHP()); // target should lose baseAtk*strengtenedMultiplier = 1*3 = 3HP
 
         target.setWeakness(Weakness.Ranged);
@@ -334,14 +400,21 @@ public class CharacterTest
         target1.setWeakenedMultiplier(2);
         target2.setCurrentHP(100);
         target2.setWeakness(Weakness.Melee);
-        mage.setCurrentMP(120);
+        mage.setCurrentMP(160);
         mage.setBaseAtk(1);
         mage.setDamageMultiplier(1);
         mage.setStrengthenedMultiplier(2);
+        enemy.CurrentHP = 106;
+        enemy.Resistance = AttackType.Melee;
         
+        // enemy
+        mage.skillLvl3(new GameObject[] {enemyGameObject});
+        Assert.AreEqual(130, mage.getCurrentMP()); // 30MP should be used
+        Assert.AreEqual(100, enemy.CurrentHP); // damage should be worth to 3 attacks (3*1*2=6)
 
+        // character
         mage.skillLvl3(new GameObject[] {targetGameObject1});
-        Assert.AreEqual(90, mage.getCurrentMP()); // 30MP should be used
+        Assert.AreEqual(100, mage.getCurrentMP()); // 30MP should be used
         Assert.AreEqual(100, target1.getCurrentHP()); // damage should be worth to 3 attacks (3*1*2=6)
 
         mage.skillLvl3(new GameObject[] {targetGameObject1, targetGameObject2});
@@ -394,10 +467,17 @@ public class CharacterTest
         protector.setBaseAtk(1);
         protector.setDamageMultiplier(1);
         protector.setStrengthenedMultiplier(3);
+        enemy.CurrentHP = 10;
+        enemy.Resistance = AttackType.Melee;
 
-
-        protector.skillLvl2(new GameObject[] {targetGameObject1});
+        // enemy
+        protector.skillLvl2(new GameObject[] {enemyGameObject});
         Assert.AreEqual(80, protector.getCurrentMP()); // 20MP should be used
+        Assert.AreEqual(9, enemy.CurrentHP); // damage should be worth to 1 attacks (1HP)
+
+        // character
+        protector.skillLvl2(new GameObject[] {targetGameObject1});
+        Assert.AreEqual(60, protector.getCurrentMP()); // 20MP should be used
         Assert.AreEqual(9, target1.getCurrentHP()); // damage should be worth to 1 attacks (1HP)
 
         protector.skillLvl2(new GameObject[] {targetGameObject1, targetGameObject2});

@@ -14,19 +14,6 @@ public class Mage : Character
     }
 
     // ---------- Methods ---------- //
-    
-    override public void onClick()
-    {
-        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
-    if (controller != null)
-    {
-        controller.HandleSelection(this.gameObject);
-    }
-    else
-    {
-        Debug.LogError("BattleUIController not found in the scene.");
-    }
-    }
 
     override public void receiveDamage(int attack, AttackType atkType, bool elemental){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
@@ -49,7 +36,12 @@ public class Mage : Character
         ///<summary> Calculate the amount of damage and attacks the target </summary>
 
         int damageReceived = (int) ((float) baseAtk * damageMultiplier); 
-        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true); // override so the attack is elemental
+
+        if (target.GetComponent<Character>() != null){ // if target is a character
+            target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true); // override so the attack is elemental
+        } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
+            target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, true); // override so the attack is elemental
+        }
     }
 
     override public void skillLvl1(GameObject target){
@@ -66,7 +58,11 @@ public class Mage : Character
         damageReceived = (int) ((float) damageReceived * strengthenedMultiplier); 
 
         // uses target's receiveDamage() to apply damage
-        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true); // might be an elemental attack ? not sure, so not elemental for now. 
+        if (target.GetComponent<Character>() != null){ // if target is a character
+            target.GetComponent<Character>().receiveDamage(damageReceived, attackType, true);
+        } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
+            target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, true);
+        }
     }
 
     override public void skillLvl2(GameObject [] target){} // to do (needs information from class Combat)
@@ -91,7 +87,11 @@ public class Mage : Character
         // for each target
         for (int i=0; i<target.Length; i++){
             // applies damage to the target
-            target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true);
+            if (target[i].GetComponent<Character>() != null){ // if target is a character
+                target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true);
+            } else if (target[i].GetComponent<Enemy>() != null){ // if target is an enemy
+                target[i].GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, true);
+            }
         }
     }
 }

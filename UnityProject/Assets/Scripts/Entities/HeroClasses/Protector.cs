@@ -14,19 +14,6 @@ public class Protector : Character
     }
 
     // ---------- Methods ---------- //
-    
-    override public void onClick()
-    {
-        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
-    if (controller != null)
-    {
-        controller.HandleSelection(this.gameObject);
-    }
-    else
-    {
-        Debug.LogError("BattleUIController not found in the scene.");
-    }   
-    }
 
     override public void receiveDamage(int attack, AttackType atkType, bool elemental){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
@@ -59,7 +46,11 @@ public class Protector : Character
         // for each target
         for (int i=0; i<target.Length; i++){
             // applies basic attack to the target
-            target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+            if (target[i].GetComponent<Character>() != null){ // if target is a character
+                target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, false);
+            } else if (target[i].GetComponent<Enemy>() != null){ // if target is an enemy
+                target[i].GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false);
+            }
         }
     }
 

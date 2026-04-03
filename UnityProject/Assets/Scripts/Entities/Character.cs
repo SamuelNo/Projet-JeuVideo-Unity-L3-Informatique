@@ -36,7 +36,6 @@ abstract public class Character : MonoBehaviour
     public int getBaseAtk(){ return baseAtk; }
     
     public int getTeamID(){ return teamID; }
-    public float getDodgeProbability(){ return dodgeProbability; }
     public float getDamageMultiplier(){ return damageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
@@ -45,6 +44,15 @@ abstract public class Character : MonoBehaviour
 
 
     // ---------- Methods ---------- //
+
+    public void onClick(){
+        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
+        if (controller != null){
+            controller.HandleSelection(this.gameObject);
+        } else {
+            Debug.LogException(new Exception("[Classe Character] BattleUIController not found in the scene.")); 
+        }
+    }
 
     public void receiveDamage(int n){
         ///<param> n : amount of damage to be received by the character </param>
@@ -95,10 +103,13 @@ abstract public class Character : MonoBehaviour
         int damageReceived = (int) ((float) baseAtk * damageMultiplier); 
 
         // uses target's receiveDamage() to apply damage
-        target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+        if (target.GetComponent<Character>() != null){ // if target is a character
+            target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+        } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
+            target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false); 
+        }
     }
 
-    abstract public void onClick(); 
     abstract public void receiveDamage(int attack, AttackType attackType, bool elemental);
     abstract public void skillLvl1(GameObject target);
     abstract public void skillLvl2(GameObject [] target);
