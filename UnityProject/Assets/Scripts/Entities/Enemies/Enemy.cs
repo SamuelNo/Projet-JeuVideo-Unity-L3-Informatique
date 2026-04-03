@@ -4,7 +4,7 @@ abstract public class Enemy : MonoBehaviour
 {
     // ---------- Attributes ---------- //
 
-    [SerializeField] protected int maxHP, currentHP, maxMP, currentMP;
+    [SerializeField] protected int maxHP, currentHP, maxMP, currentMP, teamId;
     [SerializeField] protected float dodgeProbability;
     [SerializeField] protected AttackType resistance, attackTypeUsed;
     [SerializeField] protected bool elementalAttack;
@@ -15,6 +15,9 @@ abstract public class Enemy : MonoBehaviour
     public int CurrentHP { get => currentHP;  set => currentHP = value; }
     public int MaxMP { get => maxMP;  set => maxMP = value; }
     public int CurrentMP { get => currentMP;  set => currentMP = value; }
+
+    public int TeamId { get => teamId;  set => teamId = value; }
+
     public float DodgeProbability { get => dodgeProbability;  set => dodgeProbability = value; } 
     public AttackType Resistance{ get => resistance;  set => resistance = value; }
     public AttackType AttackTypeUsed { get => attackTypeUsed;  set => attackTypeUsed = value; }
@@ -52,6 +55,7 @@ abstract public class Enemy : MonoBehaviour
             currentHP = maxHP;
         }
     }
+
 
     abstract public void OnClick(); 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);

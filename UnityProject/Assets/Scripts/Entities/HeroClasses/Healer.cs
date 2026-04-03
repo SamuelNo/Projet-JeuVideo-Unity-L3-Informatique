@@ -15,7 +15,18 @@ public class Healer : Character
 
     // ---------- Methods ---------- //
     
-    override public void onClick(){}
+    override public void onClick()
+    {
+        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
+    if (controller != null)
+    {
+        controller.HandleSelection(this.gameObject);
+    }
+    else
+    {
+        Debug.LogError("BattleUIController not found in the scene.");
+    }
+    } 
 
     override public void receiveDamage(int attack, AttackType atkType, bool elemental){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 

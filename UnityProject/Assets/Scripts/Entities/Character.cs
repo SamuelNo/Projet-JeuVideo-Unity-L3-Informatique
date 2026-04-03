@@ -5,7 +5,7 @@ abstract public class Character : MonoBehaviour
 {
     // ---------- Attributes ---------- //
 
-    [SerializeField] protected int lvl, maxHP, currentHP, maxMP, currentMP, baseAtk;
+    [SerializeField] protected int lvl, maxHP, currentHP, maxMP, currentMP, baseAtk, teamID;
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
@@ -26,12 +26,16 @@ abstract public class Character : MonoBehaviour
     public void setAttackType(AttackType t){ attackType = t; }
     public void setWeakness(Weakness w){ weakness = w; }
 
+    public void setTeamID(int n){ teamID = n; }
+
     public int getLvl(){ return lvl; }
     public int getMaxHP(){ return maxHP; }
     public int getCurrentHP(){ return currentHP; }
     public int getMaxMP(){ return maxMP; }
     public int getCurrentMP(){ return currentMP; }
     public int getBaseAtk(){ return baseAtk; }
+    
+    public int getTeamID(){ return teamID; }
     public float getDodgeProbability(){ return dodgeProbability; }
     public float getDamageMultiplier(){ return damageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
