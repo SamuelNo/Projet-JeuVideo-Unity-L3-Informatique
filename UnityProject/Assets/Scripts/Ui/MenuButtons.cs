@@ -6,7 +6,7 @@ public class MenuButtons : MonoBehaviour
     // ---------- Attributes ---------- //
 
     // script access
-    private GameObject scriptsGameObject;
+    //private GameObject scriptsGameObject;
     private Principal principalScript;
 
     // player selection data
@@ -16,8 +16,9 @@ public class MenuButtons : MonoBehaviour
     // ---------- Initialisation ---------- //
 
     void Awake(){
-        scriptsGameObject = GameObject.Find("Script"); // to access scripts (make sure to have a gameobject named "Script")
-        principalScript = scriptsGameObject.GetComponent<Principal>(); // to access Principal script
+        //scriptsGameObject = GameObject.Find("Script"); // to access scripts (make sure to have a gameobject named "Script")
+        //principalScript = scriptsGameObject.GetComponent<Principal>(); // to access Principal script
+        principalScript = Object.FindObjectsByType<Principal>(FindObjectsSortMode.None)[0];
     }
 
     void Reset(){
@@ -100,8 +101,9 @@ public class MenuButtons : MonoBehaviour
 
     public void choseStageButton(){
         ///<summary> moves on to the character selection </summary>
-
-        principalScript.characterSelection();
+        
+        if (!principalScript.getMoving()) // if character is on screen and not moving
+            principalScript.characterSelection();
     }
 
 

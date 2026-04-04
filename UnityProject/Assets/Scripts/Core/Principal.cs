@@ -27,6 +27,7 @@ public class Principal : MonoBehaviour
     //[SerializeField] 
     private GameObject stageCharacterSprite; // the character that will be moving on the map
     private bool moving; // indicates if the character is moving (used for player inputs)
+    //[SerializeField]
     private GameObject stageSprite0, stageSprite1, stageSprite2; // stage sprites
     private GameObject[] stageSpriteList; // list of stage sprites
     //private Stage[] stageList;
@@ -54,6 +55,7 @@ public class Principal : MonoBehaviour
     public void setSelectedStage(int s){ selectedStage = s; }
     public void setCharacter1(int s){ character1 = s; }
     public void setCharacter2(int s){ character2 = s; }
+    public void setMoving(bool b){ moving = b; }
 
     // get
     public int[] getSelectedCharacters1(){ return selectedCharacters1; }
@@ -61,6 +63,7 @@ public class Principal : MonoBehaviour
     public int getSelectedStage(){ return selectedStage; }
     public int getCharacter1(){ return character1; }
     public int getCharacter2(){ return character2; }
+    public bool getMoving(){ return moving; }
     public GameObject[] getcharacterSpriteList1(){ return characterSpriteList1; }
     public GameObject[] getcharacterSpriteList2(){ return characterSpriteList2; }
     public GameObject[] getStageList(){ return stageSpriteList; }

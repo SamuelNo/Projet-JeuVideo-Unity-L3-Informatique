@@ -87,9 +87,8 @@ public class PrincipalTests
 
         // script access
         scriptsGameObject = new GameObject();
-        scriptsGameObject.name = "Script";
         scriptPrincipal = scriptsGameObject.AddComponent<Principal>();
-        scriptMenuButtons = scriptsGameObject.AddComponent<MenuButtons>();
+        scriptMenuButtons = scriptsGameObject.GetComponent<MenuButtons>();
     }
 
     [TearDown]
