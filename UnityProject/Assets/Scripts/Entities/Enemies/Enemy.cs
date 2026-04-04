@@ -27,6 +27,19 @@ abstract public class Enemy : MonoBehaviour
 
     // ---------- Methods ---------- //
 
+    private void Die()
+    {
+        currentHP = 0;
+
+        if (GetComponent<Collider2D>() != null) 
+        {
+            GetComponent<Collider2D>().enabled = false;
+        }
+        Destroy(gameObject, 0.1f); 
+        
+        Debug.Log(gameObject.name + " a été supprimé de la scène.");
+    }
+
     public void ReceiveDamage(int n){
         ///<param> n : amount of damage to be received by the enemy </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
@@ -41,7 +54,7 @@ abstract public class Enemy : MonoBehaviour
         currentHP -= n;
         if (currentHP < 0){
             n += currentHP;
-            currentHP = 0;
+            Die();
         }
         Debug.Log("L'adversaire a perdu "+n+"PV");
     }

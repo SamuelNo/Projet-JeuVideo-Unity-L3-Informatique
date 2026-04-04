@@ -17,7 +17,7 @@ public class BattleUIController : MonoBehaviour
     public void ButtonAccess()
     {
         
-        if (currentPhase == BattlePhase.WAITING)
+        if (currentPhase == BattlePhase.WAITING || currentAttacker == null)
         {
             simpleAttackButton.SetState(ButtonState.BLOCKED);
             skillLvl1Button.SetState(ButtonState.BLOCKED);
@@ -27,23 +27,16 @@ public class BattleUIController : MonoBehaviour
         }
 
         
-        if (currentAttacker != null && currentTarget != null)
-        {
-            simpleAttackButton.SetState(ButtonState.SHOWN);
-            skillLvl1Button.SetState(ButtonState.SHOWN);
-            skillLvl2Button.SetState(ButtonState.SHOWN);
-            skillLvl3Button.SetState(ButtonState.SHOWN);
-        }
-        else
-        {
-            simpleAttackButton.SetState(ButtonState.BLOCKED);
-            skillLvl1Button.SetState(ButtonState.BLOCKED);
-            skillLvl2Button.SetState(ButtonState.BLOCKED);
-            skillLvl3Button.SetState(ButtonState.BLOCKED);
-        }
+    Character attackerStats = currentAttacker.GetComponent<Character>();
 
-        // Skill 3 (Area) only needs an attacker
-        skillLvl3Button.SetState(currentAttacker != null ? ButtonState.SHOWN : ButtonState.BLOCKED);
+    
+    simpleAttackButton.SetState(currentTarget != null ? ButtonState.SHOWN : ButtonState.BLOCKED);
+
+    skillLvl1Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl1() ? ButtonState.SHOWN : ButtonState.BLOCKED);
+
+    skillLvl2Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl2() ? ButtonState.SHOWN : ButtonState.BLOCKED);
+
+    skillLvl3Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl3() ? ButtonState.SHOWN : ButtonState.BLOCKED);
     }
 
     // Initialize the UI state when the scene starts.
@@ -77,6 +70,10 @@ public class BattleUIController : MonoBehaviour
                 currentPhase = BattlePhase.SELECT_TARGET;
                 Debug.Log("Attaquant choisi ! Maintenant, cliquez sur un ennemi.");
             }
+            else
+            {
+                Debug.LogWarning("Sélection invalide : veuillez sélectionner un personnage de votre équipe.");
+            }
         }
         else if (currentPhase == BattlePhase.SELECT_TARGET)
         {
@@ -92,6 +89,10 @@ public class BattleUIController : MonoBehaviour
                 currentAttacker = clickedObject;
                 currentTarget = null;            
                 Debug.Log("Changement d'attaquant : " + clickedObject.name);
+            }
+            else
+            {
+                Debug.LogWarning("Sélection invalide : veuillez sélectionner un ennemi");
             }
         }
         ButtonAccess();
@@ -115,8 +116,8 @@ public class BattleUIController : MonoBehaviour
     if (currentTarget == null || currentAttacker == null) return;
 
 
-    Character attacker = currentAttacker.GetComponent<Character>();
-    int attackerTeam = attacker.getTeamID();
+    
+    int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
 
   
     var enemy = currentTarget.GetComponent<Enemy>();
@@ -130,8 +131,8 @@ public class BattleUIController : MonoBehaviour
     {
         currentPhase = BattlePhase.WAITING;
         ButtonAccess(); 
-        if (enemy != null) enemy.ReceiveDamage(attacker.getBaseAtk());
-        if (player != null) player.receiveDamage(attacker.getBaseAtk());
+        if (enemy != null) currentAttacker.GetComponent<Character>().baseAttack(enemy.gameObject);
+        if (player != null) currentAttacker.GetComponent<Character>().baseAttack(player.gameObject);
         
         Debug.Log("Attaque simple réussie sur : " + currentTarget.name);
         
@@ -148,20 +149,20 @@ public class BattleUIController : MonoBehaviour
     public void OnClickSkillLvl1()
     {
     
-    if (currentTarget == null || currentAttacker == null) return;
+        if (currentTarget == null || currentAttacker == null) return;
 
-    currentPhase = BattlePhase.WAITING;
-    ButtonAccess(); 
+        Character c = currentTarget.GetComponent<Character>();
+        Enemy e = currentTarget.GetComponent<Enemy>();
 
-    currentAttacker.GetComponent<Character>().skillLvl1(currentTarget); 
-        
-    Debug.Log("Sort Lvl 1 lancé par " + currentAttacker.name + " sur " + currentTarget.name);
-        
-    FinishTurn();
+        ButtonAccess(); 
+        currentAttacker.GetComponent<Character>().skillLvl1(currentTarget); 
+        Debug.Log("Attaque SkillLvl 1 lancé par " + currentAttacker.name + " sur " + currentTarget.name);
+        FinishTurn();
     }
 
 
-    // Resolve skill level 2 against every valid enemy target.
+
+    // Resolve skill level 2 on the selected target.
     public void OnClickSkillLvl2()
     {
     if (currentAttacker == null) return; 
@@ -170,6 +171,11 @@ public class BattleUIController : MonoBehaviour
     ButtonAccess();
 
     List<GameObject> enemiesFound = new List<GameObject>();
+
+    if (currentTarget != null)
+    {
+        enemiesFound.Add(currentTarget);
+    }
 
     MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
 
@@ -184,11 +190,14 @@ public class BattleUIController : MonoBehaviour
         {
            
             int targetTeam = (c != null) ? c.getTeamID() : e.TeamId;
+            int hpTarget = (c != null) ? c.getCurrentHP() : e.CurrentHP;
             int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
 
-            if (targetTeam != attackerTeam)
+            if (targetTeam != attackerTeam && hpTarget > 0)
             {
-                enemiesFound.Add(obj.gameObject);
+                if (!enemiesFound.Contains(obj.gameObject)) {
+                    enemiesFound.Add(obj.gameObject);
+                }
             }
         }
     }
@@ -198,12 +207,12 @@ public class BattleUIController : MonoBehaviour
 
    
     currentAttacker.GetComponent<Character>().skillLvl2(targets);
-    Debug.Log("Attaque zone réussie sur la cible !");
+    Debug.Log("Attaque SkillLvl 2 lancée par " + currentAttacker.name);
     FinishTurn();
 }
     
 
-    // Resolve skill level 3 against every valid enemy target.
+    // Resolve skill level 3 on the selected target.
     public void OnClickSkillLvl3()
 {
     
@@ -213,6 +222,11 @@ public class BattleUIController : MonoBehaviour
     ButtonAccess();
 
     List<GameObject> enemiesFound = new List<GameObject>();
+
+    if (currentTarget != null)
+    {
+        enemiesFound.Add(currentTarget);
+    }
 
   
     MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
@@ -228,12 +242,15 @@ public class BattleUIController : MonoBehaviour
         {
     
             int targetTeam = (c != null) ? c.getTeamID() : e.TeamId;
+            int hpTarget = (c != null) ? c.getCurrentHP() : e.CurrentHP;
             int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
 
 
-            if (targetTeam != attackerTeam)
+            if (targetTeam != attackerTeam && hpTarget > 0)
             {
-                enemiesFound.Add(obj.gameObject); 
+                if (!enemiesFound.Contains(obj.gameObject)) {
+                enemiesFound.Add(obj.gameObject);
+                }
             }
         }
     }
@@ -242,7 +259,7 @@ public class BattleUIController : MonoBehaviour
     GameObject[] targets = enemiesFound.ToArray();
 
     currentAttacker.GetComponent<Character>().skillLvl3(targets);
-    Debug.Log("Attaque zone réussie sur la cible !");
+    Debug.Log("Attaque SkillLvl 3 lancée par " + currentAttacker.name);
     FinishTurn();
 }
 

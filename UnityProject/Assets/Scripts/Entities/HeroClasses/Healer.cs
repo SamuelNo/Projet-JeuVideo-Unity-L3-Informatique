@@ -41,7 +41,7 @@ public class Healer : Character
         ///<summary> Restores a certain amount of HP to the target. For now, 10% of the target's maxHP will be restored </summary>
         
         // uses MP (10MP)
-        useMP(10);
+        useMP(mpCostSkillLvl1);
 
         // calcultates 10% of target's maxHP
         int healAmount = target.GetComponent<Character>().getMaxHP(); 
@@ -64,7 +64,7 @@ public class Healer : Character
         }
 
         // uses MP (30MP)
-        useMP(30);
+        useMP(mpCostSkillLvl3);
 
         // heals themselves
         int healAmount = (int) ((float) this.maxHP * .5f);

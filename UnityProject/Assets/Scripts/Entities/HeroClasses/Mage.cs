@@ -49,7 +49,7 @@ public class Mage : Character
         ///<summary> Calculates the amount of damage and attacks the target (the amount of damage is higher than the base attack) </summary>
 
         // uses MP (10MP)
-        useMP(10);
+        useMP(mpCostSkillLvl1);
 
         // increases damage if the healer's lvl2 skill is used
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);
@@ -72,7 +72,7 @@ public class Mage : Character
         ///<summary> Calculates the amount of damage and attacks the targets (the amount of damage is higher than skillLvl1()) </summary>
          
         // uses MP (30MP)
-        useMP(30);
+        useMP(mpCostSkillLvl3);
 
         // increases damage if the healer's lvl2 skill is used
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);

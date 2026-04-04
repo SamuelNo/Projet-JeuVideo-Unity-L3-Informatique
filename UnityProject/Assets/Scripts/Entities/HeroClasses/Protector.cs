@@ -38,7 +38,7 @@ public class Protector : Character
         ///<summary> Inflicts damage to the targets </summary>
         
         // uses MP (20MP)
-        useMP(20);
+        useMP(mpCostSkillLvl2);
 
         // increases damage if the healer's lvl2 skill is used
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);

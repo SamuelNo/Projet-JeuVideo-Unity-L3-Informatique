@@ -5,7 +5,7 @@ abstract public class Character : MonoBehaviour
 {
     // ---------- Attributes ---------- //
 
-    [SerializeField] protected int lvl, maxHP, currentHP, maxMP, currentMP, baseAtk, teamID;
+    [SerializeField] protected int lvl, maxHP, currentHP, maxMP, currentMP, baseAtk, teamID, mpCostSkillLvl1, mpCostSkillLvl2, mpCostSkillLvl3;
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
@@ -25,17 +25,20 @@ abstract public class Character : MonoBehaviour
     public void setStrengthenedMultiplier(float n){ strengthenedMultiplier = n; } 
     public void setAttackType(AttackType t){ attackType = t; }
     public void setWeakness(Weakness w){ weakness = w; }
-
     public void setTeamID(int n){ teamID = n; }
-
+    public void setMpCostSkillLvl1(int n){ mpCostSkillLvl1 = n; }
+    public void setMpCostSkillLvl2(int n){ mpCostSkillLvl2 = n; }
+    public void setMpCostSkillLvl3(int n){ mpCostSkillLvl3 = n; }
     public int getLvl(){ return lvl; }
     public int getMaxHP(){ return maxHP; }
     public int getCurrentHP(){ return currentHP; }
     public int getMaxMP(){ return maxMP; }
     public int getCurrentMP(){ return currentMP; }
     public int getBaseAtk(){ return baseAtk; }
-    
     public int getTeamID(){ return teamID; }
+    public int getMpCostSkillLvl1(){ return mpCostSkillLvl1; }
+    public int getMpCostSkillLvl2(){ return mpCostSkillLvl2; }
+    public int getMpCostSkillLvl3(){ return mpCostSkillLvl3; }
     public float getDamageMultiplier(){ return damageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
@@ -46,6 +49,10 @@ abstract public class Character : MonoBehaviour
     // ---------- Methods ---------- //
 
     public void onClick(){
+        if(this.currentHP <= 0) {
+            Debug.Log("Personnage mort, impossible de le sélectionner.");
+            return;
+        }
         BattleUIController controller = FindFirstObjectByType<BattleUIController>();
         if (controller != null){
             controller.HandleSelection(this.gameObject);
@@ -53,7 +60,18 @@ abstract public class Character : MonoBehaviour
             Debug.LogException(new Exception("[Classe Character] BattleUIController not found in the scene.")); 
         }
     }
+    private void Die()
+    {
+        currentHP = 0;
 
+        if (GetComponent<Collider2D>() != null) 
+        {
+            GetComponent<Collider2D>().enabled = false;
+        }
+        Destroy(gameObject, 0.1f); 
+        
+        Debug.Log(gameObject.name + " a été supprimé de la scène.");
+    }
     public void receiveDamage(int n){
         ///<param> n : amount of damage to be received by the character </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
@@ -68,7 +86,7 @@ abstract public class Character : MonoBehaviour
         currentHP -= n;
         if (currentHP < 0){
             n += currentHP;
-            currentHP = 0;
+            Die();
         }
         //Debug.Log("Le personnage a perdu "+n+"PV");
     }

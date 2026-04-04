@@ -36,7 +36,7 @@ public class Fighter : Character
         ///<summary> Attacks the target a certain amount of times </summary>
 
         // uses MP (10MP)
-        useMP(10);
+        useMP(mpCostSkillLvl1);
 
         // increases damage if the healer's lvl2 skill is used
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);
@@ -66,7 +66,7 @@ public class Fighter : Character
         }
 
         // uses MP (30MP)
-        useMP(30);
+        useMP(mpCostSkillLvl3);
 
         // increases damage if the healer's lvl2 skill is used
         int damageReceived = (int) ((float) baseAtk * damageMultiplier);

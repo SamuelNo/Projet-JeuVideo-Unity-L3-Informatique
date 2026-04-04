@@ -16,7 +16,7 @@ git svn fetch
 echo "📥 Tentative de fusion (Rebase)..."
 if git svn rebase; then
     echo "🚀 Tout est propre, envoi vers GitHub..."
-    git push github master
+    git push github master --force
 else
     echo "⚠️ CONFLIT DÉTECTÉ entre ton code et le SVN !"
     echo "1. Ouvre VS Code."

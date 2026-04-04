@@ -4,16 +4,19 @@ public class Monster : Enemy
     // ---------- Methods ---------- //
     override public void OnClick()
     {
-        
+         if(this.currentHP <= 0) {
+            Debug.Log("Ennemi mort, impossible de le sélectionner.");
+            return;
+        }
         BattleUIController controller = FindFirstObjectByType<BattleUIController>();
-    if (controller != null)
-    {
-        controller.HandleSelection(this.gameObject);
-    }
-    else
-    {
-        Debug.LogError("BattleUIController not found in the scene.");       
-    }
+        if (controller != null)
+        {
+            controller.HandleSelection(this.gameObject);
+        }
+        else
+        {
+            Debug.LogError("BattleUIController not found in the scene.");       
+        }
     }
 
     override public void ReceiveDamage(int attack, AttackType attackType, bool elemental){
