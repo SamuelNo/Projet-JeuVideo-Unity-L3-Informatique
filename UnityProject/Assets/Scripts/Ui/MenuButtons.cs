@@ -17,7 +17,7 @@ public class MenuButtons : MonoBehaviour
 
     void Awake(){
         scriptsGameObject = GameObject.Find("Script"); // to access scripts (make sure to have a gameobject named "Script")
-        principalScript = scriptsGameObject.GetComponent(typeof(Principal)) as Principal; // to access Principal script
+        principalScript = scriptsGameObject.GetComponent<Principal>(); // to access Principal script
     }
 
     void Reset(){

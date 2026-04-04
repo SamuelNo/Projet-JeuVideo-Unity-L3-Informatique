@@ -39,6 +39,7 @@ abstract public class Character : MonoBehaviour
     public int getMpCostSkillLvl1(){ return mpCostSkillLvl1; }
     public int getMpCostSkillLvl2(){ return mpCostSkillLvl2; }
     public int getMpCostSkillLvl3(){ return mpCostSkillLvl3; }
+    public float getDodgeProbability(){ return dodgeProbability; }
     public float getDamageMultiplier(){ return damageMultiplier; }
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
