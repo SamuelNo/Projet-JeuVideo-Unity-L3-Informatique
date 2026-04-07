@@ -7,10 +7,12 @@ public class Mage : Character
     void Awake(){
         this.attackType = AttackType.Ranged;
         this.weakness = Weakness.Melee;
+        this.gameObject.name = "Mage";
     }
     void Reset(){
         this.attackType = AttackType.Ranged;
         this.weakness = Weakness.Melee;
+        this.gameObject.name = "Mage";
     }
 
     // ---------- Methods ---------- //

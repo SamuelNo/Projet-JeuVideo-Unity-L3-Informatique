@@ -7,10 +7,13 @@ public class Protector : Character
     void Awake(){
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.Elemental;
+        this.gameObject.name = "Protector";
     }
     void Reset(){
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.Elemental;
+        this.gameObject.name = "Protector";
+
     }
 
     // ---------- Methods ---------- //

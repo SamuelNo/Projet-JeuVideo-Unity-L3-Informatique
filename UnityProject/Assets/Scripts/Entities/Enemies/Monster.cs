@@ -2,13 +2,13 @@ using UnityEngine;
 public class Monster : Enemy 
 {
     // ---------- Methods ---------- //
-    override public void OnClick()
+    override public void OnMouseDown()
     {
          if(this.currentHP <= 0) {
             Debug.Log("Ennemi mort, impossible de le sélectionner.");
             return;
         }
-        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
+        BattleUIController controller = FindAnyObjectByType<BattleUIController>();
         if (controller != null)
         {
             controller.HandleSelection(this.gameObject);

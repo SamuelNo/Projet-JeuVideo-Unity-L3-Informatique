@@ -7,10 +7,12 @@ public class Fighter : Character
     void Awake(){
         this.attackType = AttackType.Melee;
         this.weakness = Weakness.Ranged;
+        this.gameObject.name = "Fighter";
     }
     void Reset(){
         this.attackType = AttackType.Melee;
         this.weakness = Weakness.Ranged;
+        this.gameObject.name = "Fighter";
     }
 
     // ---------- Methods ---------- //
@@ -60,7 +62,7 @@ public class Fighter : Character
         ///<summary> Attacks the target (the amount of damage is higher than the total of damage caused by skillLvl1()), and loses HP in the process (1/3 of maxHP)</summary>
         
         // checks that only 1 taget is chosen
-        if (target.Length != 1){
+        if (target.Length < 1){
             Debug.LogException(new Exception("[Classe Fighter] This skill has to target only 1 character"));
             return;
         }

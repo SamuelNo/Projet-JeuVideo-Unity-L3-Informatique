@@ -49,12 +49,12 @@ abstract public class Character : MonoBehaviour
 
     // ---------- Methods ---------- //
 
-    public void onClick(){
+    public void OnMouseDown(){
         if(this.currentHP <= 0) {
             Debug.Log("Personnage mort, impossible de le sélectionner.");
             return;
         }
-        BattleUIController controller = FindFirstObjectByType<BattleUIController>();
+        BattleUIController controller = FindAnyObjectByType<BattleUIController>();
         if (controller != null){
             controller.HandleSelection(this.gameObject);
         } else {

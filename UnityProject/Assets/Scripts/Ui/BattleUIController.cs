@@ -2,16 +2,22 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+
 public class BattleUIController : MonoBehaviour
 {
     public CombatButton simpleAttackButton;
     public CombatButton skillLvl1Button;
     public CombatButton skillLvl2Button;
     public CombatButton skillLvl3Button;
-    public int teampPlaying = 1;
+    public CombatButton endTurnButton;
+    public GameObject attackerNameObject;
+    public int teamPlaying = 1;
     public BattlePhase currentPhase = BattlePhase.SELECT_PLAYER;
     public GameObject currentTarget;
-    public GameObject currentAttacker; // The entity targeted by the buttons
+    public GameObject currentAttacker;
+    private GameObject firstAttacker;
+    private bool turnEnded = false;
+
 
     // Update the combat buttons based on the current battle state.
     public void ButtonAccess()
@@ -23,8 +29,14 @@ public class BattleUIController : MonoBehaviour
             skillLvl1Button.SetState(ButtonState.BLOCKED);
             skillLvl2Button.SetState(ButtonState.BLOCKED);
             skillLvl3Button.SetState(ButtonState.BLOCKED);
+            
             return;
         }
+        if(endTurnButton != null) 
+        { 
+            endTurnButton.SetState(currentPhase != BattlePhase.WAITING ? ButtonState.SHOWN : ButtonState.BLOCKED);
+        }
+                
 
         
     Character attackerStats = currentAttacker.GetComponent<Character>();
@@ -64,11 +76,20 @@ public class BattleUIController : MonoBehaviour
         if (currentPhase == BattlePhase.SELECT_PLAYER)
         {
         
-            if (clickedChar != null && clickedTeam == teampPlaying)
+            if (clickedChar != null && clickedTeam == teamPlaying)
             {
-                currentAttacker = clickedObject;
-                currentPhase = BattlePhase.SELECT_TARGET;
-                Debug.Log("Attaquant choisi ! Maintenant, cliquez sur un ennemi.");
+                if(firstAttacker != null && clickedObject == firstAttacker) 
+                {
+                    Debug.LogWarning("Vous avez déjà choisi ce personnage comme attaquant. Veuillez en choisir un autre ou passer le tour.");
+                }
+                else
+                {
+                    currentAttacker = clickedObject;
+                    firstAttacker = currentAttacker;
+                    attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", currentAttacker.name);
+                    currentPhase = BattlePhase.SELECT_TARGET;
+                    Debug.Log("Attaquant: " + currentAttacker.name + ". Maintenant, cliquez sur un ennemi.");
+                }
             }
             else
             {
@@ -78,21 +99,30 @@ public class BattleUIController : MonoBehaviour
         else if (currentPhase == BattlePhase.SELECT_TARGET)
         {
            
-            if (clickedTeam != teampPlaying && clickedTeam != -1)
+            if (clickedTeam != teamPlaying && clickedTeam != -1)
             {
                 currentTarget = clickedObject;
 
-                Debug.Log("Cible choisie ! Cliquez sur une attaque.");
+                Debug.Log("Cible : " + currentTarget.name + " ! Cliquez sur une attaque.");
             }
-            else if (clickedTeam == teampPlaying && clickedChar != null)
+            else if (clickedTeam == teamPlaying && clickedChar != null)
             {
-                currentAttacker = clickedObject;
-                currentTarget = null;            
-                Debug.Log("Changement d'attaquant : " + clickedObject.name);
-            }
-            else
-            {
-                Debug.LogWarning("Sélection invalide : veuillez sélectionner un ennemi");
+                if(turnEnded) 
+                {
+                    Debug.LogWarning(clickedObject.name + " a déjà été sélectionné comme attaquant.");
+                }
+                else if(clickedObject == firstAttacker)
+                {
+                        Debug.LogWarning("Vous avez déjà choisi " + clickedObject.name + " comme attaquant. Sélectionnez un enemi ou cliquez sur 'Fin du tour'.");
+                    }
+                else
+                {
+                    currentAttacker = clickedObject;
+                    firstAttacker = currentAttacker;
+                    attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", currentAttacker.name);
+                    currentTarget = null;            
+                    Debug.Log("Changement d'attaquant : " + clickedObject.name+". Maintenant, cliquez sur un ennemi.");
+                }
             }
         }
         ButtonAccess();
@@ -101,12 +131,29 @@ public class BattleUIController : MonoBehaviour
     // Reset the selection state and switch to the other team.
     private void FinishTurn()
     {
-        currentAttacker = null;
-        currentTarget = null;
-        teampPlaying = (teampPlaying == 1) ? 2 : 1; // Switch teams
-        currentPhase = BattlePhase.SELECT_PLAYER;
-        ButtonAccess(); 
-        Debug.Log("Tour terminé. Au tour de l'équipe d'en face de jouer ! ");
+        if(turnEnded) 
+        {
+            firstAttacker = null;
+            currentAttacker = null;
+            currentTarget = null;
+            turnEnded = false;
+            teamPlaying = (teamPlaying == 1) ? 2 : 1; // Switch teams
+            attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", "");
+            currentPhase = BattlePhase.SELECT_PLAYER;
+            ButtonAccess(); 
+            Debug.Log("Tour terminé. Au tour de l'équipe " + teamPlaying + " de jouer ! ");
+        }
+        else
+        {
+            currentAttacker = null;
+            currentTarget = null;
+            attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", "");
+            turnEnded = true;
+            currentPhase = BattlePhase.SELECT_PLAYER;
+            ButtonAccess(); 
+            Debug.Log("Sélectionner votre deuxième attaquant ou cliquez : 'fin du tour.'");
+        }
+        
     }
 
     // Resolve the basic attack button using the selected attacker and target.
@@ -115,34 +162,11 @@ public class BattleUIController : MonoBehaviour
 
     if (currentTarget == null || currentAttacker == null) return;
 
-
-    
-    int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
-
-  
-    var enemy = currentTarget.GetComponent<Enemy>();
-    var player = currentTarget.GetComponent<Character>();
-
-   
-    int targetTeam = (player != null) ? player.getTeamID() : (enemy != null ? enemy.TeamId : -1);
-
-   
-    if (targetTeam != -1 && targetTeam != attackerTeam)
-    {
-        currentPhase = BattlePhase.WAITING;
-        ButtonAccess(); 
-        if (enemy != null) currentAttacker.GetComponent<Character>().baseAttack(enemy.gameObject);
-        if (player != null) currentAttacker.GetComponent<Character>().baseAttack(player.gameObject);
-        
-        Debug.Log("Attaque simple réussie sur : " + currentTarget.name);
-        
-        
-        FinishTurn(); 
-    }
-    else 
-    {
-        Debug.LogWarning("Action impossible : cible alliée ou invalide.");
-    }
+    currentPhase = BattlePhase.WAITING;
+    ButtonAccess(); 
+    currentAttacker.GetComponent<Character>().baseAttack(currentTarget);
+    Debug.Log("Attaque simple réussie lancé par " + currentAttacker.name + " sur : " + currentTarget.name);
+    FinishTurn();
     }
 
     // Resolve skill level 1 on the selected target.
@@ -150,11 +174,8 @@ public class BattleUIController : MonoBehaviour
     {
     
         if (currentTarget == null || currentAttacker == null) return;
-
-        Character c = currentTarget.GetComponent<Character>();
-        Enemy e = currentTarget.GetComponent<Enemy>();
-
-        ButtonAccess(); 
+        currentPhase = BattlePhase.WAITING;
+        ButtonAccess();
         currentAttacker.GetComponent<Character>().skillLvl1(currentTarget); 
         Debug.Log("Attaque SkillLvl 1 lancé par " + currentAttacker.name + " sur " + currentTarget.name);
         FinishTurn();
@@ -165,19 +186,15 @@ public class BattleUIController : MonoBehaviour
     // Resolve skill level 2 on the selected target.
     public void OnClickSkillLvl2()
     {
-    if (currentAttacker == null) return; 
-
+    if (currentAttacker == null || currentTarget == null) return; 
     currentPhase = BattlePhase.WAITING;
     ButtonAccess();
 
     List<GameObject> enemiesFound = new List<GameObject>();
+    enemiesFound.Add(currentTarget);
+    
 
-    if (currentTarget != null)
-    {
-        enemiesFound.Add(currentTarget);
-    }
-
-    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude);
 
     foreach (MonoBehaviour obj in allScripts)
     {
@@ -207,7 +224,7 @@ public class BattleUIController : MonoBehaviour
 
    
     currentAttacker.GetComponent<Character>().skillLvl2(targets);
-    Debug.Log("Attaque SkillLvl 2 lancée par " + currentAttacker.name);
+    Debug.Log("Attaque SkillLvl 2 lancée par " + currentAttacker.name + " sur " + currentTarget.name);
     FinishTurn();
 }
     
@@ -216,20 +233,17 @@ public class BattleUIController : MonoBehaviour
     public void OnClickSkillLvl3()
 {
     
-    if (currentAttacker == null) return; 
+    if (currentAttacker == null || currentTarget == null) return; 
 
     currentPhase = BattlePhase.WAITING;
     ButtonAccess();
 
     List<GameObject> enemiesFound = new List<GameObject>();
+    enemiesFound.Add(currentTarget);
 
-    if (currentTarget != null)
-    {
-        enemiesFound.Add(currentTarget);
-    }
 
   
-    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude);
 
     foreach (MonoBehaviour obj in allScripts)
     {
@@ -259,7 +273,13 @@ public class BattleUIController : MonoBehaviour
     GameObject[] targets = enemiesFound.ToArray();
 
     currentAttacker.GetComponent<Character>().skillLvl3(targets);
-    Debug.Log("Attaque SkillLvl 3 lancée par " + currentAttacker.name);
+    Debug.Log("Attaque SkillLvl 3 lancée par " + currentAttacker.name + " sur " + currentTarget.name);
+    FinishTurn();
+}
+public void OnClickEndTurn()
+{
+    Debug.Log("Le joueur a cliqué sur Fin de Tour.");
+    turnEnded = true;
     FinishTurn();
 }
 

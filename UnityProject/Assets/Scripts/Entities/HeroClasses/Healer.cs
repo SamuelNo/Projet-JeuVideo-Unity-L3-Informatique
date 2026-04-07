@@ -7,10 +7,12 @@ public class Healer : Character
     void Awake(){
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.All;
+        this.gameObject.name = "Healer";
     }
     void Reset(){
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.All;
+        this.gameObject.name = "Healer";
     }
 
     // ---------- Methods ---------- //
@@ -58,8 +60,8 @@ public class Healer : Character
         ///<summary> Restores 50% of HP to the target and themselves </summary>
         
         // checks that only 1 taget is chosen (only 2 characters can fight in a battle, so 2 characters to heal : the ally and themselves)
-        if (target.Length != 1){
-            Debug.LogException(new Exception("[Classe Healer] Only the ally should be entered as a parameter"));
+        if (target.Length <1){
+            Debug.LogException(new Exception("[Classe Healer] This skill has to target only 1 character"));
             return;
         }
 
@@ -69,15 +71,18 @@ public class Healer : Character
         // heals themselves
         int healAmount = (int) ((float) this.maxHP * .5f);
         receiveHeal(healAmount);
-
+        Character ally = target[0].GetComponent<Character>();
         // if there's an ally 
-        if (target.Length == 1){
+        if (ally != null){
             // calcultates 50% of ally's maxHP
             healAmount = target[0].GetComponent<Character>().getMaxHP(); 
             healAmount = (int) ((float) healAmount * .5f);
 
             // heals target
             target[0].GetComponent<Character>().receiveHeal(healAmount);
+        }
+        else {
+            Debug.LogException(new Exception("[Classe Healer] The target of the skill should be an ally"));
         }
     }
 }

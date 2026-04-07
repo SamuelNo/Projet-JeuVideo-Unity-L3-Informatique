@@ -70,7 +70,7 @@ abstract public class Enemy : MonoBehaviour
     }
 
 
-    abstract public void OnClick(); 
+    abstract public void OnMouseDown(); 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);
     abstract public void TargetedAttack(GameObject target);
     abstract public void AoeAttack(GameObject [] target);
