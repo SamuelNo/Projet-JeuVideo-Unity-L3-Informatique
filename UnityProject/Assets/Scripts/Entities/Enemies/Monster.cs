@@ -2,22 +2,6 @@ using UnityEngine;
 public class Monster : Enemy 
 {
     // ---------- Methods ---------- //
-    override public void OnMouseDown()
-    {
-         if(this.currentHP <= 0) {
-            Debug.Log("Ennemi mort, impossible de le sélectionner.");
-            return;
-        }
-        BattleUIController controller = FindAnyObjectByType<BattleUIController>();
-        if (controller != null)
-        {
-            controller.HandleSelection(this.gameObject);
-        }
-        else
-        {
-            Debug.LogError("BattleUIController not found in the scene.");       
-        }
-    }
 
     override public void ReceiveDamage(int attack, AttackType attackType, bool elemental){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param>

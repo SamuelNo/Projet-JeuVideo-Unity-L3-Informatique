@@ -5731,8 +5731,9 @@ GameObject:
   m_Component:
   - component: {fileID: 425662840}
   - component: {fileID: 425662839}
+  - component: {fileID: 425662841}
   m_Layer: 0
-  m_Name: Battle Controller
+  m_Name: Scripts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5755,13 +5756,10 @@ MonoBehaviour:
   skillLvl2Button: {fileID: 1188450629}
   skillLvl3Button: {fileID: 1280449840}
   endTurnButton: {fileID: 1227694924}
-  attackerNameObject: {fileID: 987545736}
-  teamPlaying: 1
-  currentPhase: 0
-  currentTarget: {fileID: 0}
-  currentAttacker: {fileID: 0}
-  firstAttacker: {fileID: 0}
-  turnEnded: 0
+  perso1: {fileID: 1057943981}
+  perso2: {fileID: 1496978951}
+  perso3: {fileID: 964598859}
+  perso4: {fileID: 1253166074}
 --- !u!4 &425662840
 Transform:
   m_ObjectHideFlags: 0
@@ -5777,6 +5775,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &425662841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425662838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130415e3e78dc43c1b7e486ce6e9ca94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::Combat
 --- !u!1 &737866247
 GameObject:
   m_ObjectHideFlags: 0

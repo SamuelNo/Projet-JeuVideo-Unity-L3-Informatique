@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public enum BattlePhase {
-    SELECT_PLAYER,
+    SELECT_CHARACTER,
+    SELECT_SKILL,
     SELECT_TARGET,
     WAITING
 }

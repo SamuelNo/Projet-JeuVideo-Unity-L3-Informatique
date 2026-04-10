@@ -27,6 +27,23 @@ abstract public class Enemy : MonoBehaviour
 
     // ---------- Methods ---------- //
 
+    public void OnMouseDown()
+    {
+         if(this.currentHP <= 0) {
+            Debug.Log("Ennemi mort, impossible de le sélectionner.");
+            return;
+        }
+        BattleUIController controller = FindAnyObjectByType<BattleUIController>();
+        if (controller != null)
+        {
+            controller.HandleSelection(this.gameObject);
+        }
+        else
+        {
+            Debug.LogError("BattleUIController not found in the scene.");
+        }
+    }
+
     private void Die()
     {
         currentHP = 0;
@@ -68,9 +85,7 @@ abstract public class Enemy : MonoBehaviour
             currentHP = maxHP;
         }
     }
-
-
-    abstract public void OnMouseDown(); 
+    
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);
     abstract public void TargetedAttack(GameObject target);
     abstract public void AoeAttack(GameObject [] target);

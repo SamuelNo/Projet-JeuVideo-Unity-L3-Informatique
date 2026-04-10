@@ -4,39 +4,215 @@ using System.Collections;
 public class Combat : MonoBehaviour
 {
     // --------------- Attributes ---------------
+    private BattleUIController buttonScript;
 
     private GameObject[] playerList, player2List, enemyList;
+
+    private bool PvP, PvM;
 
     private GameObject selectedCharacter;
     private GameObject[] selectedTargets;
     private int selectedSkill; 
 
-    //private bool waitingForInput;
-
+    private int turnCount; // increases by 1 whenever a turn is over (the 2 teams have played)
+    private bool finishedTurn;
+    private GameObject usedCharacter; // saves the character that was just used
+    private BattlePhase currentPhase;
     private int currentTeam; // the team currently attacking (for now, player1 = 1, player2 = 2 & enemies = -1)
-    private bool finishedTurn; // indicates if the "Fin du tour" button is clicked
+    private int clickedTeam; // used in select(), saves the team of the clicked entity
 
 
     // --------------- set() & get() ---------------
-
-    public void setPlayerList(GameObject[] list){ playerList = list; }
-    public void setPlayer2List(GameObject[] list){ player2List = list; }
-    public void setEnemyList(GameObject[] list){ enemyList = list; }
+    // sets
     public void setSelectedCharacter(GameObject character){ selectedCharacter = character; }
-    public void setselectedTargets(GameObject[] target){ selectedTargets = target; }
     public void setSelectedSkill(int skill){ selectedSkill = skill; }
-    //public void setWaitingForInput(bool b){ waitingForInput = b; }
+    public void setSelectedTargets(GameObject[] targets){ selectedTargets = targets; }
 
-    public GameObject[] setPlayerList(){ return playerList; }
-    public GameObject[] setPlayer2List(){ return player2List; }
-    public GameObject[] setEnemyList(){ return enemyList; }
-    public GameObject setSelectedCharacter(){ return selectedCharacter; }
-    public GameObject[] setselectedTargets(){ return selectedTargets; }
-    public int setSelectedSkill(){ return selectedSkill; }
-    //public bool setWaitingForInput(){ return waitingForInput; }
+    public void setCurrentPhase(BattlePhase phase){ currentPhase = phase; }
+    public void setFinishedTurn(bool x){ finishedTurn = x; }
 
+
+    // gets
+    public GameObject getSelectedCharacter(){ return selectedCharacter; }
+    public int getSelectedSkill(){ return selectedSkill; }
+    public GameObject[] getSelectedTargets(){ return selectedTargets; }
+
+    public BattlePhase getCurrentPhase(){ return currentPhase; }
+    public int getCurrentTeam(){ return currentTeam; }
+    public GameObject getUsedCharacter(){ return usedCharacter; }
+
+
+    // --------------- Initialisation ---------------
+    void Awake(){
+        buttonScript = Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
+
+        turnCount = 0;
+        usedCharacter = null;
+        currentTeam = 1; // at the start of the fight, player1 starts attaking 
+
+        PvP = false;
+        PvM = false;
+    }
+
+    void Reset(){
+        Awake();
+    }
+
+    // --------------- start fight ---------------
+    public void startPvPFight(GameObject[] player1, GameObject[] player2){
+        ///<param> playerList : list of player1's characters, player2List : list of player2's characters </param>
+        ///<summary> starts the PvP fight </summary>
+        
+        playerList = player1;
+        player2List = player2;
+        enemyList = null;
+
+        PvP = true; // starts the battle
+
+        Debug.Log("Le combat PvP commence.");
+    }
+
+    public void startPvMFight(GameObject[] players, GameObject[] ennemies){
+        ///<param> playerList : list of the player's characters, enemyList : list of the enemies the characters are fighting </param>
+        ///<summary> starts the PvM fight </summary>
+        
+        playerList = players;
+        player2List = null;
+        enemyList = ennemies;
+
+        PvM = true; // starts the battle
+
+        Debug.Log("Le combat PvM commence.");
+    }
+
+    // --------------- Update ---------------
+    void FixedUpdate(){
+        if (PvP & finishedTurn){ // won't reenter loop until a round is finished
+            if (teamDead(playerList) | teamDead(player2List)){ // checks if the battle is over
+                if (teamDead(player2List)){
+                    Debug.Log("Fin du combat, le joueur 1 a gagné.");
+                } else {
+                    Debug.Log("Fin du combat, le joueur 2 a gagné.");
+                }
+            }
+            if (currentTeam == 1){ // player1's turn
+                if (!teamDead(playerList) & !teamDead(player2List)){ // while both teams are alive
+                    StartCoroutine(playerTurn());
+                }
+            } else if (currentTeam == 2){ // player2's turn
+                if (!teamDead(playerList) & !teamDead(player2List)){ // while both teams are alive
+                    StartCoroutine(playerTurn());
+                }
+            }
+        }
+            
+        if (PvM & finishedTurn){
+            if (teamDead(playerList) | teamDead(enemyList)){ // checks if the battle is over
+                if (teamDead(enemyList)){
+                    Debug.Log("Fin du combat, le joueur a gagné.");
+                } else {
+                    Debug.Log("Fin du combat, l'ennemi a gagné.");
+                }
+            }
+            if (currentTeam == 1){ // player's turn
+                if (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive
+                    StartCoroutine(playerTurn());
+                } 
+            } else if (currentTeam == -1){ // enemy's turn
+                if (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive
+                    enemyTurn();
+                }
+            }
+        }
+    }
 
     // --------------- Methods ---------------
+    private IEnumerator playerTurn(){
+        ///<summary> goes through the character, skill and target selection during the player's turn </summary>
+        
+        Debug.Log("Tour de l'équipe " + currentTeam + ".");
+
+        finishedTurn = false;
+        foreach (GameObject c in playerList){ // once per character that is alive 
+            if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
+
+                // waits for player to select a character, a skill and a target
+                //StartCoroutine(waitForInput());
+                selectedCharacter = null;
+                selectedSkill = -1;
+                selectedTargets = null;
+
+                currentPhase = BattlePhase.SELECT_CHARACTER;
+                buttonScript.ButtonAccess();
+
+                // waits for player to select a character
+                Debug.Log("Veuillez selectionner un personnage.");
+                yield return new WaitUntil(() => (selectedCharacter != null));
+        
+                // waits for player to select a skill
+                yield return new WaitUntil(() => (selectedSkill != -1));
+
+                // waits for player to select a target (if the automatic target selection hasn't happened)
+                if (selectedTargets == null){
+                    yield return new WaitUntil(() => (selectedTargets != null));
+                }
+
+                // applies skill to target(s)
+                Character characterScript = selectedCharacter.GetComponent<Character>();
+                switch (selectedSkill){
+                    case 0 : characterScript.baseAttack(selectedTargets[0]);
+                             Debug.Log("Attaque basique réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             break;
+                    case 1 : characterScript.skillLvl1(selectedTargets[0]);
+                             Debug.Log("Compétence niveau 1 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             break;
+                    case 2 : characterScript.skillLvl2(selectedTargets);
+                             Debug.Log("Compétence niveau 2 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             break;
+                    case 3 : characterScript.skillLvl3(selectedTargets);
+                             Debug.Log("Compétence niveau 3 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             break;
+                }
+
+                if (usedCharacter != null){
+                    usedCharacter = null;
+                    finishedTurn = true; // if the two characters have been used, the player's turn is over
+                } else {
+                    usedCharacter = selectedCharacter; // otherwise, we save the character that has just been used
+                }
+
+                // if all the characters in a team are dead, the battle is over
+                if (teamDead(enemyList) | teamDead(playerList) | teamDead(player2List)){ 
+                    finishedTurn = true;
+                }
+            }
+        }
+
+
+        // switch to the other team
+        if (player2List == null){
+            currentTeam = -1; // enemies' turn
+        } else if (currentTeam == 1){
+            currentTeam = 2; // player2's turn
+        } else {
+            currentTeam = 1; // player1's turn
+        }
+
+        // increments turnCount
+        if (currentTeam == 1){ // after the 2 teams have played
+            turnCount += 1;
+        }
+
+        yield return null;
+    }
+    
+    private void enemyTurn(){
+        ///<summary> makes the enemies attack during the enemies' turn </summary>
+        
+        Debug.Log("Tour de l'ennemi.");
+        
+        // ...
+    }
 
     private bool teamDead(GameObject[] team){
         ///<param> team : list of the memebers of a team </param>
@@ -45,13 +221,12 @@ public class Combat : MonoBehaviour
         if (team == null) return false;
 
         foreach(GameObject c in team){ 
-            if (isDead(c)){ // if a character is alive, then the team is not dead
+            if (!isDead(c)){ // if a character is alive, then the team is not dead
                 return false;
             }
         }
         return true; // otherwise, the team is dead
     }
-
 
     private bool isDead(GameObject target){
         ///<param> target : an entity (either a character or an enemy) </param>
@@ -59,165 +234,96 @@ public class Combat : MonoBehaviour
         
         if (target.GetComponent<Character>() != null){ // if target is a character
             if (target.GetComponent<Character>().getCurrentHP() <= 0) // if hp of the target is 0 (or less)
+                //Debug.Log(target.name + " is dead");
                 return true; // target is dead
 
         } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
             if (target.GetComponent<Enemy>().CurrentHP <= 0)  // if hp of the target is 0 (or less)
+                //Debug.Log(target.name + " is dead");
                 return true; // target is dead
         }
+        //Debug.Log(target.name + " is NOT dead");
         return false; // otherwise, target is alive
     }
 
-
-    public void startPvPFight(GameObject[] playerList, GameObject[] player2List){
-        ///<param> playerList : list of player1's characters, player2List : list of player2's characters </param>
-        ///<summary> starts the PvP fight </summary>
-    }
-
-
-    public void startPvMFight(GameObject[] playerList, GameObject[] enemyList){
-        ///<param> playerList : list of the player's characters, enemyList : list of the enemies the characters are fighting </param>
-        ///<summary> starts the PvM fight </summary>
+    public void automaticTargetSelection(){
+        ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
         
-        player2List = null;
-        currentTeam = 1; // at the start of the fight, player starts attaking 
-        while (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive
-            if (currentTeam == 1){ // player's turn
-                playerTurn();
-            } else if (currentTeam == -1){ // enemies' turn
-                enemyTurn();
+        if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
+           (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)| // or if character is a protector and using skill lvl 2 (?)
+           (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
+            // skill affects all opponents (player doesn't need to select target)
+            if (player2List == null){ // if it's a PvM
+                selectedTargets = enemyList;
+            } else if (currentTeam == 1){
+                selectedTargets = player2List;
+            } else {
+                selectedTargets = playerList;
+            }
+
+        } else if((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)){ // if character is a healer and using skill lvl 3
+            // skill affects all allies (player doesn't need to select target)
+            if (currentTeam == 1){
+                selectedTargets = playerList;
+            } else {
+                selectedTargets = player2List;
             }
         }
     }
 
+    public void select(GameObject clickedObject){
+        ///<summary> handles the character and target selection </summary>
 
-    private void playerTurn(){
-        ///<summary> goes through the character, skill and target selection during the player's turn </summary>
-        
-        finishedTurn = false;
-        while (!finishedTurn){ // until the "Fin du tour" button is clicked
-            
-            // waits for player to select a character, a skill and a target
-            StartCoroutine(waitForInput());
+        clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team of the clicked character
 
-            // applies skill to target(s)
-            switch (selectedSkill){
-                case 0 : selectedCharacter.GetComponent<Character>().baseAttack(selectedTargets[0]);
-                         break;
-                case 1 : selectedCharacter.GetComponent<Character>().skillLvl1(selectedTargets[0]);
-                         break;
-                case 2 : selectedCharacter.GetComponent<Character>().skillLvl2(selectedTargets);
-                         break;
-                case 3 : selectedCharacter.GetComponent<Character>().skillLvl3(selectedTargets);
-                         break;
-            }
- 
-            // if all the characters in a team are dead, the battle is over
-            if (teamDead(enemyList) | teamDead(playerList) | teamDead(player2List)){ 
-                finishedTurn = true;
-            }
-        }
+        if (currentPhase == BattlePhase.SELECT_CHARACTER | currentPhase == BattlePhase.SELECT_SKILL){
+            if (clickedTeam == currentTeam){
+                if (clickedObject != usedCharacter){ // the character can be selected
+                    selectedCharacter = clickedObject;
+                    Debug.Log("Vous avez sélectionné le personnage " + selectedCharacter.name + ". Veuillez choisir une compétence.");
 
-        if (player2List == null){
-            currentTeam = -1; // enemies' turn
-        } else if (currentTeam == 1){
-            currentTeam = 2; // player2's turn
-        } else {
-            currentTeam = 1; // player1's turn
-        }
-    }
-    
-    private IEnumerator waitForInput(){
-        ///<summary> waits for player to select a character, a skill and a target </summary>
+                    currentPhase = BattlePhase.SELECT_SKILL;
+                    buttonScript.ButtonAccess();
 
-        selectedCharacter = null;
-        selectedSkill = -1;
-        selectedTargets = null;
 
-        while(selectedCharacter == null & selectedSkill == -1 & selectedTargets == null){ // until the player selects a character, a skill and a target
-            if(selectedCharacter != null & selectedSkill != -1){ // once the player selects a character and a skill
-
-                if((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
-                   (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)| // or if character is a protector and using skill lvl 2 (?)
-                   (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
-                    if (player2List == null){
-                        selectedTargets = enemyList; // skill affects all enemies (player doesn't need to select target)
-                    } else if (currentTeam == 1){
-                        selectedTargets = player2List; // skill affects all opponents (player doesn't need to select target)
-                    } else {
-                        selectedTargets = playerList; // skill affects all opponents (player doesn't need to select target)
-                    }
+                } else { // the character was already used, nothing happens
+                    Debug.LogWarning("Vous avez déjà utilisé ce personnage. Veuillez en choisir un autre ou passer le tour.");
                 }
 
-                if((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)){ // if character is a healer and using skill lvl 3
-                    if (currentTeam == 1){
-                        selectedTargets = playerList; // skill affects all allies (player doesn't need to select target)
-                    } else {
-                        selectedTargets = player2List; // skill affects all allies (player doesn't need to select target)
-                    }
+            } else { // the character/enemy is not on the right team, nothing happens
+                Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
+            }
+
+
+        } else if (currentPhase == BattlePhase.SELECT_TARGET){
+            if (clickedTeam == currentTeam){ // if character is an ally
+                if (selectedCharacter.GetComponent<Healer>() | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2)){ // if an ally can be targeted, target the character
+                    selectedTargets = new GameObject[] {clickedObject};
+                    Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+
+                    currentPhase = BattlePhase.WAITING;
+                    buttonScript.ButtonAccess();
+
+
+                } else if (clickedObject != usedCharacter){ // if the character wasn't used before, switch to character
+                    selectedCharacter = clickedObject;
+                    Debug.Log("Vous avez sélectionné le personnage " + selectedCharacter.name + ". Veuillez choisir une compétence.");
+
+                    currentPhase = BattlePhase.SELECT_SKILL;
+                    buttonScript.ButtonAccess();
+
+
+                } else { // the character cannot be selected
+                    Debug.LogWarning("Ce personnage fait partie de votre équipe, vous ne pouvez pas l'attaquer. Veuillez choisir un autre personnage.");
                 }
+
+            } else { // if character/enemy is an opponent, target the character/enemy
+                selectedTargets = new GameObject[] {clickedObject};
+                Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+
+                currentPhase = BattlePhase.WAITING;
+                buttonScript.ButtonAccess();
             }
         }
-
-        yield return null;
-    }
-
-
-    private void enemyTurn(){
-        ///<summary> makes the enemies attack during the enemies' turn </summary>
     }
 }
-
-/*
-public IEnumerator combat(){
-   // code avant d'attendre l'input du joueur
-   waitingForInput = true;
-   yield return new WaitUntil(() => (waitingForInput == false)); // attente de l’input
-   // code après l'input du joueur
-}
-
-public void buttonClicked(){
-   combatScript.setPlayerChoice(choice); // informe Combat du choix du joueur
-   combatScript.setWaitingForInput(false); // informe combat() qu’il peut continuer 
-}
-*/
-
-
-/*          // waits for player to select a character
-            selectedCharacter = null;
-            StartCoroutine(waitForCharacter());
-
-            // waits for player to select a skill
-            selectedSkill = -1;
-            StartCoroutine(waitForSkill()); 
-
-            if (attackIsTargeted(selectedCharacter, selectedSkill)){ // if the selected skill of the selected character needs a specific target
-                // waits for player to select a target
-                selectedTargets = null;
-                StartCoroutine(waitForTarget());
-            }
-*/
-
-
-/*
-    private IEnumerator waitForCharacter(){
-        ///<summary> waits for player to select a character </summary>
-
-        waitingForInput = true;
-        yield return new WaitUntil(() => (waitingForInput == false & selectedCharacter != null)); // waits for player to select a character
-    }
-
-    private IEnumerator waitForSkill(){
-        ///<summary> waits for player to select a skill </summary>
-
-        waitingForInput = true;
-        yield return new WaitUntil(() => (waitingForInput == false & selectedSkill != -1)); // waits for player to select a skill
-    }
-
-    private IEnumerator waitForTarget(){
-        ///<summary> // waits for player to select a target </summary>
-
-        waitingForInput = true;
-        yield return new WaitUntil(() => (waitingForInput == false & selectedTargets != null)); // waits for player to select a target
-    }
-*/

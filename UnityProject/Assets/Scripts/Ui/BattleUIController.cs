@@ -5,282 +5,118 @@ using UnityEngine.UI;
 
 public class BattleUIController : MonoBehaviour
 {
-    public CombatButton simpleAttackButton;
-    public CombatButton skillLvl1Button;
-    public CombatButton skillLvl2Button;
-    public CombatButton skillLvl3Button;
-    public CombatButton endTurnButton;
-    public GameObject attackerNameObject;
-    public int teamPlaying = 1;
-    public BattlePhase currentPhase = BattlePhase.SELECT_PLAYER;
-    public GameObject currentTarget;
-    public GameObject currentAttacker;
-    private GameObject firstAttacker;
-    private bool turnEnded = false;
+    // --------------- Attributes ---------------
+    // scripts
+    private Combat combatScript;
+
+    // buttons
+    public CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton;
+
+    // data
+    private BattlePhase currentPhase;
+
+    // test
+    public GameObject perso1, perso2, perso3, perso4;
+    private GameObject[] team1, team2;
 
 
-    // Update the combat buttons based on the current battle state.
-    public void ButtonAccess()
-    {
+    // --------------- Initialisation ---------------
+    void Start(){
+        combatScript = Object.FindAnyObjectByType<Combat>(FindObjectsInactive.Exclude);
+        team1 = new GameObject[] {perso1, perso2};
+        team2 = new GameObject[] {perso3, perso4};
+        combatScript.startPvPFight(team1, team2);
+    }
+    
+    // --------------- Methods --------------- 
+    public void ButtonAccess(){
+        ///<summary> updates the combat buttons based on the current battle state </summary>
         
-        if (currentPhase == BattlePhase.WAITING || currentAttacker == null)
-        {
+        GameObject selectedCharacter = combatScript.getSelectedCharacter();
+        currentPhase = combatScript.getCurrentPhase();
+
+        endTurnButton.SetState(currentPhase == BattlePhase.WAITING ? ButtonState.BLOCKED : ButtonState.SHOWN);
+        if (currentPhase == BattlePhase.WAITING || selectedCharacter == null){
+
             simpleAttackButton.SetState(ButtonState.BLOCKED);
             skillLvl1Button.SetState(ButtonState.BLOCKED);
             skillLvl2Button.SetState(ButtonState.BLOCKED);
             skillLvl3Button.SetState(ButtonState.BLOCKED);
-            
-            return;
+
+        } else {
+            Character attackerStats = selectedCharacter.GetComponent<Character>();
+
+            simpleAttackButton.SetState(ButtonState.SHOWN);
+            skillLvl1Button.SetState(attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl1() ? ButtonState.SHOWN : ButtonState.BLOCKED);
+            skillLvl2Button.SetState(attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl2() ? ButtonState.SHOWN : ButtonState.BLOCKED);
+            skillLvl3Button.SetState(attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl3() ? ButtonState.SHOWN : ButtonState.BLOCKED);
         }
-        if(endTurnButton != null) 
-        { 
-            endTurnButton.SetState(currentPhase != BattlePhase.WAITING ? ButtonState.SHOWN : ButtonState.BLOCKED);
-        }
-                
-
-        
-    Character attackerStats = currentAttacker.GetComponent<Character>();
-
-    
-    simpleAttackButton.SetState(currentTarget != null ? ButtonState.SHOWN : ButtonState.BLOCKED);
-
-    skillLvl1Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl1() ? ButtonState.SHOWN : ButtonState.BLOCKED);
-
-    skillLvl2Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl2() ? ButtonState.SHOWN : ButtonState.BLOCKED);
-
-    skillLvl3Button.SetState(currentTarget != null && attackerStats.getCurrentMP() >= attackerStats.getMpCostSkillLvl3() ? ButtonState.SHOWN : ButtonState.BLOCKED);
     }
 
-    // Initialize the UI state when the scene starts.
-    void Start()
-    {
-        ButtonAccess(); 
-        Debug.Log("BattleUIController initialisé. Phase : " + currentPhase);
+    public void HandleSelection(GameObject clickedObject){
+        ///<summary> makes Combat handle the character and target selection </summary>
+
+        if (combatScript.getCurrentPhase() != BattlePhase.WAITING)
+            combatScript.select(clickedObject);
     }
 
+    public void OnClickSimpleAttack(){
+        ///<summary> assigns the selected skill (base attack) to the Combat class </summary>
 
-    // Handle clicks on characters and enemies to set the attacker or target.
-    public void HandleSelection(GameObject clickedObject)
-    {
-  
-        if (currentPhase == BattlePhase.WAITING) return;
+        Debug.Log("Vous avez sélectionné l'attaque basique. Veuillez choisir une cible.");
 
-       
-        Character clickedChar = clickedObject.GetComponent<Character>();
-        Enemy clickedEnemy = clickedObject.GetComponent<Enemy>();
+        combatScript.setSelectedSkill(0); // informs the Combat class that the selected skill is the basic attack
 
-      
-        int clickedTeam = (clickedChar != null) ? clickedChar.getTeamID() : (clickedEnemy != null ? clickedEnemy.TeamId : -1);
-
-  
-        if (currentPhase == BattlePhase.SELECT_PLAYER)
-        {
-        
-            if (clickedChar != null && clickedTeam == teamPlaying)
-            {
-                if(firstAttacker != null && clickedObject == firstAttacker) 
-                {
-                    Debug.LogWarning("Vous avez déjà choisi ce personnage comme attaquant. Veuillez en choisir un autre ou passer le tour.");
-                }
-                else
-                {
-                    currentAttacker = clickedObject;
-                    firstAttacker = currentAttacker;
-                    attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", currentAttacker.name);
-                    currentPhase = BattlePhase.SELECT_TARGET;
-                    Debug.Log("Attaquant: " + currentAttacker.name + ". Maintenant, cliquez sur un ennemi.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Sélection invalide : veuillez sélectionner un personnage de votre équipe.");
-            }
-        }
-        else if (currentPhase == BattlePhase.SELECT_TARGET)
-        {
-           
-            if (clickedTeam != teamPlaying && clickedTeam != -1)
-            {
-                currentTarget = clickedObject;
-
-                Debug.Log("Cible : " + currentTarget.name + " ! Cliquez sur une attaque.");
-            }
-            else if (clickedTeam == teamPlaying && clickedChar != null)
-            {
-                if(turnEnded) 
-                {
-                    Debug.LogWarning(clickedObject.name + " a déjà été sélectionné comme attaquant.");
-                }
-                else if(clickedObject == firstAttacker)
-                {
-                        Debug.LogWarning("Vous avez déjà choisi " + clickedObject.name + " comme attaquant. Sélectionnez un enemi ou cliquez sur 'Fin du tour'.");
-                    }
-                else
-                {
-                    currentAttacker = clickedObject;
-                    firstAttacker = currentAttacker;
-                    attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", currentAttacker.name);
-                    currentTarget = null;            
-                    Debug.Log("Changement d'attaquant : " + clickedObject.name+". Maintenant, cliquez sur un ennemi.");
-                }
-            }
-        }
+        combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
+
+        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
     }
 
-    // Reset the selection state and switch to the other team.
-    private void FinishTurn()
-    {
-        if(turnEnded) 
-        {
-            firstAttacker = null;
-            currentAttacker = null;
-            currentTarget = null;
-            turnEnded = false;
-            teamPlaying = (teamPlaying == 1) ? 2 : 1; // Switch teams
-            attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", "");
-            currentPhase = BattlePhase.SELECT_PLAYER;
-            ButtonAccess(); 
-            Debug.Log("Tour terminé. Au tour de l'équipe " + teamPlaying + " de jouer ! ");
-        }
-        else
-        {
-            currentAttacker = null;
-            currentTarget = null;
-            attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", "");
-            turnEnded = true;
-            currentPhase = BattlePhase.SELECT_PLAYER;
-            ButtonAccess(); 
-            Debug.Log("Sélectionner votre deuxième attaquant ou cliquez : 'fin du tour.'");
-        }
-        
-    }
+    public void OnClickSkillLvl1(){
+        ///<summary> assigns the selected skill (level 1 skill) to the Combat class </summary>
 
-    // Resolve the basic attack button using the selected attacker and target.
-    public void OnClickSimpleAttack()   
-    {
+        Debug.Log("Vous avez sélectionné la compétence niveau 1. Veuillez choisir une cible.");
 
-    if (currentTarget == null || currentAttacker == null) return;
+        combatScript.setSelectedSkill(1); // informs the Combat class that the selected skill is the lvl 1 skill
 
-    currentPhase = BattlePhase.WAITING;
-    ButtonAccess(); 
-    currentAttacker.GetComponent<Character>().baseAttack(currentTarget);
-    Debug.Log("Attaque simple réussie lancé par " + currentAttacker.name + " sur : " + currentTarget.name);
-    FinishTurn();
-    }
-
-    // Resolve skill level 1 on the selected target.
-    public void OnClickSkillLvl1()
-    {
-    
-        if (currentTarget == null || currentAttacker == null) return;
-        currentPhase = BattlePhase.WAITING;
+        combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
-        currentAttacker.GetComponent<Character>().skillLvl1(currentTarget); 
-        Debug.Log("Attaque SkillLvl 1 lancé par " + currentAttacker.name + " sur " + currentTarget.name);
-        FinishTurn();
+
+        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
     }
 
+    public void OnClickSkillLvl2(){
+        ///<summary> assigns the selected skill (level 2 skill) to the Combat class </summary>
 
+        Debug.Log("Vous avez sélectionné la compétence niveau 2. Veuillez choisir une cible.");
 
-    // Resolve skill level 2 on the selected target.
-    public void OnClickSkillLvl2()
-    {
-    if (currentAttacker == null || currentTarget == null) return; 
-    currentPhase = BattlePhase.WAITING;
-    ButtonAccess();
+        combatScript.setSelectedSkill(2); // informs the Combat class that the selected skill is the lvl 2 skill
 
-    List<GameObject> enemiesFound = new List<GameObject>();
-    enemiesFound.Add(currentTarget);
+        combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
+        ButtonAccess();
+
+        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
+    }
     
+    public void OnClickSkillLvl3(){
+        ///<summary> assigns the selected skill (level 3 skill) to the Combat class </summary>
 
-    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude);
+        Debug.Log("Vous avez sélectionné la compétence niveau 3. Veuillez choisir une cible.");
 
-    foreach (MonoBehaviour obj in allScripts)
-    {
+        combatScript.setSelectedSkill(3); // informs the Combat class that the selected skill is the lvl 3 skill
 
-        Character c = obj.GetComponent<Character>();
-        Enemy e = obj.GetComponent<Enemy>();
+        combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
+        ButtonAccess();
 
-
-        if (c != null || e != null)
-        {
-           
-            int targetTeam = (c != null) ? c.getTeamID() : e.TeamId;
-            int hpTarget = (c != null) ? c.getCurrentHP() : e.CurrentHP;
-            int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
-
-            if (targetTeam != attackerTeam && hpTarget > 0)
-            {
-                if (!enemiesFound.Contains(obj.gameObject)) {
-                    enemiesFound.Add(obj.gameObject);
-                }
-            }
-        }
+        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
     }
 
-    
-    GameObject[] targets = enemiesFound.ToArray();
+    public void OnClickEndTurn(){
+        ///<summary> informs the Combat class that the player clicked on "Fin de tour" </summary>
 
-   
-    currentAttacker.GetComponent<Character>().skillLvl2(targets);
-    Debug.Log("Attaque SkillLvl 2 lancée par " + currentAttacker.name + " sur " + currentTarget.name);
-    FinishTurn();
-}
-    
+        Debug.Log("Vous avez cliqué sur 'Fin de Tour'.");
 
-    // Resolve skill level 3 on the selected target.
-    public void OnClickSkillLvl3()
-{
-    
-    if (currentAttacker == null || currentTarget == null) return; 
-
-    currentPhase = BattlePhase.WAITING;
-    ButtonAccess();
-
-    List<GameObject> enemiesFound = new List<GameObject>();
-    enemiesFound.Add(currentTarget);
-
-
-  
-    MonoBehaviour[] allScripts = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude);
-
-    foreach (MonoBehaviour obj in allScripts)
-    {
-
-        Character c = obj.GetComponent<Character>();
-        Enemy e = obj.GetComponent<Enemy>();
-
-
-        if (c != null || e != null)
-        {
-    
-            int targetTeam = (c != null) ? c.getTeamID() : e.TeamId;
-            int hpTarget = (c != null) ? c.getCurrentHP() : e.CurrentHP;
-            int attackerTeam = currentAttacker.GetComponent<Character>().getTeamID();
-
-
-            if (targetTeam != attackerTeam && hpTarget > 0)
-            {
-                if (!enemiesFound.Contains(obj.gameObject)) {
-                enemiesFound.Add(obj.gameObject);
-                }
-            }
-        }
+        combatScript.setFinishedTurn(true); 
     }
-
-   
-    GameObject[] targets = enemiesFound.ToArray();
-
-    currentAttacker.GetComponent<Character>().skillLvl3(targets);
-    Debug.Log("Attaque SkillLvl 3 lancée par " + currentAttacker.name + " sur " + currentTarget.name);
-    FinishTurn();
-}
-public void OnClickEndTurn()
-{
-    Debug.Log("Le joueur a cliqué sur Fin de Tour.");
-    turnEnded = true;
-    FinishTurn();
-}
-
 }

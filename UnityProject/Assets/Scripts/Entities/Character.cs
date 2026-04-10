@@ -61,6 +61,7 @@ abstract public class Character : MonoBehaviour
             Debug.LogException(new Exception("[Classe Character] BattleUIController not found in the scene.")); 
         }
     }
+
     private void Die()
     {
         currentHP = 0;
@@ -73,6 +74,7 @@ abstract public class Character : MonoBehaviour
         
         Debug.Log(gameObject.name + " a été supprimé de la scène.");
     }
+    
     public void receiveDamage(int n){
         ///<param> n : amount of damage to be received by the character </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
@@ -89,7 +91,7 @@ abstract public class Character : MonoBehaviour
             n += currentHP;
             Die();
         }
-        //Debug.Log("Le personnage a perdu "+n+"PV");
+        Debug.Log( this.name+" a perdu "+n+"PV");
     }
     
 

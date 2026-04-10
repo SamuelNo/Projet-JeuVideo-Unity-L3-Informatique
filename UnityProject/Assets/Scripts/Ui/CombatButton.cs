@@ -16,10 +16,10 @@ public class CombatButton : MonoBehaviour
     // Update the button visibility and interactability from the given state.
     public void SetState(ButtonState newState)
     {
-    currentState = newState;
+        currentState = newState;
     
     
-    Image buttonImage = GetComponent<Image>();
+        Image buttonImage = GetComponent<Image>();
 
         switch (newState)
         {
