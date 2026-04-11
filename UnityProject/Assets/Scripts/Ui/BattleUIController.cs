@@ -56,8 +56,9 @@ public class BattleUIController : MonoBehaviour
     public void HandleSelection(GameObject clickedObject){
         ///<summary> makes Combat handle the character and target selection </summary>
 
-        if (combatScript.getCurrentPhase() != BattlePhase.WAITING)
+        if (combatScript.getCurrentPhase() != BattlePhase.WAITING){
             combatScript.select(clickedObject);
+        }
     }
 
     public void OnClickSimpleAttack(){
@@ -70,7 +71,7 @@ public class BattleUIController : MonoBehaviour
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
 
-        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
+        combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
 
     public void OnClickSkillLvl1(){
@@ -83,7 +84,7 @@ public class BattleUIController : MonoBehaviour
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
 
-        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
+        combatScript.automaticTargetSelection(); // assigns targets sto electedTargets if necessary
     }
 
     public void OnClickSkillLvl2(){
@@ -96,7 +97,7 @@ public class BattleUIController : MonoBehaviour
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
 
-        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
+        combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
     
     public void OnClickSkillLvl3(){
@@ -109,7 +110,7 @@ public class BattleUIController : MonoBehaviour
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
 
-        combatScript.automaticTargetSelection(); // assigns targets selectedTargets if necessary
+        combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
 
     public void OnClickEndTurn(){

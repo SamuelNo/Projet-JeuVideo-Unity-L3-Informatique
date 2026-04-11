@@ -127,7 +127,6 @@ public class OldBattleUIController : MonoBehaviour
         ButtonAccess();
     }
 
-/*
     // Reset the selection state and switch to the other team.
     private void FinishTurn()
     {
@@ -281,5 +280,4 @@ public void OnClickEndTurn()
     turnEnded = true;
     FinishTurn();
 }
-*/
 }

@@ -14,6 +14,8 @@ public class Combat : MonoBehaviour
     private GameObject[] selectedTargets;
     private int selectedSkill; 
 
+    private bool wait;
+
     private int turnCount; // increases by 1 whenever a turn is over (the 2 teams have played)
     private bool finishedTurn;
     private GameObject usedCharacter; // saves the character that was just used
@@ -28,6 +30,7 @@ public class Combat : MonoBehaviour
     public void setSelectedSkill(int skill){ selectedSkill = skill; }
     public void setSelectedTargets(GameObject[] targets){ selectedTargets = targets; }
 
+    //public void setWait(bool x){ wait = x; }
     public void setCurrentPhase(BattlePhase phase){ currentPhase = phase; }
     public void setFinishedTurn(bool x){ finishedTurn = x; }
 
@@ -49,6 +52,7 @@ public class Combat : MonoBehaviour
         turnCount = 0;
         usedCharacter = null;
         currentTeam = 1; // at the start of the fight, player1 starts attaking 
+        wait = false;
 
         PvP = false;
         PvM = false;
@@ -87,13 +91,14 @@ public class Combat : MonoBehaviour
 
     // --------------- Update ---------------
     void FixedUpdate(){
-        if (PvP & finishedTurn){ // won't reenter loop until a round is finished
+        if (PvP & !wait){ // only enters the loop when a turn is over
             if (teamDead(playerList) | teamDead(player2List)){ // checks if the battle is over
                 if (teamDead(player2List)){
                     Debug.Log("Fin du combat, le joueur 1 a gagné.");
                 } else {
                     Debug.Log("Fin du combat, le joueur 2 a gagné.");
                 }
+                wait = true;
             }
             if (currentTeam == 1){ // player1's turn
                 if (!teamDead(playerList) & !teamDead(player2List)){ // while both teams are alive
@@ -106,13 +111,14 @@ public class Combat : MonoBehaviour
             }
         }
             
-        if (PvM & finishedTurn){
+        if (PvM & !wait){ // only enters the loop when a turn is over
             if (teamDead(playerList) | teamDead(enemyList)){ // checks if the battle is over
                 if (teamDead(enemyList)){
                     Debug.Log("Fin du combat, le joueur a gagné.");
                 } else {
                     Debug.Log("Fin du combat, l'ennemi a gagné.");
                 }
+                wait = true;
             }
             if (currentTeam == 1){ // player's turn
                 if (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive
@@ -127,25 +133,27 @@ public class Combat : MonoBehaviour
     }
 
     // --------------- Methods ---------------
+
+
+    // ATTENTION : LE BOUTTON "FIN DU TOUR" NE FONCTIONNE PAS, À CORRRIGER
     private IEnumerator playerTurn(){
         ///<summary> goes through the character, skill and target selection during the player's turn </summary>
         
         Debug.Log("Tour de l'équipe " + currentTeam + ".");
+        wait = true;
 
         finishedTurn = false;
         foreach (GameObject c in playerList){ // once per character that is alive 
             if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
 
                 // waits for player to select a character, a skill and a target
-                //StartCoroutine(waitForInput());
                 selectedCharacter = null;
                 selectedSkill = -1;
                 selectedTargets = null;
 
+                // waits for player to select a character
                 currentPhase = BattlePhase.SELECT_CHARACTER;
                 buttonScript.ButtonAccess();
-
-                // waits for player to select a character
                 Debug.Log("Veuillez selectionner un personnage.");
                 yield return new WaitUntil(() => (selectedCharacter != null));
         
@@ -153,9 +161,7 @@ public class Combat : MonoBehaviour
                 yield return new WaitUntil(() => (selectedSkill != -1));
 
                 // waits for player to select a target (if the automatic target selection hasn't happened)
-                if (selectedTargets == null){
-                    yield return new WaitUntil(() => (selectedTargets != null));
-                }
+                if (selectedTargets == null) yield return new WaitUntil(() => (selectedTargets != null));
 
                 // applies skill to target(s)
                 Character characterScript = selectedCharacter.GetComponent<Character>();
@@ -174,20 +180,19 @@ public class Combat : MonoBehaviour
                              break;
                 }
 
-                if (usedCharacter != null){
+                if (usedCharacter != null){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
-                    finishedTurn = true; // if the two characters have been used, the player's turn is over
+                    finishedTurn = true;
                 } else {
-                    usedCharacter = selectedCharacter; // otherwise, we save the character that has just been used
+                    usedCharacter = selectedCharacter; // otherwise, the character that has just been used is saved
                 }
 
-                // if all the characters in a team are dead, the battle is over
+                // if a team is dead, the battle is over
                 if (teamDead(enemyList) | teamDead(playerList) | teamDead(player2List)){ 
                     finishedTurn = true;
                 }
             }
         }
-
 
         // switch to the other team
         if (player2List == null){
@@ -203,6 +208,7 @@ public class Combat : MonoBehaviour
             turnCount += 1;
         }
 
+        wait = false;
         yield return null;
     }
     
@@ -211,6 +217,7 @@ public class Combat : MonoBehaviour
         
         Debug.Log("Tour de l'ennemi.");
         
+        // implémenter l'ia ici
         // ...
     }
 
@@ -250,7 +257,7 @@ public class Combat : MonoBehaviour
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
         
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
-           (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)| // or if character is a protector and using skill lvl 2 (?)
+           (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)| // or if character is a protector and using skill lvl 2
            (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
             // skill affects all opponents (player doesn't need to select target)
             if (player2List == null){ // if it's a PvM
@@ -261,7 +268,7 @@ public class Combat : MonoBehaviour
                 selectedTargets = playerList;
             }
 
-        } else if((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)){ // if character is a healer and using skill lvl 3
+        } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)){ // if character is a healer and using skill lvl 3
             // skill affects all allies (player doesn't need to select target)
             if (currentTeam == 1){
                 selectedTargets = playerList;
@@ -274,11 +281,11 @@ public class Combat : MonoBehaviour
     public void select(GameObject clickedObject){
         ///<summary> handles the character and target selection </summary>
 
-        clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team of the clicked character
+        clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team id of the clicked character
 
         if (currentPhase == BattlePhase.SELECT_CHARACTER | currentPhase == BattlePhase.SELECT_SKILL){
             if (clickedTeam == currentTeam){
-                if (clickedObject != usedCharacter){ // the character can be selected
+                if (clickedObject != usedCharacter){ // if the character is allowed to be selected, select the character
                     selectedCharacter = clickedObject;
                     Debug.Log("Vous avez sélectionné le personnage " + selectedCharacter.name + ". Veuillez choisir une compétence.");
 
@@ -318,11 +325,16 @@ public class Combat : MonoBehaviour
                 }
 
             } else { // if character/enemy is an opponent, target the character/enemy
-                selectedTargets = new GameObject[] {clickedObject};
-                Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+                if (selectedCharacter.GetComponent<Healer>() | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2)){ // if the target has to be an ally, nothing happens
+                    Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
 
-                currentPhase = BattlePhase.WAITING;
-                buttonScript.ButtonAccess();
+                } else {
+                    selectedTargets = new GameObject[] {clickedObject};
+                    Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+
+                    currentPhase = BattlePhase.WAITING;
+                    buttonScript.ButtonAccess();
+                }
             }
         }
     }

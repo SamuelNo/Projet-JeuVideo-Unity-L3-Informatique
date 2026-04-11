@@ -103,6 +103,7 @@ abstract public class Character : MonoBehaviour
         if (currentHP > maxHP){
             currentHP = maxHP;
         }
+        Debug.Log( this.name+" a gagné "+n+"PV");
     }
 
     public void useMP (int n){
