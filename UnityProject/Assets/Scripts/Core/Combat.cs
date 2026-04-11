@@ -133,9 +133,6 @@ public class Combat : MonoBehaviour
     }
 
     // --------------- Methods ---------------
-
-
-    // ATTENTION : LE BOUTTON "FIN DU TOUR" NE FONCTIONNE PAS, À CORRRIGER
     private IEnumerator playerTurn(){
         ///<summary> goes through the character, skill and target selection during the player's turn </summary>
         
@@ -155,13 +152,18 @@ public class Combat : MonoBehaviour
                 currentPhase = BattlePhase.SELECT_CHARACTER;
                 buttonScript.ButtonAccess();
                 Debug.Log("Veuillez selectionner un personnage.");
-                yield return new WaitUntil(() => (selectedCharacter != null));
+                yield return new WaitUntil(() => (selectedCharacter != null) | finishedTurn);
+                if (finishedTurn) break; // if the "Fin du tour" button was clicked, end the turn
         
                 // waits for player to select a skill
-                yield return new WaitUntil(() => (selectedSkill != -1));
+                yield return new WaitUntil(() => (selectedSkill != -1 | finishedTurn));
+                if (finishedTurn) break; // if the "Fin du tour" button was clicked, end the turn
 
                 // waits for player to select a target (if the automatic target selection hasn't happened)
-                if (selectedTargets == null) yield return new WaitUntil(() => (selectedTargets != null));
+                if (selectedTargets == null) {
+                    yield return new WaitUntil(() => (selectedTargets != null | finishedTurn));
+                    if (finishedTurn) break; // if the "Fin du tour" button was clicked, end the turn
+                }
 
                 // applies skill to target(s)
                 Character characterScript = selectedCharacter.GetComponent<Character>();
@@ -173,10 +175,10 @@ public class Combat : MonoBehaviour
                              Debug.Log("Compétence niveau 1 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
                              break;
                     case 2 : characterScript.skillLvl2(selectedTargets);
-                             Debug.Log("Compétence niveau 2 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             Debug.Log("Compétence niveau 2 réussie, lancée par " + selectedCharacter.name);
                              break;
                     case 3 : characterScript.skillLvl3(selectedTargets);
-                             Debug.Log("Compétence niveau 3 réussie, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                             Debug.Log("Compétence niveau 3 réussie, lancée par " + selectedCharacter.name);
                              break;
                 }
 
@@ -249,7 +251,6 @@ public class Combat : MonoBehaviour
                 //Debug.Log(target.name + " is dead");
                 return true; // target is dead
         }
-        //Debug.Log(target.name + " is NOT dead");
         return false; // otherwise, target is alive
     }
 
@@ -267,6 +268,7 @@ public class Combat : MonoBehaviour
             } else {
                 selectedTargets = playerList;
             }
+            Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
 
         } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)){ // if character is a healer and using skill lvl 3
             // skill affects all allies (player doesn't need to select target)
@@ -275,6 +277,12 @@ public class Combat : MonoBehaviour
             } else {
                 selectedTargets = player2List;
             }
+            Debug.Log("Tous les alliés ont étés ciblés. (La compétence affecte tous les alliés)");
+
+        } else if ((selectedCharacter.GetComponent<Fighter>() != null & selectedSkill == 2)){ // if character is a fighter and using skill lvl 2
+            // skill affects themselves 
+            selectedTargets = new GameObject[] {selectedCharacter};
+            Debug.Log("Il n'y a pas besoin de sélectionner une cible. (La compétence n'a pas besoin de cible)");
         }
     }
 
@@ -306,7 +314,7 @@ public class Combat : MonoBehaviour
             if (clickedTeam == currentTeam){ // if character is an ally
                 if (selectedCharacter.GetComponent<Healer>() | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2)){ // if an ally can be targeted, target the character
                     selectedTargets = new GameObject[] {clickedObject};
-                    Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+                    //Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
 
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
@@ -324,13 +332,13 @@ public class Combat : MonoBehaviour
                     Debug.LogWarning("Ce personnage fait partie de votre équipe, vous ne pouvez pas l'attaquer. Veuillez choisir un autre personnage.");
                 }
 
-            } else { // if character/enemy is an opponent, target the character/enemy
+            } else { // if character/enemy is an opponent
                 if (selectedCharacter.GetComponent<Healer>() | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2)){ // if the target has to be an ally, nothing happens
                     Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
 
-                } else {
+                } else { // if the character/enemy can be targetted, target the character/enemy
                     selectedTargets = new GameObject[] {clickedObject};
-                    Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+                    //Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
 
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
