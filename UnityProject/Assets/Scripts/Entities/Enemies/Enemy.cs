@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 abstract public class Enemy : MonoBehaviour 
 {
@@ -8,6 +9,8 @@ abstract public class Enemy : MonoBehaviour
     [SerializeField] protected float dodgeProbability;
     [SerializeField] protected AttackType resistance, attackTypeUsed;
     [SerializeField] protected bool elementalAttack;
+
+    protected List<(Status,int)> statusList;
 
     // ---------- Set and Get ---------- //
 
@@ -23,7 +26,8 @@ abstract public class Enemy : MonoBehaviour
     public AttackType AttackTypeUsed { get => attackTypeUsed;  set => attackTypeUsed = value; }
     public bool ElementalAttack { get => elementalAttack;  set => elementalAttack = value; }
 
-
+    public void setStatusList(List<(Status,int)> list){ statusList = list; }
+    public List<(Status,int)> getStatusList(){ return statusList; }
 
     // ---------- Methods ---------- //
 

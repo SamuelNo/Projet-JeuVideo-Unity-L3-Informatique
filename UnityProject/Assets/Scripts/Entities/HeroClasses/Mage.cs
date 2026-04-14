@@ -67,7 +67,19 @@ public class Mage : Character
         }
     }
 
-    override public void skillLvl2(GameObject [] target){} // to do (needs information from class Combat)
+    override public void skillLvl2(GameObject [] target){
+        ///<param> target : the targets of the attack </param> 
+        ///<summary> Freezes the target </summary>
+        
+        // uses MP (20MP)
+        useMP(mpCostSkillLvl2);
+
+        if (target[0].GetComponent<Character>() != null){ // if target is a character
+            target[0].GetComponent<Character>().getStatusList().Add((Status.FROZEN,1));
+        } else if (target[0].GetComponent<Enemy>() != null){ // if target is an enemy
+            target[0].GetComponent<Enemy>().getStatusList().Add((Status.FROZEN,1));
+        }
+    }
 
     override public void skillLvl3(GameObject [] target){
         ///<param> target : the targets of the attack </param> 
@@ -97,8 +109,3 @@ public class Mage : Character
         }
     }
 }
-
-/* 
-Niveau 2 - Entrave de givre :  
-Entoure l’ennemi de glace. Peut geler l’ennemi et l’empêcher d’agir pendant un tour. 
-*/

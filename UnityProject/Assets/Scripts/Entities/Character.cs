@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 abstract public class Character : MonoBehaviour
 {
@@ -9,6 +10,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
+    protected List<(Status,int)> statusList;
     
     
     // ---------- Set and Get ---------- //
@@ -29,6 +31,8 @@ abstract public class Character : MonoBehaviour
     public void setMpCostSkillLvl1(int n){ mpCostSkillLvl1 = n; }
     public void setMpCostSkillLvl2(int n){ mpCostSkillLvl2 = n; }
     public void setMpCostSkillLvl3(int n){ mpCostSkillLvl3 = n; }
+    public void setStatusList(List<(Status,int)> list){ statusList = list; }
+
     public int getLvl(){ return lvl; }
     public int getMaxHP(){ return maxHP; }
     public int getCurrentHP(){ return currentHP; }
@@ -44,7 +48,7 @@ abstract public class Character : MonoBehaviour
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
-    public Weakness getWeakness(){ return weakness; }
+    public List<(Status,int)> getStatusList(){ return statusList; }
 
 
     // ---------- Methods ---------- //

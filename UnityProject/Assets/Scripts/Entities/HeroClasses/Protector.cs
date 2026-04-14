@@ -34,7 +34,16 @@ public class Protector : Character
         receiveDamage(damageReceived);
     }
 
-    override public void skillLvl1(GameObject target){} // to do (needs information from class Combat)
+    override public void skillLvl1(GameObject target){
+        ///<param> target : the target of the attack </param> 
+        ///<summary> Protects the target </summary>
+        
+        // uses MP (10MP)
+        useMP(mpCostSkillLvl1);
+
+        // applies protection
+        target.GetComponent<Character>().getStatusList().Add((Status.PROTECTED,1));
+    }
 
     override public void skillLvl2(GameObject [] target){
         ///<param> attack : the amount of damage taken, atkType : the type of the attack, elemental : weither the attack is elemental </param> 
@@ -57,7 +66,18 @@ public class Protector : Character
         }
     }
 
-    override public void skillLvl3(GameObject [] target){} // to do (needs information from class Combat)
+    override public void skillLvl3(GameObject [] target){
+        ///<param> target : the targets of the attack </param> 
+        ///<summary> Protects the target </summary>
+        
+        // uses MP (30MP)
+        useMP(mpCostSkillLvl3);
+
+        // applies shield to all allies
+        for (int i=0; i<target.Length; i++){
+            target[i].GetComponent<Character>().getStatusList().Add((Status.SHIELDED,1));
+        }
+    }
 
 }
 
