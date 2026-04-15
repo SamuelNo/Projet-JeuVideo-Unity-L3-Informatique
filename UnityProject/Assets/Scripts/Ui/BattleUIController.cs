@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 
 
 public class BattleUIController : MonoBehaviour
@@ -11,24 +14,72 @@ public class BattleUIController : MonoBehaviour
 
     // buttons
     public CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton;
-
-    // data
+    public GameObject attackerNameObject;
+    public GameObject battleResultsPanel;
+    public GameObject instructionTextObject;
+    public GameObject warningTextObject;
+    public GameObject infoTextObject;
+    public GameObject announcementTextObject;
+    public GameObject resultTextObject;
     private BattlePhase currentPhase;
-
-    // test
-    public GameObject perso1, perso2, perso3, perso4;
-    private GameObject[] team1, team2;
+  
 
 
     // --------------- Initialisation ---------------
     void Start(){
         combatScript = Object.FindAnyObjectByType<Combat>(FindObjectsInactive.Exclude);
-        team1 = new GameObject[] {perso1, perso2};
-        team2 = new GameObject[] {perso3, perso4};
-        combatScript.startPvPFight(team1, team2);
-    }
+        if(SelectionData.Instance.isPvP){
+            combatScript.startPvPFight();
+        } else {
+            combatScript.startPvMFight();
+        }
+        battleResultsPanel.SetActive(false);
     
+    }
     // --------------- Methods --------------- 
+    public Combat getCombatScript(){ return combatScript; }
+    private IEnumerator ClearTextAfterDelay(float delay, GameObject textObject) 
+    {
+        yield return new WaitForSeconds(delay);
+        textObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", ""); // Clear the text after the delay 
+    }
+    public void setAttackerName(string name){
+        ///<summary> sets the name of the current attacker in the UI </summary>
+        attackerNameObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",name);
+    }
+    public void setInstructionText(string text){
+        ///<summary> sets the instruction text in the UI </summary>
+        instructionTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+    }
+    public void setWarningText(string text){
+        ///<summary> sets the warning text in the UI </summary>
+        warningTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+        StartCoroutine(ClearTextAfterDelay(3.0f, warningTextObject));
+    }
+    public void setInfoText(string text){
+        ///<summary> sets the info text in the UI </summary>
+        infoTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+        StartCoroutine(ClearTextAfterDelay(5.0f, infoTextObject));
+    }
+    public void setAnnouncementText(string text){
+        ///<summary> sets the announcement text in the UI (for example, to announce the end of the fight and the winner) </summary>
+        announcementTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+        StartCoroutine(ClearTextAfterDelay(3.0f, announcementTextObject));
+    }
+    public void setResultText(string text){
+        ///<summary> sets the result text in the UI </summary>
+        resultTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+    }
+    public void DisplayEndGame(string message) 
+    {
+        battleResultsPanel.SetActive(true);
+        setResultText(message);
+    } 
+
+    public void GoToMenu() 
+    {
+        SceneManager.LoadScene("Menu_Scene");
+    }
     public void ButtonAccess(){
         ///<summary> updates the combat buttons based on the current battle state </summary>
         
@@ -63,13 +114,13 @@ public class BattleUIController : MonoBehaviour
 
     public void OnClickSimpleAttack(){
         ///<summary> assigns the selected skill (base attack) to the Combat class </summary>
-
         Debug.Log("Vous avez sélectionné l'attaque basique. Veuillez choisir une cible.");
+        setInstructionText("Vous avez sélectionné l'attaque basique. Veuillez choisir une cible.");
 
         combatScript.setSelectedSkill(0); // informs the Combat class that the selected skill is the basic attack
-
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
+        simpleAttackButton.SetState(ButtonState.BLOCKED);
 
         combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
@@ -78,11 +129,13 @@ public class BattleUIController : MonoBehaviour
         ///<summary> assigns the selected skill (level 1 skill) to the Combat class </summary>
 
         Debug.Log("Vous avez sélectionné la compétence niveau 1. Veuillez choisir une cible.");
+        setInstructionText("Vous avez sélectionné la compétence niveau 1. Veuillez choisir une cible.");
 
         combatScript.setSelectedSkill(1); // informs the Combat class that the selected skill is the lvl 1 skill
 
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
+        skillLvl1Button.SetState(ButtonState.BLOCKED);
 
         combatScript.automaticTargetSelection(); // assigns targets sto electedTargets if necessary
     }
@@ -91,12 +144,13 @@ public class BattleUIController : MonoBehaviour
         ///<summary> assigns the selected skill (level 2 skill) to the Combat class </summary>
 
         Debug.Log("Vous avez sélectionné la compétence niveau 2. Veuillez choisir une cible.");
+        setInstructionText("Vous avez sélectionné la compétence niveau 2. Veuillez choisir une cible.");
 
         combatScript.setSelectedSkill(2); // informs the Combat class that the selected skill is the lvl 2 skill
 
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
-
+        skillLvl2Button.SetState(ButtonState.BLOCKED);
         combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
     
@@ -104,11 +158,12 @@ public class BattleUIController : MonoBehaviour
         ///<summary> assigns the selected skill (level 3 skill) to the Combat class </summary>
 
         Debug.Log("Vous avez sélectionné la compétence niveau 3. Veuillez choisir une cible.");
-
+        setInstructionText("Vous avez sélectionné la compétence niveau 3. Veuillez choisir une cible.");
         combatScript.setSelectedSkill(3); // informs the Combat class that the selected skill is the lvl 3 skill
 
         combatScript.setCurrentPhase(BattlePhase.SELECT_TARGET);
         ButtonAccess();
+        skillLvl3Button.SetState(ButtonState.BLOCKED);
 
         combatScript.automaticTargetSelection(); // assigns targets to selectedTargets if necessary
     }
@@ -117,6 +172,7 @@ public class BattleUIController : MonoBehaviour
         ///<summary> informs the Combat class that the player clicked on "Fin de tour" </summary>
 
         Debug.Log("Vous avez cliqué sur 'Fin de Tour'.");
+        setInstructionText("Vous avez cliqué sur 'Fin de Tour'.");
 
         combatScript.setFinishedTurn(true); 
     }

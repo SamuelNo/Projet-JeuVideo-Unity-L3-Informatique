@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 
 abstract public class Character : MonoBehaviour
 {
@@ -10,12 +10,15 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
-    [SerializeField] private GameObject selectionCircle; // Glisse ton Sprite Circle ici
+    [SerializeField] private GameObject selectionCircle; 
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
 
-    private SpriteRenderer circleRenderer; // On cible le renderer du CERCLE
+    private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
+
+    private BattleUIController buttonScript;
+    public GameObject textInfoPV;
     
     
     // ---------- Set and Get ---------- //
@@ -55,38 +58,54 @@ abstract public class Character : MonoBehaviour
 
 
     // ---------- Methods ---------- //
+    void Update()
+    {
+    if (textInfoPV != null)
+    {
+        Vector3 worldPos = transform.position + Vector3.up * 0.9f; 
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        textInfoPV.transform.position = screenPos;
+    }
+    }
     protected virtual void Awake() 
     {
+        buttonScript = UnityEngine.Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
         if (selectionCircle != null) {
             circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();
-            selectionCircle.SetActive(false); // Caché par défaut
+            selectionCircle.SetActive(false); 
         }
     }
     protected void OnMouseEnter() {
-    if (isSelected || circleRenderer == null) return;
+    if (isSelected || circleRenderer == null || buttonScript.getCombatScript().getIsBattleOver()) return;
         
         selectionCircle.SetActive(true);
         circleRenderer.color = hoverColor;
     }
 
     protected void OnMouseExit() {
-        if (isSelected || selectionCircle == null) return;
+        if (isSelected || selectionCircle == null || buttonScript.getCombatScript().getIsBattleOver()) return;
         
         selectionCircle.SetActive(false);
     }
     public void OnMouseDown(){
         if(this.currentHP <= 0) {
             Debug.Log("Personnage mort, impossible de le sélectionner.");
+            buttonScript.setWarningText("Personnage mort, impossible de le sélectionner.");
             return;
         }
-        BattleUIController controller = FindAnyObjectByType<BattleUIController>();
-        if (controller != null){
+        buttonScript = FindAnyObjectByType<BattleUIController>();
+        if(buttonScript.getCombatScript().getIsBattleOver()) {
+            Debug.Log("Le combat est terminé, impossible de sélectionner un personnage.");
+            buttonScript.setWarningText("Le combat est terminé, impossible de sélectionner un personnage.");
+            return;
+        }
+        if (buttonScript != null){
             isSelected = true;
             if (selectionCircle != null) {
                 selectionCircle.SetActive(true);
                 circleRenderer.color = selectedColor;
             }
-            controller.HandleSelection(this.gameObject);
+            buttonScript.HandleSelection(this.gameObject);
         } else {
             Debug.LogException(new Exception("[Classe Character] BattleUIController not found in the scene.")); 
         }
@@ -110,24 +129,43 @@ abstract public class Character : MonoBehaviour
         
         Debug.Log(gameObject.name + " a été supprimé de la scène.");
     }
+    public void setTextInfoPV(string text) 
+    {
+
+        textInfoPV.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+    }
+    private IEnumerator ClearTextAfterDelay(float delay, GameObject textObject) 
+    {
+        yield return new WaitForSeconds(delay);
+        setTextInfoPV(""); // Clear the text after the delay 
+    }
     
-    public void receiveDamage(int n){
+    public bool receiveDamage(int n){
         ///<param> n : amount of damage to be received by the character </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
 
         // tries to dodge the attack 
         if (UnityEngine.Random.value < dodgeProbability){
             Debug.Log("esquivé !");
-            return;
+            setTextInfoPV("Esquivé !");
+            StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
+            return false;
         }
 
         // if dodge fails, damage is taken
         currentHP -= n;
-        if (currentHP < 0){
+        if (currentHP <= 0){
             n += currentHP;
+            setTextInfoPV("-"+n+"PV -> Mort !");
+            StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
             Die();
         }
-        Debug.Log( this.name+" a perdu "+n+"PV");
+        if(currentHP > 0){
+            Debug.Log( this.name+" a perdu "+n+"PV");
+            setTextInfoPV("-"+n+"PV");
+            StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
+        }
+        return true;
     }
     
 
@@ -140,6 +178,8 @@ abstract public class Character : MonoBehaviour
             currentHP = maxHP;
         }
         Debug.Log( this.name+" a gagné "+n+"PV");
+        setTextInfoPV("+"+n+"PV");
+        StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV)); 
     }
 
     public void useMP (int n){

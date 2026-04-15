@@ -23,6 +23,7 @@ public class Principal : MonoBehaviour
     private GameObject fighterSprite1, healerSprite1, mageSprite1, protectorSprite1, // character sprites
                        fighterSprite2, healerSprite2, mageSprite2, protectorSprite2;
     private GameObject[] characterSpriteList1, characterSpriteList2; // list of character sprites
+    private GameObject[] teamPlayer1, teamPlayer2; // list of the characters of player1 and player2 respectively (might be removed) 
 
     // stage selection data
     //[SerializeField] 
@@ -71,12 +72,10 @@ public class Principal : MonoBehaviour
     
 
     // ---------- Initialisation ---------- //
-
     void Awake(){
         // ----- script access ----------
         scriptsGameObject = this.gameObject;
         buttonScript = scriptsGameObject.AddComponent<MenuButtons>(); // to access MenuButtons script
-        combatScript = scriptsGameObject.AddComponent<Combat>();
 
 
         // ----- button initialisation ----------
@@ -225,11 +224,14 @@ public class Principal : MonoBehaviour
         ///<summary> displays the stage and starts the PvP fight </summary>
 
         selectedCharacters2 = new int[]{character1, character2}; // saves characters
+        SelectionData.Instance.team1 = selectedCharacters1;
+        SelectionData.Instance.team2 = selectedCharacters2;
+        SelectionData.Instance.isPvP = true;
         SceneManager.LoadScene("PVP_Palier_Scene");
         
         //stageList[selectedStage].setEnemyList(selectedCharacters2); // ?
         //stageList[selectedStage].start(); // displays stage
-        //combatScript.startPvPFight(); // starts fight
+        /* combatScript.startPvPFight(); // starts fight */
     }
 
     // ----- PvM mode ----------
@@ -296,6 +298,8 @@ public class Principal : MonoBehaviour
         ///<summary> displays the stage and starts the PvP fight </summary>
 
         selectedCharacters1 = new int[]{character1, character2}; // saves characters
+        SelectionData.Instance.team1 = selectedCharacters1;
+        SelectionData.Instance.isPvP = false;
         
         //stageList[selectedStage].start(); // displays stage
         //combatScript.startPvMFight(); // starts fight

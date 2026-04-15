@@ -102,9 +102,9 @@ public class Mage : Character
         // for each target
         for (int i=0; i<target.Length; i++){
             // applies damage to the target
-            if (target[i].GetComponent<Character>() != null){ // if target is a character
+            if (target[i] != null && target[i].GetComponent<Character>() != null){ // if target is a character
                 target[i].GetComponent<Character>().receiveDamage(damageReceived, attackType, true);
-            } else if (target[i].GetComponent<Enemy>() != null){ // if target is an enemy
+            } else if (target[i] != null && target[i].GetComponent<Enemy>() != null){ // if target is an enemy
                 target[i].GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, true);
             }
         }
