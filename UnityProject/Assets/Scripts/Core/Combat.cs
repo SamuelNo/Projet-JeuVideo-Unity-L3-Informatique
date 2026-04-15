@@ -180,10 +180,12 @@ public class Combat : MonoBehaviour
                     Debug.Log("Fin du combat, le joueur 1 a gagné.");
                     buttonScript.setInfoText("Fin du combat, le joueur 1 a gagné.");
                     buttonScript.DisplayEndGame("Victoire du Joueur 1 !");
+                    buttonScript.setAttackerName("");
                 } else {
                     Debug.Log("Fin du combat, le joueur 2 a gagné.");
                     buttonScript.setInfoText("Fin du combat, le joueur 2 a gagné.");
                     buttonScript.DisplayEndGame("Victoire du Joueur 2 !");
+                    buttonScript.setAttackerName("");
                 }
                 wait = true;
                 isBattleOver = true;
@@ -205,10 +207,12 @@ public class Combat : MonoBehaviour
                     Debug.Log("Fin du combat, le joueur a gagné.");
                     buttonScript.setInfoText("Fin du combat, le joueur a gagné.");
                     buttonScript.DisplayEndGame("Victoire du Joueur !");
+                    buttonScript.setAttackerName("");
                 } else {
                     Debug.Log("Fin du combat, l'ennemi a gagné.");
                     buttonScript.setInfoText("Fin du combat, l'ennemi a gagné.");
                     buttonScript.DisplayEndGame("Défaite !");
+                    buttonScript.setAttackerName("");
                 }
                 wait = true;
                 isBattleOver = true;
@@ -230,14 +234,15 @@ public class Combat : MonoBehaviour
         buttonScript.setAnnouncementText("Tour de l'équipe " + currentTeam + ".");
         buttonScript.setAttackerName("");
         wait = true;
-
+        usedCharacter = null;
         finishedTurn = false;
         currentTeamList = (currentTeam == 1) ? playerList : (currentTeam == 2) ? player2List : null;
+        turnCount = 0;
 
         foreach (GameObject c in currentTeamList){ // once per character that is alive
             if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
                 // waits for player to select a character, a skill and a target
-
+                turnCount += 1;
                 selectedCharacter = null;
                 selectedSkill = -1;
                 selectedTargets = null;
@@ -294,11 +299,7 @@ public class Combat : MonoBehaviour
                              buttonScript.setInfoText("Compétence niveau 3, lancée par " + selectedCharacter.name);
                              break;
                 }
-                // if a team is dead, the battle is over
-                if (teamDead(playerList) | teamDead(player2List) | teamDead(enemyList)){ // checks if the battle is over    
-                    finishedTurn = true;
-                    buttonScript.setInstructionText("Fin du combat.");
-                }
+               
                 selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
                     if (selectedTargets[i] != null){
@@ -310,10 +311,16 @@ public class Combat : MonoBehaviour
                         }
                     }
                 }
-                    Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
-                    if (usedCharacter != null || numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
+                 if (teamDead(playerList) | teamDead(player2List) | teamDead(enemyList)){ // checks if the battle is over    
+                    finishedTurn = true;
+                    wait = false;
+                    buttonScript.setInstructionText("Fin du combat.");
+                }
+                Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
+                if (turnCount == 2|| numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
                     finishedTurn = true;
+                    wait = false;
                 } else {
                     usedCharacter = selectedCharacter; // otherwise, the character that has just been used is saved
                 }
@@ -324,14 +331,9 @@ public class Combat : MonoBehaviour
         if (PvM){
             currentTeam = -1; // enemies' turn
         } else if (currentTeam == 1){
-
             currentTeam = 2; // player2's turn
         } else {
             currentTeam = 1; // player1's turn
-        }
-
-        if (currentTeam == 1){ // after the 2 teams have played
-            turnCount += 1; // increments turnCount
         }
     }
 
