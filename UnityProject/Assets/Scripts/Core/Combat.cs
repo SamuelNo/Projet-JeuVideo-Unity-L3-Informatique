@@ -11,8 +11,10 @@ public class Combat : MonoBehaviour
 {
     // --------------- Attributes ---------------
     // script access
+    // script access
     private BattleUIController buttonScript;
 
+    // combat start
     // combat start
     private GameObject[] playerList, player2List, enemyList;
     public GameObject[] prefabsLibrary;
@@ -24,12 +26,13 @@ public class Combat : MonoBehaviour
     private bool wait;
 
     // player input 
+    // player input 
     private GameObject selectedCharacter;
     private GameObject[] selectedTargets;
     private int selectedSkill; 
     private int clickedTeam; // used in select(), saves the team of the clicked entity
 
-    
+    // turn by turn data
     private bool isBattleOver;
 
     private int turnCount; // increases by 1 whenever a turn is over (the 2 teams have played)
@@ -41,8 +44,6 @@ public class Combat : MonoBehaviour
     private GameObject[] currentTeamList;
     private Character characterScript;
     private Enemy enemyScript;
-
-
 
     // --------------- set() & get() ---------------
     // sets
@@ -149,7 +150,6 @@ public class Combat : MonoBehaviour
         usedCharacter = null;
         wait = false;
         currentTeam = 1;
-
         PvP = true; // starts the battle
         Debug.Log("Le combat PvP commence.");
         buttonScript.setAnnouncementText("Le combat PvP commence.");
@@ -232,8 +232,9 @@ public class Combat : MonoBehaviour
         wait = true;
 
         finishedTurn = false;
-        GameObject[] currentPlayerList = (currentTeam == 1) ? playerList : (currentTeam == 2) ? player2List : null;
-        foreach (GameObject c in currentPlayerList){ // once per character that is alive 
+        currentTeamList = (currentTeam == 1) ? playerList : (currentTeam == 2) ? player2List : null;
+
+        foreach (GameObject c in currentTeamList){ // once per character that is alive
             if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
                 // waits for player to select a character, a skill and a target
 
@@ -309,8 +310,8 @@ public class Combat : MonoBehaviour
                         }
                     }
                 }
-                    Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentPlayerList));
-                    if (usedCharacter != null || numberAliveMembers(currentPlayerList) == 1){ // if the two characters have been used, the player's turn is over
+                    Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
+                    if (usedCharacter != null || numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
                     finishedTurn = true;
                 } else {
