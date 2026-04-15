@@ -4,7 +4,8 @@ using System;
 public class Protector : Character
 {
     // ---------- Initialisation ---------- //
-    void Awake(){
+    protected override void Awake(){
+        base.Awake();
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.Elemental;
         this.gameObject.name = "Protector";

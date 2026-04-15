@@ -4,7 +4,8 @@ using System;
 public class Fighter : Character
 {
     // ---------- Initialisation ---------- //
-    void Awake(){
+    protected override void Awake(){
+        base.Awake();
         this.attackType = AttackType.Melee;
         this.weakness = Weakness.Ranged;
         this.gameObject.name = "Fighter";

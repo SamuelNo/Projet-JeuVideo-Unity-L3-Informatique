@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Principal : MonoBehaviour
 {
@@ -224,6 +225,7 @@ public class Principal : MonoBehaviour
         ///<summary> displays the stage and starts the PvP fight </summary>
 
         selectedCharacters2 = new int[]{character1, character2}; // saves characters
+        SceneManager.LoadScene("PVP_Palier_Scene");
         
         //stageList[selectedStage].setEnemyList(selectedCharacters2); // ?
         //stageList[selectedStage].start(); // displays stage

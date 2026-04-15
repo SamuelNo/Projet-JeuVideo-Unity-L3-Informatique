@@ -10,7 +10,12 @@ abstract public class Character : MonoBehaviour
     [SerializeField] protected float dodgeProbability, damageMultiplier, weakenedMultiplier, strengthenedMultiplier;
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected Weakness weakness;
-    protected List<(Status,int)> statusList;
+    [SerializeField] private GameObject selectionCircle; // Glisse ton Sprite Circle ici
+    [SerializeField] private Color hoverColor = Color.yellow; 
+    [SerializeField] private Color selectedColor = Color.orange;
+
+    private SpriteRenderer circleRenderer; // On cible le renderer du CERCLE
+    private bool isSelected = false;
     
     
     // ---------- Set and Get ---------- //
@@ -31,7 +36,6 @@ abstract public class Character : MonoBehaviour
     public void setMpCostSkillLvl1(int n){ mpCostSkillLvl1 = n; }
     public void setMpCostSkillLvl2(int n){ mpCostSkillLvl2 = n; }
     public void setMpCostSkillLvl3(int n){ mpCostSkillLvl3 = n; }
-    public void setStatusList(List<(Status,int)> list){ statusList = list; }
 
     public int getLvl(){ return lvl; }
     public int getMaxHP(){ return maxHP; }
@@ -48,11 +52,28 @@ abstract public class Character : MonoBehaviour
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
-    public List<(Status,int)> getStatusList(){ return statusList; }
 
 
     // ---------- Methods ---------- //
+    protected virtual void Awake() 
+    {
+        if (selectionCircle != null) {
+            circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();
+            selectionCircle.SetActive(false); // Caché par défaut
+        }
+    }
+    protected void OnMouseEnter() {
+    if (isSelected || circleRenderer == null) return;
+        
+        selectionCircle.SetActive(true);
+        circleRenderer.color = hoverColor;
+    }
 
+    protected void OnMouseExit() {
+        if (isSelected || selectionCircle == null) return;
+        
+        selectionCircle.SetActive(false);
+    }
     public void OnMouseDown(){
         if(this.currentHP <= 0) {
             Debug.Log("Personnage mort, impossible de le sélectionner.");
@@ -60,12 +81,23 @@ abstract public class Character : MonoBehaviour
         }
         BattleUIController controller = FindAnyObjectByType<BattleUIController>();
         if (controller != null){
+            isSelected = true;
+            if (selectionCircle != null) {
+                selectionCircle.SetActive(true);
+                circleRenderer.color = selectedColor;
+            }
             controller.HandleSelection(this.gameObject);
         } else {
             Debug.LogException(new Exception("[Classe Character] BattleUIController not found in the scene.")); 
         }
     }
 
+    public void Deselect() {
+        isSelected = false;
+        if (selectionCircle != null) {
+            selectionCircle.SetActive(false);
+        }
+    }
     private void Die()
     {
         currentHP = 0;

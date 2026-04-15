@@ -4,7 +4,8 @@ using System;
 public class Mage : Character
 {
     // ---------- Initialisation ---------- //
-    void Awake(){
+    protected override void Awake(){
+        base.Awake();
         this.attackType = AttackType.Ranged;
         this.weakness = Weakness.Melee;
         this.gameObject.name = "Mage";

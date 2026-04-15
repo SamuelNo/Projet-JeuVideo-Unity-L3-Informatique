@@ -4,7 +4,8 @@ using System;
 public class Healer : Character
 {
     // ---------- Initialisation ---------- //
-    void Awake(){
+    protected override void Awake(){
+        base.Awake();
         this.attackType = AttackType.Neutral;
         this.weakness = Weakness.All;
         this.gameObject.name = "Healer";
