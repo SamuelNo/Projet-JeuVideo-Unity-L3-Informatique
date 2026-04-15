@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 abstract public class Character : MonoBehaviour
 {
@@ -13,6 +14,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] private GameObject selectionCircle; 
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
+    [SerializeField] protected List<(Status, int)> statusList = new List<(Status, int)>();
 
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
@@ -55,6 +57,9 @@ abstract public class Character : MonoBehaviour
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
+    public List<(Status, int)> getStatusList() {
+    return statusList;
+}
 
 
     // ---------- Methods ---------- //
