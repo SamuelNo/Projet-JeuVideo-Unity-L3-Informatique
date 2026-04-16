@@ -32,6 +32,7 @@ public class Principal : MonoBehaviour
     //[SerializeField]
     private GameObject stageSprite0, stageSprite1, stageSprite2; // stage sprites
     private GameObject[] stageSpriteList; // list of stage sprites
+    [SerializeField] private int unlockedStage; // last stage that was unlocked
     //private Stage[] stageList;
 
     // other visual components
@@ -58,6 +59,7 @@ public class Principal : MonoBehaviour
     public void setCharacter1(int s){ character1 = s; }
     public void setCharacter2(int s){ character2 = s; }
     public void setMoving(bool b){ moving = b; }
+    public void setUnlockedStage(int s){ unlockedStage = s; }
 
     // get
     public int[] getSelectedCharacters1(){ return selectedCharacters1; }
@@ -69,6 +71,7 @@ public class Principal : MonoBehaviour
     public GameObject[] getcharacterSpriteList1(){ return characterSpriteList1; }
     public GameObject[] getcharacterSpriteList2(){ return characterSpriteList2; }
     public GameObject[] getStageList(){ return stageSpriteList; }
+    public int getUnlockedStage(){ return unlockedStage; }
     
 
     // ---------- Initialisation ---------- //
@@ -128,6 +131,7 @@ public class Principal : MonoBehaviour
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
         
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
+        unlockedStage = 0; // will change when saving system is implemented
 
         // other
         selectedStage = 0;
@@ -161,7 +165,7 @@ public class Principal : MonoBehaviour
         ///<summary> changes the selected stage and moves the character towards said stage </summary>
         if (ctx.started){ 
             if (!moving){ // stops code from changing selected stage outside of stage selection, or when character is moving
-                if (selectedStage < stageSpriteList.Length-1) 
+                if (selectedStage < unlockedStage) 
                     selectedStage += 1; // chose the next stage
                 StartCoroutine(moveCharacter()); // moves the character towards the selected stage
             }
@@ -256,6 +260,16 @@ public class Principal : MonoBehaviour
         foreach (GameObject s in stageSpriteList){ // shows stage sprites
             s.gameObject.SetActive(true);
         }
+        
+        // makes the locked stages grey
+        for (int i=0; i<stageSpriteList.Length; i++){
+            if (i > unlockedStage){
+                stageSpriteList[i].GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f, 0.7f); 
+            } else {
+                stageSpriteList[i].GetComponent<Image>().color = Color.white; 
+            }
+        }
+        
     }
 
     public IEnumerator moveCharacter(){

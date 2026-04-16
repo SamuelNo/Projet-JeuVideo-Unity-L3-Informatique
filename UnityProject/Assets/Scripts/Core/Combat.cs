@@ -13,6 +13,7 @@ public class Combat : MonoBehaviour
     // script access
     // script access
     private BattleUIController buttonScript;
+    private Principal principalScript;
 
     // combat start
     // combat start
@@ -69,6 +70,7 @@ public class Combat : MonoBehaviour
     // --------------- Initialisation ---------------
     void Awake(){
         buttonScript = Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
+        principalScript = Object.FindAnyObjectByType<Principal>(FindObjectsInactive.Exclude);
 
         turnCount = 0;
         usedCharacter = null;
@@ -204,6 +206,9 @@ public class Combat : MonoBehaviour
         if (PvM & !wait){ // PvM battle
             if (teamDead(playerList) | teamDead(enemyList)){ // checks if the battle is over
                 if (teamDead(enemyList)){
+                    if (principalScript.getSelectedStage() == principalScript.getUnlockedStage()){ // unlocks the next stage
+                        principalScript.setUnlockedStage(principalScript.getUnlockedStage() + 1);
+                    }
                     Debug.Log("Fin du combat, le joueur a gagné.");
                     buttonScript.setInfoText("Fin du combat, le joueur a gagné.");
                     buttonScript.DisplayEndGame("Victoire du Joueur !");
