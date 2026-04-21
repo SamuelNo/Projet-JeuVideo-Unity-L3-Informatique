@@ -76,9 +76,9 @@ public class Mage : Character
         useMP(mpCostSkillLvl2);
 
         if (target[0].GetComponent<Character>() != null){ // if target is a character
-            target[0].GetComponent<Character>().getStatusList().Add((Status.FROZEN,1));
+            target[0].GetComponent<Character>().getStatusList().Add((Status.FROZEN,0));
         } else if (target[0].GetComponent<Enemy>() != null){ // if target is an enemy
-            target[0].GetComponent<Enemy>().getStatusList().Add((Status.FROZEN,1));
+            target[0].GetComponent<Enemy>().getStatusList().Add((Status.FROZEN,0));
         }
     }
 

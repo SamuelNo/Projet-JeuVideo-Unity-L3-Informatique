@@ -56,7 +56,17 @@ public class Fighter : Character
         }
     }
 
-    override public void skillLvl2(GameObject [] target){} // to do (needs information from class Combat)
+    override public void skillLvl2(GameObject [] target){
+        ///<param> target : the targets of the attack (themselves) </param> 
+        ///<summary> strengthens the target (themselves) </summary>
+        
+        // uses MP (20MP)
+        useMP(mpCostSkillLvl2);
+
+        // applies skill
+        target[0].GetComponent<Character>().getStatusList().Add((Status.STRENGTHENED,1));
+        target[0].GetComponent<Character>().setDamageMultiplier(target[0].GetComponent<Character>().getDamageMultiplier()*2); // multiplies applied damage by 2
+    }
 
     override public void skillLvl3(GameObject [] target){
         ///<param> target : the targets of the attack (only 1 target) </param> 

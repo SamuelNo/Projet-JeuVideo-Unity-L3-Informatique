@@ -5,8 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-// TO DO : undo FROZEN state after 1 turn
-
 public class Combat : MonoBehaviour
 {
     // --------------- Attributes ---------------
@@ -45,6 +43,7 @@ public class Combat : MonoBehaviour
     private GameObject[] currentTeamList;
     private Character characterScript;
     private Enemy enemyScript;
+    private List<(Status, int)> statusList;
 
     // --------------- set() & get() ---------------
     // sets
@@ -298,29 +297,11 @@ public class Combat : MonoBehaviour
                     }   
                 }
 
+                // handles the character's status 
+                statusHandler();
+
                 // applies skill to target(s)
-                characterScript = selectedCharacter.GetComponent<Character>();
-                switch (selectedSkill){
-                    case 0 : characterScript.baseAttack(selectedTargets[0]);
-                             Debug.Log("Attaque basique, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
-                             buttonScript.setInfoText("Attaque basique, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
-                             break;
-
-                    case 1 : characterScript.skillLvl1(selectedTargets[0]);
-                             Debug.Log("Compétence niveau 1, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
-                             buttonScript.setInfoText("Compétence niveau 1, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
-                             break;
-
-                    case 2 : characterScript.skillLvl2(selectedTargets);
-                             Debug.Log("Compétence niveau 2, lancée par " + selectedCharacter.name);
-                             buttonScript.setInfoText("Compétence niveau 2 , lancée par " + selectedCharacter.name);
-                             break;
-
-                    case 3 : characterScript.skillLvl3(selectedTargets);
-                             Debug.Log("Compétence niveau 3, lancée par " + selectedCharacter.name);
-                             buttonScript.setInfoText("Compétence niveau 3, lancée par " + selectedCharacter.name);
-                             break;
-                }
+                skillHandler();
                
                 selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
@@ -333,18 +314,41 @@ public class Combat : MonoBehaviour
                         }
                     }
                 }
-                 if (teamDead(playerList) | teamDead(player2List) | teamDead(enemyList)){ // checks if the battle is over    
+
+                // checks if the turn is over
+                Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
+                if (teamDead(enemyList) | teamDead(playerList) | teamDead(player2List)){ // if a team is dead, the battle is over
                     finishedTurn = true;
                     wait = false;
                     buttonScript.setInstructionText("Fin du combat.");
-                }
-                Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
-                if (turnCount == 2|| numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
+                    
+                } else if (turnCount == 2 || numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
                     finishedTurn = true;
                     wait = false;
+
                 } else {
-                    usedCharacter = selectedCharacter; // otherwise, the character that has just been used is saved
+                    // if a character has been used and the other is frozen, the player's turn is over
+                    statusList = new List<(Status,int)>(currentTeamList[0].GetComponent<Character>().getStatusList());
+                    foreach ((Status,int) s in statusList){
+                        if (s.Item1 == Status.FROZEN){
+                            usedCharacter = null;
+                            finishedTurn = true;
+                            wait = false;
+                        }
+                    }
+                    statusList = new List<(Status,int)>(currentTeamList[1].GetComponent<Character>().getStatusList());
+                    foreach ((Status,int) s in statusList){
+                        if (s.Item1 == Status.FROZEN){
+                            usedCharacter = null;
+                            finishedTurn = true;
+                            wait = false;
+                        }
+                    }
+
+
+                    // otherwise, the character that has just been used is saved
+                    usedCharacter = selectedCharacter;
                 }
             }
         }
@@ -352,11 +356,16 @@ public class Combat : MonoBehaviour
         // switch to the other team
         if (PvM){
             currentTeam = -1; // enemies' turn
+            statusUpdate(enemyList);
         } else if (currentTeam == 1){
+            statusUpdate(playerList);
             currentTeam = 2; // player2's turn
         } else {
+            statusUpdate(player2List);
             currentTeam = 1; // player1's turn
         }
+
+        
     }
 
     private void enemyTurn(){
@@ -415,6 +424,102 @@ public class Combat : MonoBehaviour
         return false; // otherwise, target is alive
     }
 
+    private void statusHandler(){
+        ///<summary> handles the characters' status (protected) </summary>
+
+        characterScript = selectedTargets[0].GetComponent<Character>();
+        characterScript.Deselect();
+
+        if (characterScript != null){ // if target is a character
+            statusList = new List<(Status,int)> (characterScript.getStatusList());
+        }
+
+        foreach ((Status,int) s in statusList){
+            if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
+                if (currentTeam == 1){
+                    selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
+                } else {
+                    selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+                }
+            }
+        }
+    }
+
+    private void skillHandler(){
+        ///<summary> applies the selected character's skill to the target(s) </summary>
+        
+        characterScript = selectedCharacter.GetComponent<Character>();
+
+        switch (selectedSkill){
+            case 0 : characterScript.baseAttack(selectedTargets[0]);
+                     Debug.Log("Attaque basique, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                     buttonScript.setInfoText("Attaque basique, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                     break;
+
+            case 1 : characterScript.skillLvl1(selectedTargets[0]);
+                     Debug.Log("Compétence niveau 1, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                     buttonScript.setInfoText("Compétence niveau 1, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
+                     break;
+
+            case 2 : characterScript.skillLvl2(selectedTargets);
+                     Debug.Log("Compétence niveau 2, lancée par " + selectedCharacter.name);
+                     buttonScript.setInfoText("Compétence niveau 2 , lancée par " + selectedCharacter.name);
+                     break;
+
+            case 3 : characterScript.skillLvl3(selectedTargets);
+                     Debug.Log("Compétence niveau 3, lancée par " + selectedCharacter.name);
+                     buttonScript.setInfoText("Compétence niveau 3, lancée par " + selectedCharacter.name);
+                     break;
+                }
+    }
+
+    private void statusUpdate(GameObject[] list){
+        ///<param> list : list of characters (no enemy for now) </param>
+        ///<summary> updates all of the characters' status </summary>
+        
+        for (int i=0; i<list.Length; i++){ // for all the characters in the list
+
+            if (!isDead(list[i])){ // ... that are alive
+
+                characterScript = list[i].GetComponent<Character>();
+                statusList = new List<(Status,int)> (characterScript.getStatusList());
+
+                foreach ((Status,int) s in statusList){ // for every status the character has
+                    switch (s.Item1){
+                        case Status.FROZEN :        // (status effect is taken care of in select())
+                            characterScript.getStatusList().Remove(s);
+                            break;
+
+                        case Status.PROTECTED :     // (status effect is taken care of in statusHandler())
+                            characterScript.getStatusList().Remove(s);
+                            if (s.Item2 > 0){
+                                characterScript.getStatusList().Add((Status.PROTECTED, s.Item2-1)); 
+                            }
+                            break;
+
+                        case Status.SHIELDED :      // (status effect is taken care of in select())
+                            characterScript.getStatusList().Remove(s);
+                            if (s.Item2 > -1){
+                                characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly dissapear
+                            }
+                            break;
+
+                        case Status.STRENGTHENED :  // (status effect is taken care of here and in class Healer/Fighter)
+                            characterScript.getStatusList().Remove(s);
+                            if (s.Item2 > 0){
+                                characterScript.getStatusList().Add((Status.STRENGTHENED, s.Item2-1)); // makes the status last one more turn
+                            } else {
+                                characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/2); // do not change '2' unless you change it in Healer and Fighter too
+                            }
+                            break;
+                    
+                    }
+                }
+            }
+        }
+
+    }
+
     public void automaticTargetSelection(){
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
         
@@ -459,9 +564,26 @@ public class Combat : MonoBehaviour
         ///<summary> handles the character and target selection </summary>
 
         clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team id of the clicked character
+        bool effect = false;
 
         if (currentPhase == BattlePhase.SELECT_CHARACTER){
-            if (clickedTeam == currentTeam){
+
+            // if the character is frozen, nothing happens
+            statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
+            foreach ((Status,int) s in statusList){
+                if (s.Item1 == Status.FROZEN){
+                    effect = true;
+                }
+            }
+            if (effect){
+                Debug.LogWarning("Ce personnage est gelé et ne peux pas être utilisé pendant ce tour. Veuillez en choisir un autre ou passer le tour.");
+                buttonScript.setWarningText("Ce personnage est gelé et ne peux pas être utilisé pendant ce tour. Veuillez en choisir un autre ou passer le tour.");
+                Character character_selected = clickedObject.GetComponent<Character>();
+                if (character_selected != null){
+                    character_selected.Deselect();
+                }
+
+            } else if (clickedTeam == currentTeam){
                 if (clickedObject != usedCharacter){ // if the character is allowed to be selected, select the character
                     selectedCharacter = clickedObject;
                     buttonScript.setAttackerName(selectedCharacter.name);
@@ -493,9 +615,25 @@ public class Combat : MonoBehaviour
                 }
             }
     
+
         } else if(currentPhase == BattlePhase.SELECT_SKILL){
 
-            if(clickedTeam == currentTeam & clickedObject != selectedCharacter & clickedObject == usedCharacter){ 
+            // if the character is frozen, nothing happens
+            statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
+            foreach ((Status,int) s in statusList){
+                if (s.Item1 == Status.FROZEN){
+                    effect = true;
+                }
+            }
+            if (effect){
+                Debug.LogWarning("Ce personnage est gelé et ne peux pas être utilisé pendant ce tour. Veuillez en choisir un autre ou passer le tour.");
+                buttonScript.setWarningText("Ce personnage est gelé et ne peux pas être utilisé pendant ce tour. Veuillez en choisir un autre ou passer le tour.");
+                Character character_selected = clickedObject.GetComponent<Character>();
+                if (character_selected != null){
+                    character_selected.Deselect();
+                }
+
+            } else if(clickedTeam == currentTeam & clickedObject != selectedCharacter & clickedObject == usedCharacter){ 
                 Debug.LogWarning("Vous avez déjà utilisé ce personnage. Veuillez choisir un autre ou passer le tour.");
                 buttonScript.setWarningText("Vous avez déjà utilisé ce personnage. Veuillez en choisir un autre ou passer le tour.");
                 clickedObject.GetComponent<Character>().Deselect();
@@ -524,10 +662,11 @@ public class Combat : MonoBehaviour
                 Debug.LogWarning("Vous utilisé déjà ce personnage. Veuillez choisir une compétence.");
                 buttonScript.setWarningText("Vous utilisé déjà ce personnage. Veuillez choisir une compétence.");
             }
-        
-        }else if (currentPhase == BattlePhase.SELECT_TARGET){
+
+            
+        } else if (currentPhase == BattlePhase.SELECT_TARGET){
             if (clickedTeam == currentTeam){ // if character is an ally
-                if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0)   | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if an ally can be targeted, target the character
+                if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0) | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if an ally can be targeted, target the character
                     selectedTargets = new GameObject[] {clickedObject};
                     Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
                     buttonScript.setInstructionText("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
@@ -535,13 +674,14 @@ public class Combat : MonoBehaviour
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
 
-                }else if (clickedObject != selectedCharacter & clickedObject == usedCharacter)
-                {
+
+                } else if (clickedObject != selectedCharacter & clickedObject == usedCharacter){
                     Debug.LogWarning("Vous avez déjà utilisé ce personnage. Veuillez en choisir un autre ou passer le tour.");
                     buttonScript.setWarningText("Vous avez déjà utilisé ce personnage. Veuillez en choisir un autre ou passer le tour.");
                     clickedObject.GetComponent<Character>().Deselect();
-                }
-                else if (clickedObject != selectedCharacter){ // if the character wasn't used before, switch to character
+
+
+                } else if (clickedObject != selectedCharacter){ // if the character wasn't used before, switch to character
                     selectedCharacter.GetComponent<Character>().Deselect();
                     selectedCharacter = clickedObject;
                     buttonScript.setAttackerName(selectedCharacter.name);
@@ -555,14 +695,45 @@ public class Combat : MonoBehaviour
                 } else if(clickedObject == selectedCharacter) { 
                     Debug.LogWarning("Cette attaque est impossible sur soit même. Veuillez choisir un autre personnage.");
                     buttonScript.setWarningText("Cette attaque est impossible sur soit même. Veuillez choisir un autre personnage.");
-                }else{// the character cannot be selected
+
+
+                } else { // the character cannot be selected
                     Debug.LogWarning("Ce personnage fait partie de votre équipe, vous ne pouvez pas l'attaquer. Veuillez choisir un autre personnage.");
                     buttonScript.setWarningText("Ce personnage fait partie de votre équipe, vous ne pouvez pas l'attaquer. Veuillez choisir un autre personnage.");
                     clickedObject.GetComponent<Character>().Deselect();
                 }   
 
             } else { // if character/enemy is an opponent
-                if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0)   | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if the target has to be an ally, nothing happens
+
+                // if the target is shielded
+                statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
+                foreach ((Status,int) s in statusList){
+                    if (s.Item1 == Status.SHIELDED){
+                        effect = true;
+                    }
+                }
+                if (effect){
+                    if (!(selectedCharacter.GetComponent<Mage>() & selectedSkill == 2)){ // the mage's lvl 2 skill can still work on the protected character (freezing the target)
+                        Debug.LogWarning("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez en choisir une autre compétence ou passer le tour.");
+                        buttonScript.setWarningText("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez en choisir une autre compétence ou passer le tour.");
+                        Character character_selected = clickedObject.GetComponent<Character>();
+                        if(clickedObject.GetComponent<Character>() != null){
+                            clickedObject.GetComponent<Character>().Deselect();
+                        }
+                        else if (clickedObject.GetComponent<Enemy>() != null){
+                            clickedObject.GetComponent<Enemy>().Deselect();
+                        }
+
+                    } else { // target the character/enemy
+                    selectedTargets = new GameObject[] {clickedObject};
+                    Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+                    buttonScript.setInstructionText("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
+
+                    currentPhase = BattlePhase.WAITING;
+                    buttonScript.ButtonAccess();
+                    }
+
+                } else if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0)   | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if the target has to be an ally, nothing happens
                     Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
                     buttonScript.setWarningText("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
 
@@ -573,7 +744,8 @@ public class Combat : MonoBehaviour
                         clickedObject.GetComponent<Enemy>().Deselect();
                     }
 
-                } else { // if the character/enemy can be targetted, target the character/enemy
+                } else { 
+                    // if the character/enemy can be targetted, target the character/enemy
                     selectedTargets = new GameObject[] {clickedObject};
                     Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
                     buttonScript.setInstructionText("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
