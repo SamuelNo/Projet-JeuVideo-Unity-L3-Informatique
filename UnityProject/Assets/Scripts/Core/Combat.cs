@@ -191,6 +191,8 @@ public class Combat : MonoBehaviour
                 }
                 wait = true;
                 isBattleOver = true;
+                currentPhase = BattlePhase.WAITING;
+                buttonScript.ButtonAccess();
             }
             if (currentTeam == 1){ // player1's turn
                 if (!teamDead(playerList) & !teamDead(player2List)){ // while both teams are alive
@@ -260,6 +262,7 @@ public class Combat : MonoBehaviour
                 yield return new WaitUntil(() => (selectedCharacter != null) | finishedTurn);
                 if (finishedTurn) {
                     usedCharacter = null;
+                    wait = false;
                     break; // if the "Fin du tour" button was clicked, end the turn
                 }
         
@@ -267,7 +270,9 @@ public class Combat : MonoBehaviour
                 yield return new WaitUntil(() => (selectedSkill != -1 | finishedTurn));
                 if (finishedTurn) {
                     selectedCharacter.GetComponent<Character>().Deselect();
+                    buttonScript.setAttackerName("");
                     usedCharacter = null;
+                    wait = false;
                     break; // if the "Fin du tour" button was clicked, end the turn
                 }
 
@@ -276,7 +281,9 @@ public class Combat : MonoBehaviour
                     yield return new WaitUntil(() => (selectedTargets != null | finishedTurn));
                     if (finishedTurn) {
                         selectedCharacter.GetComponent<Character>().Deselect();
+                        buttonScript.setAttackerName("");
                         usedCharacter = null;
+                        wait = false;
                         break; // if the "Fin du tour" button was clicked, end the turn
                     }   
                 }

@@ -67,7 +67,7 @@ abstract public class Character : MonoBehaviour
     {
     if (textInfoPV != null)
     {
-        Vector3 worldPos = transform.position + Vector3.up * 0.9f; 
+        Vector3 worldPos = transform.position + Vector3.up * 1.5f; 
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
         textInfoPV.transform.position = screenPos;
     }

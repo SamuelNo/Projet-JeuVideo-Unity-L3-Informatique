@@ -64,7 +64,7 @@ public class BattleUIController : MonoBehaviour
     public void setAnnouncementText(string text){
         ///<summary> sets the announcement text in the UI (for example, to announce the end of the fight and the winner) </summary>
         announcementTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
-        StartCoroutine(ClearTextAfterDelay(3.0f, announcementTextObject));
+        StartCoroutine(ClearTextAfterDelay(4.0f, announcementTextObject));
     }
     public void setResultText(string text){
         ///<summary> sets the result text in the UI </summary>
