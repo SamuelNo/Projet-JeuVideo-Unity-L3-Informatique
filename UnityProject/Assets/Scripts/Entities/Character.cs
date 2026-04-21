@@ -15,6 +15,7 @@ abstract public class Character : MonoBehaviour
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
     [SerializeField] protected List<(Status, int)> statusList = new List<(Status, int)>();
+    [SerializeField] public StatBarHandler statBar;
 
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
@@ -67,7 +68,7 @@ abstract public class Character : MonoBehaviour
     {
     if (textInfoPV != null)
     {
-        Vector3 worldPos = transform.position + Vector3.up * 1.5f; 
+        Vector3 worldPos = transform.position + Vector3.up * 3.5f; 
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
         textInfoPV.transform.position = screenPos;
     }
@@ -144,6 +145,12 @@ abstract public class Character : MonoBehaviour
         yield return new WaitForSeconds(delay);
         setTextInfoPV(""); // Clear the text after the delay 
     }
+    public void UpdateBars() {
+    if (statBar != null) {
+        // Remplace par tes vrais noms de variables (ex: pv, pvMax...)
+        statBar.SetValues(currentHP, maxHP, currentMP, maxMP);
+    }
+    }
     
     public bool receiveDamage(int n){
         ///<param> n : amount of damage to be received by the character </param>
@@ -170,6 +177,7 @@ abstract public class Character : MonoBehaviour
             setTextInfoPV("-"+n+"PV");
             StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
         }
+        UpdateBars();
         return true;
     }
     
@@ -185,6 +193,7 @@ abstract public class Character : MonoBehaviour
         Debug.Log( this.name+" a gagné "+n+"PV");
         setTextInfoPV("+"+n+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV)); 
+        UpdateBars();
     }
 
     public void useMP (int n){
@@ -193,6 +202,7 @@ abstract public class Character : MonoBehaviour
 
         if (currentMP >= n){
             currentMP -= n;
+            UpdateBars();
         } else {
             Debug.LogException(new Exception("[Classe Character] There aren't enough magic points, this method should not be used")); 
         }

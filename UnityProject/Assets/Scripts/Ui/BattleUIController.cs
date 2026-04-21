@@ -13,16 +13,18 @@ public class BattleUIController : MonoBehaviour
     private Combat combatScript;
 
     // buttons
-    public CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton;
-    public GameObject attackerNameObject;
-    public GameObject battleResultsPanel;
-    public GameObject instructionTextObject;
-    public GameObject warningTextObject;
-    public GameObject infoTextObject;
-    public GameObject announcementTextObject;
-    public GameObject resultTextObject;
+    [SerializeField] private CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton;
+    [SerializeField] private GameObject attackerNameObject;
+    [SerializeField] private GameObject battleResultsPanel;
+    [SerializeField] private GameObject instructionTextObject;
+    [SerializeField] private GameObject warningTextObject;
+    [SerializeField] private GameObject infoTextObject;
+    [SerializeField] private GameObject announcementTextObject;
+    [SerializeField] private GameObject resultTextObject;
     private BattlePhase currentPhase;
-  
+    [SerializeField] private GameObject statBarPrefab;
+    [SerializeField] private Transform uiCanvasTransform;
+    private List<StatBarHandler> activeBars = new List<StatBarHandler>();
 
 
     // --------------- Initialisation ---------------
@@ -79,6 +81,21 @@ public class BattleUIController : MonoBehaviour
     public void GoToMenu() 
     {
         SceneManager.LoadScene("Menu_Scene");
+    }
+
+    public StatBarHandler CreateStatBar(Transform unitTransform) {
+        GameObject barGo = Instantiate(statBarPrefab, uiCanvasTransform);
+        StatBarHandler handler = barGo.GetComponent<StatBarHandler>();
+        handler.target = unitTransform;
+        activeBars.Add(handler);
+        return handler;
+    }
+
+    public void ClearAllBars() {
+        foreach (var bar in activeBars) {
+            if (bar != null) Destroy(bar.gameObject);
+        }
+        activeBars.Clear();
     }
     public void ButtonAccess(){
         ///<summary> updates the combat buttons based on the current battle state </summary>

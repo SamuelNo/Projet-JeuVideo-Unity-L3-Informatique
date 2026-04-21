@@ -97,16 +97,16 @@ public class Combat : MonoBehaviour
     void InitializeBattle() {
 
         int[] t1 = SelectionData.Instance.team1;
-        GameObject p1 = SpawnUnit(t1[0], spawnPoints[0], Color.blue, 0, 1);
-        GameObject p2 = SpawnUnit(t1[1], spawnPoints[1], Color.blue, 1, 1);
+        GameObject p1 = SpawnUnit(t1[0], spawnPoints[0], 0, 1);
+        GameObject p2 = SpawnUnit(t1[1], spawnPoints[1], 1, 1);
 
         playerList = new GameObject[] { p1, p2 };
 
         if (SelectionData.Instance.isPvP) {
 
             int[] t2 = SelectionData.Instance.team2;
-            GameObject p3 = SpawnUnit(t2[0], spawnPoints[2], Color.red, 2, 2);
-            GameObject p4 = SpawnUnit(t2[1], spawnPoints[3], Color.red, 3, 2);
+            GameObject p3 = SpawnUnit(t2[0], spawnPoints[2], 2, 2);
+            GameObject p4 = SpawnUnit(t2[1], spawnPoints[3], 3, 2);
 
 
             player2List = new GameObject[] { p3, p4 };
@@ -122,22 +122,28 @@ public class Combat : MonoBehaviour
             enemyList = new GameObject[] { m1, m2 }; */
         }
     }
-    GameObject SpawnUnit(int index, Transform point, Color sideColor, int uiIndex, int tID) {
-        GameObject unit = Instantiate(prefabsLibrary[index], point.position, Quaternion.identity);
-        unit.GetComponent<SpriteRenderer>().color = sideColor;
-        Character scriptJ = unit.GetComponent<Character>();
-        if (scriptJ != null) {
-            scriptJ.setTeamID(tID);
-            scriptJ.textInfoPV = uiTextsGameObjects[uiIndex];
-        } else {
-            Enemy scriptE = unit.GetComponent<Enemy>();
-            if (scriptE != null) {
-                scriptE.TeamId = tID;
-                scriptE.textInfoPV = uiTextsGameObjects[uiIndex];
-            }
+    GameObject SpawnUnit(int index, Transform point, int uiIndex, int tID) {
+    int finalIndex = (tID == 2) ? index + 4 : index;
+    GameObject unit = Instantiate(prefabsLibrary[finalIndex], point.position, Quaternion.identity);
+    StatBarHandler handler = buttonScript.CreateStatBar(unit.transform);
+    
+    Character scriptJ = unit.GetComponent<Character>();
+    if (scriptJ != null) {
+        scriptJ.setTeamID(tID);
+        scriptJ.textInfoPV = uiTextsGameObjects[uiIndex];
+        scriptJ.statBar = handler;
+        scriptJ.UpdateBars();
+    } else {
+        Enemy scriptE = unit.GetComponent<Enemy>();
+        if (scriptE != null) {
+            scriptE.TeamId = tID;
+            scriptE.textInfoPV = uiTextsGameObjects[uiIndex];
+            scriptE.statBar = handler;
+            scriptE.UpdateBars();
         }
-        return unit;
     }
+    return unit;
+}
 
 
 
@@ -193,6 +199,7 @@ public class Combat : MonoBehaviour
                 isBattleOver = true;
                 currentPhase = BattlePhase.WAITING;
                 buttonScript.ButtonAccess();
+                buttonScript.ClearAllBars();
             }
             if (currentTeam == 1){ // player1's turn
                 if (!teamDead(playerList) & !teamDead(player2List)){ // while both teams are alive
@@ -223,6 +230,9 @@ public class Combat : MonoBehaviour
                 }
                 wait = true;
                 isBattleOver = true;
+                currentPhase = BattlePhase.WAITING;
+                buttonScript.ButtonAccess();
+                buttonScript.ClearAllBars();
             }
             if (currentTeam == 1){ // player's turn
                 if (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive

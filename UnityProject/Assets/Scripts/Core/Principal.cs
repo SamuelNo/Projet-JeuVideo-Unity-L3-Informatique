@@ -273,23 +273,40 @@ public class Principal : MonoBehaviour
     }
 
     public IEnumerator moveCharacter(){
-        ///<summary> moves the stage selection character sprite towards the selected stage </summary>
-        Vector3 targetPosition = stageSpriteList[selectedStage].transform.position,
-                characterScale = stageCharacterSprite.transform.localScale,
-                direction = targetPosition - stageCharacterSprite.transform.position;
+    ///<summary> moves the stage selection character sprite towards the selected stage </summary>
+        Vector3 targetPosition = stageSpriteList[selectedStage].transform.position;
+        Vector3 characterScale = stageCharacterSprite.transform.localScale;
 
-        // makes the character face the selected stage's direction
-        characterScale.x = targetPosition.x < stageCharacterSprite.transform.position.x ? -1 : 1; // character faces left if stage is on the left, otherwise character faces right
-        stageCharacterSprite.transform.localScale = characterScale; // flips the character towards the correct direction
-
-        // moves the character towards the selected stage
-        moving = true; // stops code from changing selected stage while moving
-        while (Vector3.Distance(stageCharacterSprite.transform.position, targetPosition) > 1f){ // stops when character is close to the target
-            stageCharacterSprite.transform.position = Vector3.MoveTowards(stageCharacterSprite.transform.position, targetPosition, 500f * Time.deltaTime); // calculates the position of the character
-            yield return null; // applies the calculated position to the character
+        if (targetPosition.x < stageCharacterSprite.transform.position.x) {
+            characterScale.x = 1; 
+        } 
+        else if (targetPosition.x > stageCharacterSprite.transform.position.x) {
+            characterScale.x = -1; 
         }
+
+        stageCharacterSprite.transform.localScale = characterScale;
+
+        // 2. Déplacement vers le palier
+        moving = true;
+        while (Vector3.Distance(stageCharacterSprite.transform.position, targetPosition) > 1f) {
+            stageCharacterSprite.transform.position = Vector3.MoveTowards(stageCharacterSprite.transform.position, targetPosition, 500f * Time.deltaTime);
+            yield return null;
+        }
+
+        // 3. UNE FOIS ARRIVÉ : Tes règles d'inversion spécifiques
+        if (selectedStage == 0) {
+            // Au tout début (stage 0), on veut qu'il regarde à GAUCHE
+            characterScale.x = 1; 
+        } 
+        else if (selectedStage == stageSpriteList.Length - 1) {
+            // Au dernier stage (palier final), on veut qu'il regarde à DROITE
+            characterScale.x = -1;
+        }
+
+        stageCharacterSprite.transform.localScale = characterScale;
         moving = false;
     }
+    
 
     public void characterSelection(){
         ///<summary> puts all element of character selection in place and displays them (PvM mode) </summary>

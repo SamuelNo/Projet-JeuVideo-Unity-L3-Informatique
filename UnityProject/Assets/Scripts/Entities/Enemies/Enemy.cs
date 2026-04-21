@@ -13,6 +13,7 @@ abstract public class Enemy : MonoBehaviour
     [SerializeField] private GameObject selectionCircle; 
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
+    [SerializeField] public StatBarHandler statBar;
     
 
     private SpriteRenderer circleRenderer; 
@@ -44,7 +45,7 @@ abstract public class Enemy : MonoBehaviour
     void Update()
     {
     if (textInfoPV != null){    
-        Vector3 worldPos = transform.position + Vector3.up * 0.9f; 
+        Vector3 worldPos = transform.position + Vector3.up * 3.5f; 
         
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
     
@@ -125,6 +126,12 @@ abstract public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(delay);
         setTextInfoPV(""); // Clear the text after the delay 
     }
+    public void UpdateBars() {
+    if (statBar != null) {
+        // Remplace par tes vrais noms de variables (ex: pv, pvMax...)
+        statBar.SetValues(currentHP, maxHP, currentMP, maxMP);
+    }
+}
 
     public void ReceiveDamage(int n){
         ///<param> n : amount of damage to be received by the enemy </param>
