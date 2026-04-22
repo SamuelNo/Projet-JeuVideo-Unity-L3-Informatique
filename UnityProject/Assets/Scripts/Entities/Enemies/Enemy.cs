@@ -14,6 +14,7 @@ abstract public class Enemy : MonoBehaviour
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
     [SerializeField] public StatBarHandler statBar;
+    [SerializeField] private string nameText;
     
 
     private SpriteRenderer circleRenderer; 
@@ -53,7 +54,7 @@ abstract public class Enemy : MonoBehaviour
     }
     }
     protected virtual void Awake() 
-    {
+    {   this.gameObject.name = nameText; // default name, can be changed in inspector
         buttonScript = UnityEngine.Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
         if (selectionCircle != null) {
             circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();
@@ -151,6 +152,7 @@ abstract public class Enemy : MonoBehaviour
             n += currentHP;
             Die();
         }
+        UpdateBars();
         Debug.Log("L'adversaire a perdu "+n+"PV");
         setTextInfoPV("-"+n+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));

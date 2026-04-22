@@ -15,10 +15,18 @@ public class Combat : MonoBehaviour
 
     // combat start
     // combat start
+    public SpriteRenderer backgroundRenderer; 
+    public Sprite[] stageBackgrounds; 
     private GameObject[] playerList, player2List, enemyList;
-    public GameObject[] prefabsLibrary;
+    public GameObject[] team1Prefabs;
+    public GameObject[] team2Prefabs; 
     public GameObject[] monsterPrefabs;
-    public Transform[] spawnPoints;
+    
+    [System.Serializable] 
+    public struct MapSpawns {
+        public Transform[] points; 
+    }
+    public MapSpawns[] allMapsSpawns;
     public GameObject[] uiTextsGameObjects;
 
     private bool PvP, PvM;
@@ -94,38 +102,43 @@ public class Combat : MonoBehaviour
         }
     }
     void InitializeBattle() {
-
+        int selectedStage = SelectionData.Instance.selectedStage;
         int[] t1 = SelectionData.Instance.team1;
-        GameObject p1 = SpawnUnit(t1[0], spawnPoints[0], 0, 1);
-        GameObject p2 = SpawnUnit(t1[1], spawnPoints[1], 1, 1);
+        GameObject p1 = SpawnUnit(t1[0], allMapsSpawns[selectedStage].points[0], 0, 1);
+        GameObject p2 = SpawnUnit(t1[1], allMapsSpawns[selectedStage].points[1], 1, 1);
 
         playerList = new GameObject[] { p1, p2 };
 
         if (SelectionData.Instance.isPvP) {
 
             int[] t2 = SelectionData.Instance.team2;
-            GameObject p3 = SpawnUnit(t2[0], spawnPoints[2], 2, 2);
-            GameObject p4 = SpawnUnit(t2[1], spawnPoints[3], 3, 2);
+            GameObject p3 = SpawnUnit(t2[0], allMapsSpawns[selectedStage].points[2], 2, 2);
+            GameObject p4 = SpawnUnit(t2[1], allMapsSpawns[selectedStage].points[3], 3, 2);
 
 
             player2List = new GameObject[] { p3, p4 };
-        } else {
-            /*
-            GameObject m1 = Instantiate(monsterPrefabs[0], spawnPoints[2].position, Quaternion.identity);
-            GameObject m2 = Instantiate(monsterPrefabs[1], spawnPoints[3].position, Quaternion.identity);
-            SpawnUnit(monsterPrefabs[0], spawnPoints[2], Color.red, 2, 2);
-            SpawnUnit(monsterPrefabs[1], spawnPoints[3], Color.red, 3, 2);
-            m1.GetComponent<SpriteRenderer>().color = Color.red;
-            m2.GetComponent<SpriteRenderer>().color = Color.red;
-
-            enemyList = new GameObject[] { m1, m2 }; */
+        } else if(!SelectionData.Instance.isPvP) {
+            if(selectedStage == 1){
+                GameObject m1 = SpawnUnit(0, allMapsSpawns[selectedStage].points[2], 2, -1);
+                GameObject m2 = SpawnUnit(1, allMapsSpawns[selectedStage].points[3], 3, -1);
+                enemyList = new GameObject[] { m1, m2 };
+            }
         }
     }
     GameObject SpawnUnit(int index, Transform point, int uiIndex, int tID) {
-    int finalIndex = (tID == 2) ? index + 4 : index;
-    GameObject unit = Instantiate(prefabsLibrary[finalIndex], point.position, Quaternion.identity);
+        GameObject unit = null;
+    if(tID == 1) {
+        unit = Instantiate(team1Prefabs[index], point.position, Quaternion.identity);
+    } else if(tID == 2) {
+        unit = Instantiate(team2Prefabs[index], point.position, Quaternion.identity);
+    } else if(tID == -1) {
+        unit = Instantiate(monsterPrefabs[index], point.position, Quaternion.identity);
+    }
+    if(unit == null) {
+        Debug.LogError("Erreur lors de l'instanciation de l'unité. Vérifiez les index et les tableaux de prefabs.");
+        return null;
+    }
     StatBarHandler handler = buttonScript.CreateStatBar(unit.transform);
-    
     Character scriptJ = unit.GetComponent<Character>();
     if (scriptJ != null) {
         scriptJ.setTeamID(tID);
@@ -158,6 +171,15 @@ public class Combat : MonoBehaviour
         wait = false;
         currentTeam = 1;
         PvP = true; // starts the battle
+        int chosenStage = SelectionData.Instance.selectedStage;
+        if(chosenStage == 0)
+        {
+            backgroundRenderer.sprite = stageBackgrounds[chosenStage];
+        }
+        else
+        {
+            Debug.LogWarning("Selected stage index is out of range. Using default background.");
+        }
         Debug.Log("Le combat PvP commence.");
         buttonScript.setAnnouncementText("Le combat PvP commence.");
     }
@@ -174,6 +196,12 @@ public class Combat : MonoBehaviour
         currentTeam = 1;
 
         PvM = true; // starts the battle
+        int chosenStage = SelectionData.Instance.selectedStage;
+        if(chosenStage >= 0 && chosenStage < stageBackgrounds.Length) {
+            backgroundRenderer.sprite = stageBackgrounds[chosenStage];
+        } else {
+            Debug.LogWarning("Selected stage index is out of range. Using default background.");
+        }
         Debug.Log("Le combat PvM commence.");
         buttonScript.setAnnouncementText("Le combat PvM commence.");
     }

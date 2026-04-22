@@ -268,7 +268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8948010610391460476, guid: 47a3c26543b1d40bd8474916b8048768, type: 3}
+  m_Sprite: {fileID: -6735140052841253373, guid: 6a329514f4caa4266a9bed176c30ed1b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -731,7 +731,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6735140052841253373, guid: 6a329514f4caa4266a9bed176c30ed1b, type: 3}
+  m_Sprite: {fileID: -8948010610391460476, guid: 47a3c26543b1d40bd8474916b8048768, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1462,6 +1462,7 @@ MonoBehaviour:
   isPvP: 0
   team1: 
   team2: 
+  selectedStage: 0
 --- !u!4 &560905522
 Transform:
   m_ObjectHideFlags: 0

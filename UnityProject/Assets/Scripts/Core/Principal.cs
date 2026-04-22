@@ -131,7 +131,7 @@ public class Principal : MonoBehaviour
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
         
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
-        unlockedStage = 0; // will change when saving system is implemented
+        unlockedStage = 2; // will change when saving system is implemented
 
         // other
         selectedStage = 0;
@@ -231,13 +231,14 @@ public class Principal : MonoBehaviour
         SelectionData.Instance.team1 = selectedCharacters1;
         SelectionData.Instance.team2 = selectedCharacters2;
         SelectionData.Instance.isPvP = true;
-        SceneManager.LoadScene("PVP_Palier_Scene");
+        SelectionData.Instance.selectedStage = 0;
+        SceneManager.LoadScene("Combat_Scene");
         
         //stageList[selectedStage].setEnemyList(selectedCharacters2); // ?
         //stageList[selectedStage].start(); // displays stage
         /* combatScript.startPvPFight(); // starts fight */
     }
-
+    
     // ----- PvM mode ----------
     public void stageSelection(){
         ///<summary> puts all element of stage selection in place and displays them </summary>
@@ -286,20 +287,15 @@ public class Principal : MonoBehaviour
 
         stageCharacterSprite.transform.localScale = characterScale;
 
-        // 2. Déplacement vers le palier
         moving = true;
         while (Vector3.Distance(stageCharacterSprite.transform.position, targetPosition) > 1f) {
             stageCharacterSprite.transform.position = Vector3.MoveTowards(stageCharacterSprite.transform.position, targetPosition, 500f * Time.deltaTime);
             yield return null;
         }
-
-        // 3. UNE FOIS ARRIVÉ : Tes règles d'inversion spécifiques
         if (selectedStage == 0) {
-            // Au tout début (stage 0), on veut qu'il regarde à GAUCHE
             characterScale.x = 1; 
         } 
         else if (selectedStage == stageSpriteList.Length - 1) {
-            // Au dernier stage (palier final), on veut qu'il regarde à DROITE
             characterScale.x = -1;
         }
 
@@ -331,9 +327,9 @@ public class Principal : MonoBehaviour
         selectedCharacters1 = new int[]{character1, character2}; // saves characters
         SelectionData.Instance.team1 = selectedCharacters1;
         SelectionData.Instance.isPvP = false;
-        
-        //stageList[selectedStage].start(); // displays stage
-        //combatScript.startPvMFight(); // starts fight
+        SelectionData.Instance.selectedStage = selectedStage + 1; // because stages are indexed from 0 but stage selection is indexed from 1
+        SceneManager.LoadScene("Combat_Scene");
+        combatScript.startPvMFight(); // starts fight
     }
 
     // ----- character selection ----------

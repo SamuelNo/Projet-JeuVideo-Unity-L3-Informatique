@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8227371362511791078}
   - component: {fileID: 4834171547816475182}
   m_Layer: 0
-  m_Name: Fighter-1F
+  m_Name: Fighter-2F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 8
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3763302679527931817, guid: 8b802a7a671334cb4b1ea292ab60f21a, type: 3}
+  m_Sprite: {fileID: 1907791027302407599, guid: c9c09ef7debcf41e3b0abfbbb48a549f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -219,7 +219,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.013109207, y: -0.0131111145}
+  m_Offset: {x: -0.19778287, y: 0.24570668}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -229,7 +229,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.1835136, y: 1.1835098}
+  m_Size: {x: 1.6052978, y: 6.302458}
   m_EdgeRadius: 0
 --- !u!114 &4834171547816475182
 MonoBehaviour:
@@ -260,7 +260,7 @@ MonoBehaviour:
   attackType: 0
   weakness: 1
   selectionCircle: {fileID: 238444792877392269}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.50980395}
+  selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.50980395}
   statBar: {fileID: 0}
   textInfoPV: {fileID: 0}

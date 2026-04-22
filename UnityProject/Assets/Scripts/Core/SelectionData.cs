@@ -5,6 +5,7 @@ public class SelectionData : MonoBehaviour {
     public bool isPvP;
     public int[] team1 = new int[2]; 
     public int[] team2 = new int[2];
+    public int selectedStage;
 
     void Awake() {
         if (Instance == null) {

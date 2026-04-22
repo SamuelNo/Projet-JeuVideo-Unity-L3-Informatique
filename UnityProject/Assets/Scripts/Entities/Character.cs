@@ -168,8 +168,6 @@ abstract public class Character : MonoBehaviour
         currentHP -= n;
         if (currentHP <= 0){
             n += currentHP;
-            setTextInfoPV("-"+n+"PV -> Mort !");
-            StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
             Die();
         }
         if(currentHP > 0){
