@@ -52,6 +52,7 @@ public class Combat : MonoBehaviour
     private Character characterScript;
     private Enemy enemyScript;
     private List<(Status, int)> statusList;
+    private bool effect;
 
     // --------------- set() & get() ---------------
     // sets
@@ -455,19 +456,24 @@ public class Combat : MonoBehaviour
     private void statusHandler(){
         ///<summary> handles the characters' status (protected) </summary>
 
-        characterScript = selectedTargets[0].GetComponent<Character>();
-        characterScript.Deselect();
-
-        if (characterScript != null){ // if target is a character
-            statusList = new List<(Status,int)> (characterScript.getStatusList());
+        // deselects the character
+        if (selectedTargets.Length == 1){ 
+            characterScript = selectedTargets[0].GetComponent<Character>();
+            characterScript.Deselect();
         }
 
-        foreach ((Status,int) s in statusList){
-            if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
-                if (currentTeam == 1){
-                    selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
-                } else {
-                    selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+        for (int i=0; i<selectedTargets.Length; i++){ // for each target
+
+            characterScript = selectedTargets[i].GetComponent<Character>(); 
+            statusList = new List<(Status,int)> (characterScript.getStatusList());
+
+            foreach ((Status,int) s in statusList){
+                if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
+                    if (currentTeam == 1){
+                        selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
+                    } else {
+                        selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+                    }
                 }
             }
         }
@@ -554,14 +560,46 @@ public class Combat : MonoBehaviour
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)){ // or if character is a protector and using skill lvl 2
             // skill affects all opponents (player doesn't need to select target)
-            if (player2List == null){ // if it's a PvM
+            if (PvM){ // if it's a PvM
                 selectedTargets = enemyList;
+                Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
+
             } else if (currentTeam == 1){
-                selectedTargets = player2List;
+                // checks the that the player's team isn't shielded
+                statusList = player2List[0].GetComponent<Character>().getStatusList();
+                foreach ((Status,int) s in statusList){
+                    if (s.Item1 == Status.SHIELDED){
+                        effect = true;
+                    }
+                }
+                if (effect){ // if it is, do not select them
+                    Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    buttonScript.ButtonAccess();
+
+                } else {
+                    selectedTargets = player2List;
+                    Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
+                }
+
             } else {
-                selectedTargets = playerList;
+                // checks the that the player's team isn't shielded
+                statusList = playerList[0].GetComponent<Character>().getStatusList();
+                foreach ((Status,int) s in statusList){
+                    if (s.Item1 == Status.SHIELDED){
+                        effect = true;
+                    }
+                }
+                if (effect){ // if it is, do not select them
+                    Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    buttonScript.ButtonAccess();
+
+                } else {
+                    selectedTargets = playerList;
+                    Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
+                }
             }
-            Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
 
 
         } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)| // if character is a healer and using skill lvl 3
@@ -592,7 +630,7 @@ public class Combat : MonoBehaviour
         ///<summary> handles the character and target selection </summary>
 
         clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team id of the clicked character
-        bool effect = false;
+        effect = false;
 
         if (currentPhase == BattlePhase.SELECT_CHARACTER){
 
@@ -742,8 +780,8 @@ public class Combat : MonoBehaviour
                 }
                 if (effect){
                     if (!(selectedCharacter.GetComponent<Mage>() & selectedSkill == 2)){ // the mage's lvl 2 skill can still work on the protected character (freezing the target)
-                        Debug.LogWarning("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez en choisir une autre compétence ou passer le tour.");
-                        buttonScript.setWarningText("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez en choisir une autre compétence ou passer le tour.");
+                        Debug.LogWarning("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                        buttonScript.setWarningText("Ce personnage a un bouclier et ne recevra pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                         Character character_selected = clickedObject.GetComponent<Character>();
                         if(clickedObject.GetComponent<Character>() != null){
                             clickedObject.GetComponent<Character>().Deselect();
