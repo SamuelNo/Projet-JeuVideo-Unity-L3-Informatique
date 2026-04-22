@@ -38,6 +38,7 @@ public class Fighter : Character
         ///<param> target : the target of the attack </param> 
         ///<summary> Attacks the target a certain amount of times </summary>
 
+        Debug.Log("test");
         // uses MP (10MP)
         useMP(mpCostSkillLvl1);
 
@@ -98,6 +99,10 @@ public class Fighter : Character
         this.currentHP -= (int) ((float) maxHP/3);
         if (this.currentHP < 0){
             this.currentHP = 0;
+        }
+        this.UpdateBars();
+        if (this.currentHP == 0){
+            this.Die();
         }
     }
 }

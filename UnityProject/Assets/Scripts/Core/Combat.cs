@@ -126,37 +126,38 @@ public class Combat : MonoBehaviour
             }
         }
     }
+    
     GameObject SpawnUnit(int index, Transform point, int uiIndex, int tID) {
         GameObject unit = null;
-    if(tID == 1) {
-        unit = Instantiate(team1Prefabs[index], point.position, Quaternion.identity);
-    } else if(tID == 2) {
-        unit = Instantiate(team2Prefabs[index], point.position, Quaternion.identity);
-    } else if(tID == -1) {
-        unit = Instantiate(monsterPrefabs[index], point.position, Quaternion.identity);
-    }
-    if(unit == null) {
-        Debug.LogError("Erreur lors de l'instanciation de l'unité. Vérifiez les index et les tableaux de prefabs.");
-        return null;
-    }
-    StatBarHandler handler = buttonScript.CreateStatBar(unit.transform);
-    Character scriptJ = unit.GetComponent<Character>();
-    if (scriptJ != null) {
-        scriptJ.setTeamID(tID);
-        scriptJ.textInfoPV = uiTextsGameObjects[uiIndex];
-        scriptJ.statBar = handler;
-        scriptJ.UpdateBars();
-    } else {
-        Enemy scriptE = unit.GetComponent<Enemy>();
-        if (scriptE != null) {
-            scriptE.TeamId = tID;
-            scriptE.textInfoPV = uiTextsGameObjects[uiIndex];
-            scriptE.statBar = handler;
-            scriptE.UpdateBars();
+        if(tID == 1) {
+            unit = Instantiate(team1Prefabs[index], point.position, Quaternion.identity);
+        } else if(tID == 2) {
+            unit = Instantiate(team2Prefabs[index], point.position, Quaternion.identity);
+        } else if(tID == -1) {
+            unit = Instantiate(monsterPrefabs[index], point.position, Quaternion.identity);
         }
+        if(unit == null) {
+            Debug.LogError("Erreur lors de l'instanciation de l'unité. Vérifiez les index et les tableaux de prefabs.");
+            return null;
+        }
+        StatBarHandler handler = buttonScript.CreateStatBar(unit.transform);
+        Character scriptJ = unit.GetComponent<Character>();
+        if (scriptJ != null) {
+            scriptJ.setTeamID(tID);
+            scriptJ.textInfoPV = uiTextsGameObjects[uiIndex];
+            scriptJ.statBar = handler;
+            scriptJ.UpdateBars();
+        } else {
+            Enemy scriptE = unit.GetComponent<Enemy>();
+            if (scriptE != null) {
+                scriptE.TeamId = tID;
+                scriptE.textInfoPV = uiTextsGameObjects[uiIndex];
+                scriptE.statBar = handler;
+                scriptE.UpdateBars();
+            }
+        }
+        return unit;
     }
-    return unit;
-}
 
 
 
@@ -469,7 +470,7 @@ public class Combat : MonoBehaviour
 
             foreach ((Status,int) s in statusList){
                 if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
-                    if (currentTeam == 1){
+                    if (currentTeam == 1){ // replaces the target with the protector
                         selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
                     } else {
                         selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
@@ -620,6 +621,15 @@ public class Combat : MonoBehaviour
 
 
         } else if ((selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 1)){ // if character is a protector and using skill lvl 1
+            // checks if the protector has an ally
+            if (currentTeamList[0]==null | currentTeamList[1]==null){
+                Debug.LogWarning("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
+                buttonScript.setWarningText("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
+                currentPhase = BattlePhase.SELECT_SKILL;
+                buttonScript.ButtonAccess();
+                return;
+            }
+
             // skill affects their ally
             selectedTargets = new GameObject[] {(currentTeamList[0].GetComponent<Protector>() != null) ? currentTeamList[1] : currentTeamList[0]};
             Debug.Log("L'allié a été ciblé. (La compétence affecte l'allié)");

@@ -123,7 +123,7 @@ abstract public class Character : MonoBehaviour
             selectionCircle.SetActive(false);
         }
     }
-    private void Die()
+    protected void Die()
     {
         currentHP = 0;
 
