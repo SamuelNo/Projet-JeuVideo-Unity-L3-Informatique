@@ -6,6 +6,7 @@ public class SelectionData : MonoBehaviour {
     public int[] team1 = new int[2]; 
     public int[] team2 = new int[2];
     public int selectedStage;
+    public int unlockedStage;
 
     void Awake() {
         if (Instance == null) {

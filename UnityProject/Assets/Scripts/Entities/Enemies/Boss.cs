@@ -2,6 +2,18 @@ using UnityEngine;
 
 public class Boss : Enemy 
 {
+    // ---------- Initialisation ---------- //
+    protected override void Awake()
+    {
+        base.Awake();
+
+        this.costAOE = 10;
+        this.costSpecial = 15;
+        this.costHeal = 10;
+        this.costBoost = 12;
+        this.costProtection = 8;
+    }
+
     // ---------- Methods ---------- //
 
     override public void ReceiveDamage(int attack, AttackType attackType, bool elemental){
@@ -21,35 +33,50 @@ public class Boss : Enemy
 
 
     //Attacks
-    //The attacks depend on the boss's HP
 
-    override public void TargetedAttack(GameObject target){
-    ///<param> target : the target of the attack </param> 
-    ///<summary> Attacks the target (depends on the HP of the boss) </summary>
-    
-        int damage = (int)(MaxHP * 0.15); //15% of the boss's HP 
+    override public void TargetedAttack(GameObject target)
+    {
+        ///<param> target : the target of the attack </param> 
+        ///<summary> Attacks the target </summary>
+
+        Debug.Log(gameObject.name + " a utilisé Targeted Attack");
+
+        int damage = (int)(basePower * GetRankMultiplier() * BuffAttack);
         target.GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
-        
+
     }
 
-    override public void AoeAttack(GameObject [] target){
-    ///<param> target : the targets of the attack </param> 
-    ///<summary> Attacks the targets </summary>
-    
-        int damage = (int)(MaxHP * 0.15f); //15% of its health
+    override public void AoeAttack(GameObject[] target)
+    {
+        ///<param> target : the targets of the attack </param> 
+        ///<summary> Attacks the targets </summary>
+
+        Debug.Log(gameObject.name + " a utilisé AOE Attack");
+
+        UseMp(GetMPCost(costAOE));
+
+        int damage = (int)(basePower * GetRankMultiplier() * 0.7f * BuffAttack);
 
         //will be dealt to multiple target
-        for (int i=0; i<target.Length; i++){
+        for (int i = 0; i < target.Length; i++)
+        {
             target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
     }
 
-    public void SpecialAttack(GameObject [] target){
-    ///<param> target : the targets of the attack </param> 
-    ///<summary> Attacks the targets </summary>
-    
-        int damage = (int)(MaxHP * 0.25f); //25% of its HP
-        for (int i=0; i<target.Length; i++){
+
+    public void SpecialAttack(GameObject[] target)
+    {
+        ///<param> target : the targets of the attack </param> 
+        ///<summary> Attacks the targets </summary>
+        ///
+        Debug.Log(gameObject.name + " a utilisé Special Attack");
+
+        UseMp(GetMPCost(costSpecial));
+
+        int damage = (int)(basePower * GetRankMultiplier() * 1.2f);
+        for (int i = 0; i < target.Length; i++)
+        {
             target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
     }

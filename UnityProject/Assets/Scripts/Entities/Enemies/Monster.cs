@@ -1,6 +1,18 @@
 using UnityEngine;
 public class Monster : Enemy 
 {
+    // ---------- Initialisation ---------- //
+    protected override void Awake()
+    {
+        base.Awake();
+
+        this.costAOE = 5;
+        this.costSpecial = 0;
+        this.costHeal = 5;
+        this.costBoost = 7;
+        this.costProtection = 5;
+    }
+
     // ---------- Methods ---------- //
 
     override public void ReceiveDamage(int attack, AttackType attackType, bool elemental){
@@ -20,27 +32,36 @@ public class Monster : Enemy
 
 
     //Attacks
-    //The attacks depend on the monster's HP
 
-    override public void TargetedAttack(GameObject target){
-    ///<param> target : the target of the attack </param> 
-    ///<summary> Attacks the target (depends on the HP of the monster) </summary>
-    
-        int damage = (int)(MaxHP * 0.1f); //10% of the monster's HP 
+    override public void TargetedAttack(GameObject target)
+    {
+        ///<param> target : the target of the attack </param> 
+        ///<summary> Attacks the target</summary>
+
+        Debug.Log(gameObject.name + " a utilisé Targeted Attack");
+
+        int damage = (int)(basePower * GetRankMultiplier() * BuffAttack);
         target.GetComponent<Character>().receiveDamage(damage, this.AttackTypeUsed, this.ElementalAttack);
-        
+
     }
 
-    override public void AoeAttack(GameObject [] target){
-    ///<param> target : the targets of the attack </param> 
-    ///<summary> Attacks the targets </summary>
-    
-        int damage = (int)(MaxHP * 0.1f); //10% of its health
+    override public void AoeAttack(GameObject[] target)
+    {
+        ///<param> target : the targets of the attack </param> 
+        ///<summary> Attacks the targets </summary>
+
+        Debug.Log(gameObject.name + " a utilisé AOE Attack");
+
+        UseMp(GetMPCost(costAOE));
+
+        int damage = (int)(basePower * GetRankMultiplier() * 0.6f * BuffAttack); //0.6f is aoeMultiplier
 
         //will be dealt to multiple target
-        for (int i=0; i<target.Length; i++){
+        for (int i = 0; i < target.Length; i++)
+        {
             target[i].GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
         }
+
     }
 
 }

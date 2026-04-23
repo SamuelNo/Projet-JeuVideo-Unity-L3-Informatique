@@ -243,11 +243,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae4fb86a7a7942b6851a64c78176654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Monster
+  rank: 2
   maxHP: 100
   currentHP: 100
   maxMP: 50
   currentMP: 50
-  teamId: 0
+  teamId: -1
+  basePower: 10
   dodgeProbability: 0.1
   resistance: 0
   attackTypeUsed: 0
@@ -257,4 +259,11 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.54509807}
   statBar: {fileID: 0}
   nameText: Fighter
+  type: 0
   textInfoPV: {fileID: 0}
+  isPhase2: 0
+  buffAttack: 1
+  isProtected: 0
+  isBuffed: 0
+  buffTurnsRemaining: 0
+  protectionTurnsRemaining: 0

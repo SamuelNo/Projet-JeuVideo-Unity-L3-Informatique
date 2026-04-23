@@ -329,7 +329,7 @@ public class Principal : MonoBehaviour
         SelectionData.Instance.isPvP = false;
         SelectionData.Instance.selectedStage = selectedStage + 1; // because stages are indexed from 0 but stage selection is indexed from 1
         SceneManager.LoadScene("Combat_Scene");
-        combatScript.startPvMFight(); // starts fight
+        //combatScript.startPvMFight(); // starts fight
     }
 
     // ----- character selection ----------

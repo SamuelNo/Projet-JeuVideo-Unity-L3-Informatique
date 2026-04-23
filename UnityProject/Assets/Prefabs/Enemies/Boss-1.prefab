@@ -152,11 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb58c74192b48474b94e7e2506a1668c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Boss
+  rank: 0
   maxHP: 200
   currentHP: 200
   maxMP: 100
   currentMP: 100
-  teamId: 0
+  teamId: -1
+  basePower: 10
   dodgeProbability: 0.1
   resistance: 0
   attackTypeUsed: 0
@@ -166,7 +168,14 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.54509807}
   statBar: {fileID: 0}
   nameText: Protector
+  type: 0
   textInfoPV: {fileID: 0}
+  isPhase2: 0
+  buffAttack: 1
+  isProtected: 0
+  isBuffed: 0
+  buffTurnsRemaining: 0
+  protectionTurnsRemaining: 0
 --- !u!1 &3382017922349067435
 GameObject:
   m_ObjectHideFlags: 0

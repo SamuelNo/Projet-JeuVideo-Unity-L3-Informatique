@@ -6,7 +6,8 @@ abstract public class Enemy : MonoBehaviour
 {
     // ---------- Attributes ---------- //
 
-    [SerializeField] protected int maxHP, currentHP, maxMP, currentMP, teamId;
+    [SerializeField] protected Rank rank;
+    [SerializeField] protected int maxHP, currentHP, maxMP, currentMP, teamId, basePower;
     [SerializeField] protected float dodgeProbability;
     [SerializeField] protected AttackType resistance, attackTypeUsed;
     [SerializeField] protected bool elementalAttack;
@@ -15,7 +16,8 @@ abstract public class Enemy : MonoBehaviour
     [SerializeField] private Color selectedColor = Color.orange;
     [SerializeField] public StatBarHandler statBar;
     [SerializeField] private string nameText;
-    
+    [SerializeField] protected EnemyType type;
+
 
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
@@ -25,7 +27,23 @@ abstract public class Enemy : MonoBehaviour
 
     protected List<(Status,int)> statusList;
 
+    // AI
+    protected EnemyAI ai;
+    protected int costAOE, costSpecial, costHeal, costBoost, costProtection;
+    [SerializeField] protected bool isPhase2 = false;
+    [SerializeField] protected float buffAttack = 1.0f;
+    [SerializeField] protected bool isProtected = false;
+    [SerializeField] protected bool isBuffed = false;
+
+    // Number of turns remaining before the temporary effect is removed
+    [SerializeField] protected int buffTurnsRemaining = 0;
+    [SerializeField] protected int protectionTurnsRemaining = 0;
+
     // ---------- Set and Get ---------- //
+
+    public Rank Rank { get => rank; set => rank = value; }
+    public int BasePower { get => basePower; set => basePower = value; }
+    public EnemyType Type { get => type; set => type = value; }
 
     public int MaxHP { get => maxHP;  set => maxHP = value; }
     public int CurrentHP { get => currentHP;  set => currentHP = value; }
@@ -42,6 +60,17 @@ abstract public class Enemy : MonoBehaviour
     public void setStatusList(List<(Status,int)> list){ statusList = list; }
     public List<(Status,int)> getStatusList(){ return statusList; }
 
+    public EnemyAI AI { get => ai; set => ai = value; }
+    public bool IsPhase2 { get => isPhase2; set => isPhase2 = value; }
+    public float BuffAttack { get => buffAttack; set => buffAttack = value; }
+    public bool IsProtected { get => isProtected; set => isProtected = value; }
+    public bool IsBuffed { get => isBuffed; set => isBuffed = value; }
+
+    public int CostAOE { get => costAOE; set => costAOE = value; }
+    public int CostSpecial { get => costSpecial; set => costSpecial = value; }
+    public int CostHeal { get => costHeal; set => costHeal = value; }
+    public int CostBoost { get => costBoost; set => costBoost = value; }
+    public int CostProtection { get => costProtection; set => costProtection = value; }
     // ---------- Methods ---------- //
     void Update()
     {
@@ -133,10 +162,39 @@ abstract public class Enemy : MonoBehaviour
         statBar.SetValues(currentHP, maxHP, currentMP, maxMP);
     }
 }
+    public float GetRankMultiplier()
+    {
+        ///<summary> A multiplier that will be applied to the base attack depending on the enemy's rank </summary>
+        switch (rank)
+        {
+            case Rank.C:
+                return 0.9f;
+            case Rank.B:
+                return 1.2f;
+            case Rank.A:
+                return 1.5f;
+            case Rank.S:
+                return 2.0f;
+            default:
+                return 1.0f;
+        }
+    }
 
+    public int GetMPCost(int baseCost)
+    {
+        float multiplier = 1.0f;
+
+        if (IsPhase2)
+        {
+            multiplier = 0.5f;
+        }
+        return (int)(baseCost * GetRankMultiplier() * multiplier);
+    }
     public void ReceiveDamage(int n){
         ///<param> n : amount of damage to be received by the enemy </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
+
+        int damage = n;
 
         // tries to dodge the attack 
         if (Random.value < dodgeProbability){
@@ -146,15 +204,22 @@ abstract public class Enemy : MonoBehaviour
             return;
         }
 
+        if (isProtected)
+        {
+            damage = (int)(n - 0.20f * n * GetRankMultiplier());
+            Debug.Log(gameObject.name + " est protégé.");
+            Debug.Log(gameObject.name + " a réduit les dégâts à " + damage);
+        }
+
         // if dodge fails, damage is taken
-        currentHP -= n;
+        currentHP -= damage;
         if (currentHP < 0){
-            n += currentHP;
+            damage += currentHP;
             Die();
         }
         UpdateBars();
-        Debug.Log("L'adversaire a perdu "+n+"PV");
-        setTextInfoPV("-"+n+"PV");
+        Debug.Log("L'adversaire a perdu "+damage+"PV");
+        setTextInfoPV("-"+damage+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
     }
 
@@ -169,7 +234,83 @@ abstract public class Enemy : MonoBehaviour
         setTextInfoPV("+"+n+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
     }
-    
+
+    public void Heal(GameObject target)
+    {
+        ///<param> target : the target of the skill </param> 
+        ///<summary> Restores a certain amount of HP to the target : 10% of the enemy's maxHP will be restored </summary>
+
+        UseMp(GetMPCost(costHeal));
+
+        int healAmount = this.MaxHP;
+        healAmount = (int)((float)healAmount * 0.1f * GetRankMultiplier());
+
+        // heals target
+        target.GetComponent<Enemy>().ReceiveHeal(healAmount);
+    }
+
+    public void BoostAttack(GameObject target)
+    {
+        ///<param> target : the target of the skill </param>
+        ///<summary> Boosts the target's attack for the next turn</summary>
+        UseMp(GetMPCost(costBoost));
+
+        Enemy enemyTarget = target.GetComponent<Enemy>();
+        enemyTarget.IsBuffed = true;
+
+        float boostAmount = 1.0f;
+        boostAmount += 0.1f * GetRankMultiplier();
+        target.GetComponent<Enemy>().BuffAttack = boostAmount;
+        enemyTarget.buffTurnsRemaining = 2;
+    }
+
+    public void Protection(GameObject target)
+    {
+        ///<param> target : the target of the skill </param> 
+        ///<summary> Protects the target for the next turn : 20% of the damage taken will be reduced for the next turn </summary>
+
+        UseMp(GetMPCost(costBoost));
+        // protects target
+        target.GetComponent<Enemy>().IsProtected = true;
+
+        target.GetComponent<Enemy>().protectionTurnsRemaining = 2;
+
+        Debug.Log(gameObject.name + " a protégé " + target.name);
+    }
+
+    public void EndTurnConsumeTemporaryEffects()
+    {
+        if (buffTurnsRemaining > 0)
+        {
+            buffTurnsRemaining--;
+            if (buffTurnsRemaining == 0)
+            {
+                IsBuffed = false;
+                // If it's a boss in phase 2 : buffAttack = 1.5
+                BuffAttack = (IsPhase2) ? 1.5f : 1f;
+            }
+        }
+
+        if (protectionTurnsRemaining > 0)
+        {
+            protectionTurnsRemaining--;
+            if (protectionTurnsRemaining == 0)
+            {
+                IsProtected = false;
+            }
+        }
+    }
+
+    public void UseMp(int amount)
+    {
+        if (CurrentMP < amount)
+        {
+            Debug.Log(gameObject.name + " : pas assez de MP.");
+            return;
+        }
+        CurrentMP -= amount;
+    }
+
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);
     abstract public void TargetedAttack(GameObject target);
     abstract public void AoeAttack(GameObject [] target);

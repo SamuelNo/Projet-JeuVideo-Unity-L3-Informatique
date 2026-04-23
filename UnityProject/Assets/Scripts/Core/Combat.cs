@@ -98,6 +98,9 @@ public class Combat : MonoBehaviour
 
         if (SelectionData.Instance != null && SelectionData.Instance.team1.Length >= 2) {
             InitializeBattle();
+            if (!SelectionData.Instance.isPvP) {
+                startPvMFight();
+            }
         } else {
             Debug.LogError("Les données de combat ne sont pas prêtes ou incomplètes !");
         }
@@ -244,8 +247,12 @@ public class Combat : MonoBehaviour
         if (PvM & !wait){ // PvM battle
             if (teamDead(playerList) | teamDead(enemyList)){ // checks if the battle is over
                 if (teamDead(enemyList)){
-                    if (principalScript.getSelectedStage() == principalScript.getUnlockedStage()){ // unlocks the next stage
+                    /*if (principalScript.getSelectedStage() == principalScript.getUnlockedStage()){ // unlocks the next stage
                         principalScript.setUnlockedStage(principalScript.getUnlockedStage() + 1);
+                    }*/
+                    if (SelectionData.Instance.selectedStage == SelectionData.Instance.unlockedStage)
+                    {
+                        SelectionData.Instance.unlockedStage++;
                     }
                     Debug.Log("Fin du combat, le joueur a gagné.");
                     buttonScript.setInfoText("Fin du combat, le joueur a gagné.");
@@ -263,11 +270,16 @@ public class Combat : MonoBehaviour
                 buttonScript.ButtonAccess();
                 buttonScript.ClearAllBars();
             }
-            if (currentTeam == 1){ // player's turn
-                if (!teamDead(playerList) & !teamDead(enemyList)){ // while both teams are alive
+            if (currentTeam == 1)
+            { // player's turn
+                if (!teamDead(playerList) & !teamDead(enemyList))
+                { // while both teams are alive
                     StartCoroutine(playerTurn());
-                } else if (currentTeam == -1){ // enemy's turn
-                    enemyTurn();
+                }
+            }else if (currentTeam == -1){ // enemy's turn
+                if (!teamDead(playerList) & !teamDead(enemyList))
+                {
+                    StartCoroutine(enemyTurn());
                 }
             }
         }
@@ -398,14 +410,154 @@ public class Combat : MonoBehaviour
         
     }
 
-    private void enemyTurn(){
+    private IEnumerator enemyTurn()
+    {
         ///<summary> makes the enemies attack during the enemies' turn </summary>
-        
+
         Debug.Log("Tour de l'ennemi.");
-        
-        // implémenter l'ia ici
-        // ...
+        wait = true;
+
+        // build initial lists of living units
+        List<GameObject> charactersAlive = new List<GameObject>();
+        List<GameObject> enemiesAlive = new List<GameObject>();
+
+        if (playerList != null)
+        {
+            for (int j = 0; j < playerList.Length; j++)
+            {
+                if (!isDead(playerList[j]))
+                {
+                    charactersAlive.Add(playerList[j]);
+                }
+            }
+        }
+
+        if (enemyList != null)
+        {
+            for (int k = 0; k < enemyList.Length; k++)
+            {
+                if (!isDead(enemyList[k]))
+                {
+                    enemiesAlive.Add(enemyList[k]);
+                }
+            }
+        }
+
+
+        // loop over enemies
+        for (int i = 0; i < enemyList.Length; i++)
+        {
+            GameObject currentEnemy = enemyList[i];
+            if (currentEnemy == null || isDead(currentEnemy))
+            {
+                continue;
+            }
+
+            Enemy enemy = currentEnemy.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.Log("Composant ennemi null : " + currentEnemy.name);
+                continue;
+            }
+
+            if (enemy.AI == null)
+            {
+                enemy.AI = new EnemyAI();
+            }
+
+            EnemyAI ai = enemy.AI;
+            int action = ai.DecideAction(enemy, charactersAlive, enemiesAlive);
+            GameObject target = ai.DecideTarget(enemy, charactersAlive, enemiesAlive);
+            if (target == null)
+            {
+                target = ai.GetLowestHP(enemiesAlive);
+            }
+
+            switch (action)
+            {
+                // Targeted attack
+                case 1:
+                    if (target != null)
+                    {
+                        enemy.TargetedAttack(target);
+                        // if the target is dead after the attack, remove it from the list
+                        if (isDead(target))
+                        {
+                            charactersAlive.Remove(target);
+                        }
+                    }
+                    break;
+
+                // Aoe Attack
+                case 2:
+                    if (charactersAlive.Count > 0)
+                    {
+                        enemy.AoeAttack(charactersAlive.ToArray());
+                        // clean up dead targets
+                        for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
+                        {
+                            if (isDead(charactersAlive[idx])) charactersAlive.RemoveAt(idx);
+                        }
+                    }
+                    break;
+
+                // Special Attack
+                case 3:
+                    Boss boss = enemy as Boss;
+                    if (boss != null && charactersAlive.Count > 0)
+                    {
+                        boss.SpecialAttack(charactersAlive.ToArray());
+                        for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
+                        {
+                            if (isDead(charactersAlive[idx]))
+                            {
+                                charactersAlive.RemoveAt(idx);
+                            }
+                        }
+                    }
+                    break;
+
+                case 4:
+                    // heal the ally with the lowest HP (including themselves)
+                    if (target != null)
+                    {
+                        enemy.Heal(target);
+                    }
+                    break;
+
+                case 5:
+                    // boost the attack of the ally with the lowest HP (including themselves)
+                    if (target != null)
+                    {
+                        enemy.BoostAttack(target);
+                    }
+                    break;
+
+                case 6:
+                    // protect the ally with the lowest HP (including themselves)
+                    if (target != null)
+                    {
+                        enemy.Protection(target);
+                    }
+                    break;
+            }
+
+            // after the attack, the enemy consumes their temporary effects (if they have any)
+            enemy.EndTurnConsumeTemporaryEffects();
+
+            yield return new WaitForSeconds(3f);
+
+            // break the enemy loop early if all characters are dead (the battle is over)
+            if (charactersAlive.Count == 0)
+            {
+                break;
+            }
+        }
+        currentTeam = 1;
+        wait = false;
+        yield return null;
     }
+
     int numberAliveMembers(GameObject[] team) {
         int count = 0;
         foreach (GameObject member in team) {
@@ -457,15 +609,26 @@ public class Combat : MonoBehaviour
     private void statusHandler(){
         ///<summary> handles the characters' status (protected) </summary>
 
+        if (selectedTargets == null || selectedTargets.Length == 0)
+        {
+            return;
+        }
         // deselects the character
         if (selectedTargets.Length == 1){ 
             characterScript = selectedTargets[0].GetComponent<Character>();
-            characterScript.Deselect();
+            if (characterScript != null)
+            {
+                characterScript.Deselect();
+            }
         }
 
         for (int i=0; i<selectedTargets.Length; i++){ // for each target
 
-            characterScript = selectedTargets[i].GetComponent<Character>(); 
+            if (selectedTargets[i] == null) continue;
+
+            characterScript = selectedTargets[i].GetComponent<Character>();
+            if (characterScript == null) continue; //if it's an enemy, skip it
+
             statusList = new List<(Status,int)> (characterScript.getStatusList());
 
             foreach ((Status,int) s in statusList){
@@ -517,6 +680,7 @@ public class Combat : MonoBehaviour
             if (!isDead(list[i])){ // ... that are alive
 
                 characterScript = list[i].GetComponent<Character>();
+                if (characterScript == null) continue; // if it's an enemy, skip it (for now)
                 statusList = new List<(Status,int)> (characterScript.getStatusList());
 
                 foreach ((Status,int) s in statusList){ // for every status the character has
@@ -782,7 +946,17 @@ public class Combat : MonoBehaviour
             } else { // if character/enemy is an opponent
 
                 // if the target is shielded
-                statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
+                //statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
+                Character c = clickedObject.GetComponent<Character>();
+                if (c != null)
+                {
+                    statusList = new List<(Status, int)>(c.getStatusList());
+                }
+                else
+                {
+                    statusList = new List<(Status, int)>(); // to do (ennemy status)
+                }
+
                 foreach ((Status,int) s in statusList){
                     if (s.Item1 == Status.SHIELDED){
                         effect = true;

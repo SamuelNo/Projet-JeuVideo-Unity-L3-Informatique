@@ -58,6 +58,7 @@ abstract public class Character : MonoBehaviour
     public float getWeakenedMultiplier(){ return weakenedMultiplier; }
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
+    public Weakness getWeakness(){ return weakness; }
     public List<(Status, int)> getStatusList() {
     return statusList;
 }
