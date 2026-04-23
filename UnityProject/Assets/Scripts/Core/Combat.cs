@@ -44,6 +44,7 @@ public class Combat : MonoBehaviour
 
     private int turnCount; // increases by 1 whenever a turn is over (the 2 teams have played)
     private bool finishedTurn;
+    private bool endGameClicked; // becomes true when the player clicks on "Fin de la partie" at the end of the fight, used in BattleUIController to know when to return to the menu
     private GameObject usedCharacter; // saves the character that was just used
     private BattlePhase currentPhase;
     private int currentTeam; // the team currently attacking (for now, player1 = 1, player2 = 2 & enemies = -1)
@@ -62,7 +63,8 @@ public class Combat : MonoBehaviour
 
     public void setCurrentPhase(BattlePhase phase){ currentPhase = phase; }
     public void setFinishedTurn(bool x){ finishedTurn = x; }
-
+    public void setFinishedGame(bool x){ endGameClicked = x; }
+    public void setIsBattleOver(bool x){ isBattleOver = x; }
 
     // gets
     public GameObject getSelectedCharacter(){ return selectedCharacter; }
@@ -170,7 +172,7 @@ public class Combat : MonoBehaviour
         ///<summary> starts the PvP fight </summary>
         
         enemyList = null;
-
+        endGameClicked = false;
         turnCount = 0;
         usedCharacter = null;
         wait = false;
@@ -199,7 +201,7 @@ public class Combat : MonoBehaviour
         usedCharacter = null;
         wait = false;
         currentTeam = 1;
-
+        endGameClicked = false;
         PvM = true; // starts the battle
         int chosenStage = SelectionData.Instance.selectedStage;
         if(chosenStage >= 0 && chosenStage < stageBackgrounds.Length) {
@@ -214,6 +216,17 @@ public class Combat : MonoBehaviour
     // --------------- Update ---------------
     void FixedUpdate(){
         if (playerList == null || playerList.Length == 0) return;
+        if (endGameClicked) {
+                    buttonScript.setInfoText("Fin du combat");
+                    buttonScript.DisplayEndGame("Combat terminé");
+                    buttonScript.setAttackerName("");
+                    wait = true;
+                    isBattleOver = true;
+                    currentPhase = BattlePhase.WAITING;
+                    buttonScript.ButtonAccess();
+                    buttonScript.ClearAllBars();
+                    return;
+        }
         if (PvP & !wait){ // only enters the loop when a turn is over
             if (teamDead(playerList) | teamDead(player2List)){ // checks if the battle is over
                 if (teamDead(player2List)){

@@ -21,6 +21,9 @@ public class BattleUIController : MonoBehaviour
     [SerializeField] private GameObject infoTextObject;
     [SerializeField] private GameObject announcementTextObject;
     [SerializeField] private GameObject resultTextObject;
+    [SerializeField] private GameObject endGameTextObject;
+    [SerializeField] private GameObject infoEntity;
+    [SerializeField] private GameObject choicePanel;
     private BattlePhase currentPhase;
     [SerializeField] private GameObject statBarPrefab;
     [SerializeField] private Transform uiCanvasTransform;
@@ -36,6 +39,7 @@ public class BattleUIController : MonoBehaviour
             combatScript.startPvMFight();
         }
         battleResultsPanel.SetActive(false);
+        choicePanel.SetActive(false);
     
     }
     // --------------- Methods --------------- 
@@ -71,6 +75,14 @@ public class BattleUIController : MonoBehaviour
     public void setResultText(string text){
         ///<summary> sets the result text in the UI </summary>
         resultTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+    }
+    public void setInfoEntityText(GameObject entity, string text){
+        ///<summary> sets the info text about the selected entity in the UI </summary>
+        entity.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
+    }
+    public void setEndGameText(string text){
+        ///<summary> sets the end game text in the UI (for example, to announce the winner) </summary>
+        endGameTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text",text);
     }
     public void DisplayEndGame(string message) 
     {
@@ -192,5 +204,32 @@ public class BattleUIController : MonoBehaviour
         setInstructionText("Vous avez cliqué sur 'Fin de Tour'.");
 
         combatScript.setFinishedTurn(true); 
+    }
+    public void OnClickEndGame(){
+        ///<summary> informs the Combat class that the player clicked on "Fin de la partie" (after the end of the fight) </summary>
+        choicePanel.SetActive(true);
+        setEndGameText("Voulez-vous arrêter la partie ?"); // asks the player if they want to return to the main menu
+        combatScript.setIsBattleOver(true);
+        simpleAttackButton.SetState(ButtonState.BLOCKED);
+        skillLvl1Button.SetState(ButtonState.BLOCKED);
+        skillLvl2Button.SetState(ButtonState.BLOCKED);
+        skillLvl3Button.SetState(ButtonState.BLOCKED);
+        endTurnButton.SetState(ButtonState.BLOCKED);
+    }
+    public void OnClickYesEndGameChoice()
+    {
+        Debug.Log("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
+        setInstructionText("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
+        choicePanel.SetActive(false);
+        combatScript.setFinishedGame(true);
+    }
+    public void OnClickNoEndGameChoice()
+    {
+        Debug.Log("La partie continue");
+        setInstructionText("La partie continue");
+        choicePanel.SetActive(false);
+        combatScript.setIsBattleOver(false);
+        combatScript.setCurrentPhase(combatScript.getCurrentPhase()); 
+        ButtonAccess();
     }
 }
