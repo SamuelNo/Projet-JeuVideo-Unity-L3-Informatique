@@ -512,7 +512,10 @@ public class Combat : MonoBehaviour
             foreach ((Status,int) s in statusList){
                 if (s.Item1 == Status.FROZEN) effect = true;
             }
-            if (!effect){
+            if (effect){
+                buttonScript.setInfoText("L'ennemi "+enemy.name+" est gelé et ne peut pas attaquer.");
+
+            } else {
 
                 // if the target is shielded, skip the attacks
                 if (target.GetComponent<Character>() != null){
@@ -557,8 +560,13 @@ public class Combat : MonoBehaviour
                     case 1:
                         if (target != null)
                         {
-                            if (!effect) // if the character isn't shielded
+                            if (!effect){ // if the character isn't shielded
                                 enemy.TargetedAttack(target);
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué "+target.name+".");
+
+                            } else {
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                            }
                             // if the target is dead after the attack, remove it from the list
                             if (isDead(target))
                             {
@@ -571,8 +579,13 @@ public class Combat : MonoBehaviour
                     case 2:
                         if (charactersAlive.Count > 0)
                         {
-                            if (!effect) // if the character isn't shielded
+                            if (!effect){ // if the character isn't shielded
                                 enemy.AoeAttack(selectedTargets);
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué les 2 personnages.");
+
+                            } else {
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                            }
 
                             // clean up dead targets
                             for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
@@ -587,8 +600,13 @@ public class Combat : MonoBehaviour
                         Boss boss = enemy as Boss;
                         if (boss != null && charactersAlive.Count > 0)
                         {
-                            if (!effect) // if the character isn't shielded
+                            if (!effect){ // if the character isn't shielded
                                 boss.SpecialAttack(selectedTargets);
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a utilisé son attaque spéciale.");
+
+                            } else {
+                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                            }
 
                             // clean up dead targets
                             for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
@@ -603,6 +621,7 @@ public class Combat : MonoBehaviour
                         if (target != null)
                         {
                             enemy.Heal(target);
+                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a soigné "+target.name+".");
                         }
                         break;
 
@@ -611,6 +630,7 @@ public class Combat : MonoBehaviour
                         if (target != null)
                         {
                             enemy.BoostAttack(target);
+                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a renforcé les attaques de "+target.name+".");
                         }
                         break;
 
@@ -619,6 +639,7 @@ public class Combat : MonoBehaviour
                         if (target != null)
                         {
                             enemy.Protection(target);
+                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a protégé "+target.name+".");
                         }
                         break;
                 }
