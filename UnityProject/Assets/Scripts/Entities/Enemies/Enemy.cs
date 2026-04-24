@@ -91,6 +91,7 @@ abstract public class Enemy : MonoBehaviour
             circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();
             selectionCircle.SetActive(false);
         }
+        statusList = new List<(Status,int)>();
     }
     protected void OnMouseEnter() {
     if (isSelected || circleRenderer == null) return;

@@ -430,8 +430,8 @@ public class Combat : MonoBehaviour
 
         // switch to the other team
         if (PvM){
+            statusUpdate(playerList);
             currentTeam = -1; // enemies' turn
-            statusUpdate(enemyList);
         } else if (currentTeam == 1){
             statusUpdate(playerList);
             currentTeam = 2; // player2's turn
@@ -506,73 +506,121 @@ public class Combat : MonoBehaviour
                 target = ai.GetLowestHP(enemiesAlive);
             }
 
-            switch (action)
-            {
-                // Targeted attack
-                case 1:
-                    if (target != null)
-                    {
-                        enemy.TargetedAttack(target);
-                        // if the target is dead after the attack, remove it from the list
-                        if (isDead(target))
-                        {
-                            charactersAlive.Remove(target);
-                        }
+            // if the enemy is frozen, skip the turn
+            effect = false;
+            statusList = enemy.getStatusList();
+            foreach ((Status,int) s in statusList){
+                if (s.Item1 == Status.FROZEN) effect = true;
+            }
+            if (!effect){
+                // if the target is shielded, skip the attacks
+                if (target.GetComponent<Character>() != null){
+                    effect = false;
+                    statusList = target.GetComponent<Character>().getStatusList();
+                    foreach ((Status,int) s in statusList){
+                        if (s.Item1 == Status.SHIELDED) effect = true; // (attacks will check if effect==true)
                     }
-                    break;
+                }
 
-                // Aoe Attack
-                case 2:
-                    if (charactersAlive.Count > 0)
-                    {
-                        enemy.AoeAttack(charactersAlive.ToArray());
-                        // clean up dead targets
-                        for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
-                        {
-                            if (isDead(charactersAlive[idx])) charactersAlive.RemoveAt(idx);
-                        }
-                    }
-                    break;
+                // array for AoE attacks
+                selectedTargets = charactersAlive.ToArray();
+            
+                // if the target is protected, attack the protector instead
+                if (target.GetComponent<Character>() != null){
+                    statusList = target.GetComponent<Character>().getStatusList();
+                    foreach ((Status,int) s in statusList){
+                        if (s.Item1 == Status.PROTECTED) {
+                            // if the protector is dead, the character is no longer protected
+                            if (charactersAlive.ElementAt(0) == null){
+                                charactersAlive.ElementAt(1).GetComponent<Character>().getStatusList().Remove(s);
+                            } else if (charactersAlive.ElementAt(1) == null){
+                                charactersAlive.ElementAt(0).GetComponent<Character>().getStatusList().Remove(s);
 
-                // Special Attack
-                case 3:
-                    Boss boss = enemy as Boss;
-                    if (boss != null && charactersAlive.Count > 0)
-                    {
-                        boss.SpecialAttack(charactersAlive.ToArray());
-                        for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
-                        {
-                            if (isDead(charactersAlive[idx]))
-                            {
-                                charactersAlive.RemoveAt(idx);
+                            } else { // otherwise, replaces the target with the protector
+                                target = (charactersAlive.ElementAt(0).GetComponent<Protector>() != null) ? charactersAlive.ElementAt(0) : charactersAlive.ElementAt(1);
+                            }
+
+                            // new array with the protector x2 (for AoE attacks) so the protected target doesn't get attacked
+                            if (charactersAlive.ElementAt(0).GetComponent<Protector>() != null){
+                                selectedTargets = new GameObject[]{charactersAlive.ElementAt(0), charactersAlive.ElementAt(0)};
+                            } else {
+                                selectedTargets = new GameObject[]{charactersAlive.ElementAt(1), charactersAlive.ElementAt(1)};
                             }
                         }
                     }
-                    break;
+                }
 
-                case 4:
-                    // heal the ally with the lowest HP (including themselves)
-                    if (target != null)
-                    {
-                        enemy.Heal(target);
-                    }
-                    break;
+                switch (action)
+                {
+                    // Targeted attack
+                    case 1:
+                        if (target != null)
+                        {
+                            if (!effect) // if the character isn't shielded
+                                enemy.TargetedAttack(target);
+                            // if the target is dead after the attack, remove it from the list
+                            if (isDead(target))
+                            {
+                                charactersAlive.Remove(target);
+                            }
+                        }
+                        break;
 
-                case 5:
-                    // boost the attack of the ally with the lowest HP (including themselves)
-                    if (target != null)
-                    {
-                        enemy.BoostAttack(target);
-                    }
-                    break;
+                    // Aoe Attack
+                    case 2:
+                        if (charactersAlive.Count > 0)
+                        {
+                            if (!effect) // if the character isn't shielded
+                                enemy.AoeAttack(selectedTargets);
 
-                case 6:
-                    // protect the ally with the lowest HP (including themselves)
-                    if (target != null)
-                    {
-                        enemy.Protection(target);
-                    }
-                    break;
+                            // clean up dead targets
+                            for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
+                            {
+                                if (isDead(charactersAlive[idx])) charactersAlive.RemoveAt(idx);
+                            }
+                        }
+                        break;
+
+                    // Special Attack
+                    case 3:
+                        Boss boss = enemy as Boss;
+                        if (boss != null && charactersAlive.Count > 0)
+                        {
+                            if (!effect) // if the character isn't shielded
+                                boss.SpecialAttack(selectedTargets);
+
+                            // clean up dead targets
+                            for (int idx = charactersAlive.Count - 1; idx >= 0; idx--)
+                            {
+                                if (isDead(charactersAlive[idx])) charactersAlive.RemoveAt(idx);
+                            }
+                        }
+                        break;
+
+                    case 4:
+                        // heal the ally with the lowest HP (including themselves)
+                        if (target != null)
+                        {
+                            enemy.Heal(target);
+                        }
+                        break;
+
+                    case 5:
+                        // boost the attack of the ally with the lowest HP (including themselves)
+                        if (target != null)
+                        {
+                            enemy.BoostAttack(target);
+                        }
+                        break;
+
+                    case 6:
+                        // protect the ally with the lowest HP (including themselves)
+                        if (target != null)
+                        {
+                            enemy.Protection(target);
+                        }
+                        break;
+                }
             }
 
             // after the attack, the enemy consumes their temporary effects (if they have any)
@@ -588,6 +636,8 @@ public class Combat : MonoBehaviour
         }
         currentTeam = 1;
         wait = false;
+        // gets rid of frozen status
+        statusUpdate(enemyList);
         yield return null;
     }
 
@@ -666,10 +716,27 @@ public class Combat : MonoBehaviour
 
             foreach ((Status,int) s in statusList){
                 if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
-                    if (currentTeam == 1){ // replaces the target with the protector
-                        selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
+                    if (currentTeam == 1 & PvP){ 
+                        // if the protector is dead, the character is no longer protected
+                        if (player2List[0] == null){
+                            player2List[1].GetComponent<Character>().getStatusList().Remove(s);
+                        } else if (player2List[1] == null){
+                            player2List[0].GetComponent<Character>().getStatusList().Remove(s);
+
+                        } else { // otherwise, replaces the target with the protector
+                            selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
+                        }
+                        
                     } else {
-                        selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+                        // if the protector is dead, the character is no longer protected
+                        if (playerList[0] == null){
+                            playerList[1].GetComponent<Character>().getStatusList().Remove(s);
+                        } else if (playerList[1] == null){
+                            playerList[0].GetComponent<Character>().getStatusList().Remove(s);
+
+                        } else { // otherwise, replaces the target with the protector
+                            selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+                        }
                     }
                 }
             }
@@ -710,42 +777,56 @@ public class Combat : MonoBehaviour
         
         for (int i=0; i<list.Length; i++){ // for all the characters in the list
 
-            if (!isDead(list[i])){ // ... that are alive
+            if (list[i] != null){ // ... that are alive
 
                 characterScript = list[i].GetComponent<Character>();
-                if (characterScript == null) continue; // if it's an enemy, skip it (for now)
-                statusList = new List<(Status,int)> (characterScript.getStatusList());
+                if (characterScript != null) { // if it's a character
+                    statusList = new List<(Status,int)> (characterScript.getStatusList());
 
-                foreach ((Status,int) s in statusList){ // for every status the character has
-                    switch (s.Item1){
-                        case Status.FROZEN :        // (status effect is taken care of in select())
-                            characterScript.getStatusList().Remove(s);
-                            break;
+                    foreach ((Status,int) s in statusList){ // for every status the character has
+                        switch (s.Item1){
+                            case Status.FROZEN :        // (status effect is taken care of in select())
+                                characterScript.getStatusList().Remove(s);
+                                break;
 
-                        case Status.PROTECTED :     // (status effect is taken care of in statusHandler())
-                            characterScript.getStatusList().Remove(s);
-                            if (s.Item2 > 0){
-                                characterScript.getStatusList().Add((Status.PROTECTED, s.Item2-1)); 
-                            }
-                            break;
+                            case Status.PROTECTED :     // (status effect is taken care of in statusHandler())
+                                characterScript.getStatusList().Remove(s);
+                                if (s.Item2 > 0){
+                                    characterScript.getStatusList().Add((Status.PROTECTED, s.Item2-1)); 
+                                }
+                                break;
 
-                        case Status.SHIELDED :      // (status effect is taken care of in select())
-                            characterScript.getStatusList().Remove(s);
-                            if (s.Item2 > -1){
-                                characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly dissapear
-                            }
-                            break;
+                            case Status.SHIELDED :      // (status effect is taken care of in select())
+                                characterScript.getStatusList().Remove(s);
+                                if (s.Item2 > -1){
+                                    characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly dissapear
+                                }
+                                break;
 
-                        case Status.STRENGTHENED :  // (status effect is taken care of here and in class Healer/Fighter)
-                            characterScript.getStatusList().Remove(s);
-                            if (s.Item2 > 0){
-                                characterScript.getStatusList().Add((Status.STRENGTHENED, s.Item2-1)); // makes the status last one more turn
-                            } else {
-                                characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/2); // do not change '2' unless you change it in Healer and Fighter too
-                            }
-                            break;
-                    
+                            case Status.STRENGTHENED :  // (status effect is taken care of here and in class Healer/Fighter)
+                                characterScript.getStatusList().Remove(s);
+                                if (s.Item2 > 0){
+                                    characterScript.getStatusList().Add((Status.STRENGTHENED, s.Item2-1)); // makes the status last one more turn
+                                } else {
+                                    characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/2); // do not change '2' unless you change it in Healer and Fighter too
+                                }
+                                break;
+                        }
                     }
+                }
+
+                enemyScript = list[i].GetComponent<Enemy>();
+                if (enemyScript != null) { // if it's an enemy
+                    statusList = new List<(Status,int)> (enemyScript.getStatusList());
+
+                    foreach ((Status,int) s in statusList){ // for every status the character has
+                        switch (s.Item1){
+                            case Status.FROZEN :
+                                enemyScript.getStatusList().Remove(s);
+                                break;
+                        }
+                    }
+                    return;
                 }
             }
         }
@@ -754,6 +835,8 @@ public class Combat : MonoBehaviour
 
     public void automaticTargetSelection(){
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
+        
+        if (currentTeam == -1) return;
         
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)){ // or if character is a protector and using skill lvl 2
@@ -836,10 +919,29 @@ public class Combat : MonoBehaviour
     public void select(GameObject clickedObject){
         ///<summary> handles the character and target selection </summary>
 
+        if (currentTeam == -1) {
+            if(clickedObject.GetComponent<Character>() != null){
+                clickedObject.GetComponent<Character>().Deselect();
+            }
+            else if (clickedObject.GetComponent<Enemy>() != null){
+                clickedObject.GetComponent<Enemy>().Deselect();
+            }
+            return;
+        }
+        
         clickedTeam = (clickedObject.GetComponent<Character>() != null) ? clickedObject.GetComponent<Character>().getTeamID() : -1; // gets the team id of the clicked character
         effect = false;
 
         if (currentPhase == BattlePhase.SELECT_CHARACTER){
+
+            // an enemy shouldn't be clickable right now
+            if (clickedObject.GetComponent<Character>() == null) {
+                Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
+                buttonScript.setWarningText("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
+                if (clickedObject.GetComponent<Enemy>() != null) 
+                    clickedObject.GetComponent<Enemy>().Deselect();
+                return;
+            }
 
             // if the character is frozen, nothing happens
             statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());
@@ -890,6 +992,15 @@ public class Combat : MonoBehaviour
     
 
         } else if(currentPhase == BattlePhase.SELECT_SKILL){
+
+            // an enemy shouldn't be clickable right now
+            if (clickedObject.GetComponent<Character>() == null) {
+                Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
+                buttonScript.setWarningText("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
+                if (clickedObject.GetComponent<Enemy>() != null) 
+                    clickedObject.GetComponent<Enemy>().Deselect();
+                return;
+            }
 
             // if the character is frozen, nothing happens
             statusList = new List<(Status,int)>(clickedObject.GetComponent<Character>().getStatusList());

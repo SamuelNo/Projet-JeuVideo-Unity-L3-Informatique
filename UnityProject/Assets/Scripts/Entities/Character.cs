@@ -42,6 +42,7 @@ abstract public class Character : MonoBehaviour
     public void setMpCostSkillLvl1(int n){ mpCostSkillLvl1 = n; }
     public void setMpCostSkillLvl2(int n){ mpCostSkillLvl2 = n; }
     public void setMpCostSkillLvl3(int n){ mpCostSkillLvl3 = n; }
+    public void setStatusList(List<(Status, int)> list){ statusList = list; }
 
     public int getLvl(){ return lvl; }
     public int getMaxHP(){ return maxHP; }
@@ -59,9 +60,7 @@ abstract public class Character : MonoBehaviour
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
     public Weakness getWeakness(){ return weakness; }
-    public List<(Status, int)> getStatusList() {
-    return statusList;
-    }
+    public List<(Status, int)> getStatusList() { return statusList; }
     public StatBarHandler getStatBar() {
         return statBar;
     }
@@ -84,6 +83,7 @@ abstract public class Character : MonoBehaviour
             circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();
             selectionCircle.SetActive(false); 
         }
+        statusList = new List<(Status,int)>();
     }
     protected void OnMouseEnter() {
     if (isSelected || circleRenderer == null || buttonScript.getCombatScript().getIsBattleOver()) return;
