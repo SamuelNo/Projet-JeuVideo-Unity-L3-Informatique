@@ -24,6 +24,7 @@ abstract public class Enemy : MonoBehaviour
 
     private BattleUIController buttonScript;
     public GameObject textInfoPV;
+    public Vector3 offset = new Vector3(0, 3.5f, 0); 
 
     protected List<(Status,int)> statusList;
 
@@ -59,7 +60,8 @@ abstract public class Enemy : MonoBehaviour
 
     public void setStatusList(List<(Status,int)> list){ statusList = list; }
     public List<(Status,int)> getStatusList(){ return statusList; }
-
+    public StatBarHandler getStatBar() { return statBar; }
+    public GameObject getTextInfoPV() { return textInfoPV; }
     public EnemyAI AI { get => ai; set => ai = value; }
     public bool IsPhase2 { get => isPhase2; set => isPhase2 = value; }
     public float BuffAttack { get => buffAttack; set => buffAttack = value; }
@@ -75,7 +77,7 @@ abstract public class Enemy : MonoBehaviour
     void Update()
     {
     if (textInfoPV != null){    
-        Vector3 worldPos = transform.position + Vector3.up * 3.5f; 
+        Vector3 worldPos = transform.position + Vector3.up * offset.y; 
         
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
     
@@ -221,6 +223,7 @@ abstract public class Enemy : MonoBehaviour
         Debug.Log("L'adversaire a perdu "+damage+"PV");
         setTextInfoPV("-"+damage+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
+        UpdateBars();
     }
 
     public void ReceiveHeal(int n){
@@ -233,6 +236,7 @@ abstract public class Enemy : MonoBehaviour
         }
         setTextInfoPV("+"+n+"PV");
         StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
+        UpdateBars();
     }
 
     public void Heal(GameObject target)
@@ -309,6 +313,7 @@ abstract public class Enemy : MonoBehaviour
             return;
         }
         CurrentMP -= amount;
+        UpdateBars();
     }
 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);

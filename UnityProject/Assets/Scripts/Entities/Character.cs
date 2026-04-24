@@ -22,7 +22,7 @@ abstract public class Character : MonoBehaviour
 
     private BattleUIController buttonScript;
     public GameObject textInfoPV;
-    
+    public Vector3 offset = new Vector3(0, 3.5f, 0); 
     
     // ---------- Set and Get ---------- //
 
@@ -61,7 +61,10 @@ abstract public class Character : MonoBehaviour
     public Weakness getWeakness(){ return weakness; }
     public List<(Status, int)> getStatusList() {
     return statusList;
-}
+    }
+    public StatBarHandler getStatBar() {
+        return statBar;
+    }
 
 
     // ---------- Methods ---------- //
@@ -69,7 +72,7 @@ abstract public class Character : MonoBehaviour
     {
     if (textInfoPV != null)
     {
-        Vector3 worldPos = transform.position + Vector3.up * 3.5f; 
+        Vector3 worldPos = transform.position + Vector3.up * offset.y; 
         Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
         textInfoPV.transform.position = screenPos;
     }

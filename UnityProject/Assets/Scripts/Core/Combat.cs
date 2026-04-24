@@ -129,6 +129,26 @@ public class Combat : MonoBehaviour
                 GameObject m2 = SpawnUnit(1, allMapsSpawns[selectedStage].points[3], 3, -1);
                 enemyList = new GameObject[] { m1, m2 };
             }
+            if(selectedStage == 2){
+                GameObject m1 = SpawnUnit(3, allMapsSpawns[selectedStage].points[2], 2, -1);
+                GameObject m2 = SpawnUnit(2, allMapsSpawns[selectedStage].points[3], 3, -1);
+                GameObject m3 = SpawnUnit(3, allMapsSpawns[selectedStage].points[4], 4, -1);
+                GameObject[] currentEnemies = { m1, m2, m3 };
+                float newOffset = 1.5f;
+
+                foreach(GameObject m in currentEnemies) {
+                    Enemy e = m.GetComponent<Enemy>();
+                    if(e != null) {
+                        e.statBar.offset = new Vector3(0, newOffset, 0);
+                        e.offset = new Vector3(0, newOffset+0.5f, 0);
+                    }
+                }
+                enemyList = currentEnemies;
+            }
+            if(selectedStage == 3){
+                GameObject m1 = SpawnUnit(4, allMapsSpawns[selectedStage].points[2], 4, -1);
+                enemyList = new GameObject[] { m1};
+            }
         }
     }
     

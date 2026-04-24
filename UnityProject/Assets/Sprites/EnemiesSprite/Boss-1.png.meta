@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 1969ef972dcb7444aa27c463f62695b7
+guid: 24a108205615448f997ac363bbba4d67
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8948010610391460476
-    second: PVM-1_0
+      213: 5715978072879699838
+    second: Boss-1_0
+  - first:
+      213: -2582673773990317324
+    second: Boss-1_1
+  - first:
+      213: 1863542185353818966
+    second: Boss-1_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +106,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PVM-1_0
+      name: Boss-1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2048
-        height: 1536
+        x: 94
+        y: 675
+        width: 91
+        height: 89
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 485d03922c742d380800000000000000
-      internalID: -8948010610391460476
+      spriteID: e779ae1d5cb335f40800000000000000
+      internalID: 5715978072879699838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss-1_1
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 74
+        width: 727
+        height: 809
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f2f69ad2ef782cd0800000000000000
+      internalID: -2582673773990317324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss-1_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 692
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65338fd7eb1acd910800000000000000
+      internalID: 1863542185353818966
       vertices: []
       indices: 
       edges: []
@@ -125,7 +175,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 34ac8a71e1e284ddf82e798aa30c4a04
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PVM-1_0: -8948010610391460476
+      Boss-1_0: 5715978072879699838
+      Boss-1_1: -2582673773990317324
+      Boss-1_2: 1863542185353818966
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
