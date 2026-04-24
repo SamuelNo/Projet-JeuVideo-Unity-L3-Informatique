@@ -141,9 +141,9 @@ abstract public class Enemy : MonoBehaviour
         if (GetComponent<Collider2D>() != null) 
         {
             GetComponent<Collider2D>().enabled = false;
-        }
+        }/*
         setTextInfoPV("Mort !");
-        StartCoroutine(ClearTextAfterDelay(2.0f, textInfoPV));
+        StartCoroutine(ClearTextAfterDelay(2.0f, textInfoPV));*/
         Destroy(gameObject, 0.1f); 
         
         Debug.Log(gameObject.name + " a été supprimé de la scène.");
@@ -220,11 +220,13 @@ abstract public class Enemy : MonoBehaviour
             damage += currentHP;
             Die();
         }
+        if(currentHP > 0){
+            Debug.Log("L'adversaire a perdu "+damage+"PV");
+            setTextInfoPV("-"+damage+"PV");
+            StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
+        }
         UpdateBars();
-        Debug.Log("L'adversaire a perdu "+damage+"PV");
-        setTextInfoPV("-"+damage+"PV");
-        StartCoroutine(ClearTextAfterDelay(3.0f, textInfoPV));
-        UpdateBars();
+        return;
     }
 
     public void ReceiveHeal(int n){
