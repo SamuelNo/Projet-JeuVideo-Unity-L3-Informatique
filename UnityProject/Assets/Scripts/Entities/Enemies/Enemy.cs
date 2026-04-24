@@ -219,6 +219,7 @@ abstract public class Enemy : MonoBehaviour
         if (currentHP < 0){
             damage += currentHP;
             Die();
+            statBar.disappear();
         }
         UpdateBars();
         Debug.Log("L'adversaire a perdu "+damage+"PV");

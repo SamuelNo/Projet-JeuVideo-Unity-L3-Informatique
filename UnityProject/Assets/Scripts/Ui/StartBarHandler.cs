@@ -27,4 +27,8 @@ public class StatBarHandler : MonoBehaviour
         if (manaFill != null && maxMP > 0) 
             manaFill.fillAmount = (float)currentMP / maxMP;
     }
+
+    public void disappear(){
+        Destroy(this.gameObject);
+    }
 }

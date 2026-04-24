@@ -821,7 +821,7 @@ public class Combat : MonoBehaviour
                             case Status.SHIELDED :      // (status effect is taken care of in select())
                                 characterScript.getStatusList().Remove(s);
                                 if (s.Item2 > 0){
-                                    characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly dissapear
+                                    characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly disappear
                                 }
                                 break;
 
