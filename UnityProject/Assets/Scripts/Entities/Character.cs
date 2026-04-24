@@ -173,7 +173,6 @@ abstract public class Character : MonoBehaviour
         if (currentHP <= 0){
             n += currentHP;
             Die();
-            statBar.disappear();
         }
         if(currentHP > 0){
             Debug.Log( this.name+" a perdu "+n+"PV");
