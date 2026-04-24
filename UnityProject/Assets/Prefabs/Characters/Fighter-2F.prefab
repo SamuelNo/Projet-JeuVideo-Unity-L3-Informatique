@@ -244,19 +244,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Fighter
   lvl: 5
-  maxHP: 100
-  currentHP: 100
-  maxMP: 50
-  currentMP: 50
-  baseAtk: 5
+  maxHP: 130
+  currentHP: 130
+  maxMP: 80
+  currentMP: 80
+  baseAtk: 10
   teamID: 0
   mpCostSkillLvl1: 10
   mpCostSkillLvl2: 20
   mpCostSkillLvl3: 30
   dodgeProbability: 0.1
   damageMultiplier: 1
-  weakenedMultiplier: 1
-  strengthenedMultiplier: 5
+  weakenedMultiplier: 1.5
+  strengthenedMultiplier: 0.5
   attackType: 0
   weakness: 1
   selectionCircle: {fileID: 238444792877392269}
@@ -264,3 +264,4 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.50980395}
   statBar: {fileID: 0}
   textInfoPV: {fileID: 0}
+  offset: {x: 0, y: 3.5, z: 0}

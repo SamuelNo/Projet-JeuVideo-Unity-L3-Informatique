@@ -96,7 +96,7 @@ public class Fighter : Character
         }
 
         // loses HP (1/3 of maxHP)
-        this.currentHP -= (int) ((float) maxHP/3);
+        this.currentHP -= (int) ((float) maxHP*0.2f);
         if (this.currentHP < 0){
             this.currentHP = 0;
         }

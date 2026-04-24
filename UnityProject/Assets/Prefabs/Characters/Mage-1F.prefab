@@ -153,10 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Mage
   lvl: 5
-  maxHP: 100
-  currentHP: 100
-  maxMP: 50
-  currentMP: 50
+  maxHP: 150
+  currentHP: 150
+  maxMP: 80
+  currentMP: 80
   baseAtk: 5
   teamID: 0
   mpCostSkillLvl1: 10
@@ -164,8 +164,8 @@ MonoBehaviour:
   mpCostSkillLvl3: 30
   dodgeProbability: 0.1
   damageMultiplier: 1
-  weakenedMultiplier: 1
-  strengthenedMultiplier: 5
+  weakenedMultiplier: 1.5
+  strengthenedMultiplier: 3
   attackType: 1
   weakness: 0
   selectionCircle: {fileID: 8672076707429445554}
@@ -173,6 +173,7 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.50980395}
   statBar: {fileID: 0}
   textInfoPV: {fileID: 0}
+  offset: {x: 0, y: 3.5, z: 0}
 --- !u!1 &8672076707429445554
 GameObject:
   m_ObjectHideFlags: 0
