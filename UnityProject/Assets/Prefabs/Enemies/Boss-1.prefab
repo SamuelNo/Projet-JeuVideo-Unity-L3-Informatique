@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb58c74192b48474b94e7e2506a1668c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Boss
-  rank: 0
+  rank: 3
   maxHP: 200
   currentHP: 200
   maxMP: 100
@@ -170,12 +170,16 @@ MonoBehaviour:
   nameText: Boss-1
   type: 0
   textInfoPV: {fileID: 0}
+  offset: {x: 0, y: 3.5, z: 0}
   isPhase2: 0
   buffAttack: 1
   isProtected: 0
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
+  enemyDescription: "R\xE9sistant au corps \xE0 corps. Attaque cibl\xE9e, Attaque
+    de zone, Attaque sp\xE9ciale. "
+  enemyName: Boss de rang S
 --- !u!1 &3382017922349067435
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +207,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.5, y: -3.5, z: 0}
-  m_LocalScale: {x: 6, y: 2, z: 1}
+  m_LocalScale: {x: 6, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1113638511161394176}

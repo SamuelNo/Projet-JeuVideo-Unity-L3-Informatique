@@ -22,12 +22,14 @@ public class BattleUIController : MonoBehaviour
     [SerializeField] private GameObject announcementTextObject;
     [SerializeField] private GameObject resultTextObject;
     [SerializeField] private GameObject endGameTextObject;
-    [SerializeField] private GameObject infoEntity;
     [SerializeField] private GameObject choicePanel;
     private BattlePhase currentPhase;
     [SerializeField] private GameObject statBarPrefab;
     [SerializeField] private Transform uiCanvasTransform;
     private List<StatBarHandler> activeBars = new List<StatBarHandler>();
+    public GameObject skillTooltip; 
+    public GameObject titleTextObject;
+    public GameObject descriptionTextObject;
 
 
     // --------------- Initialisation ---------------
@@ -136,9 +138,19 @@ public class BattleUIController : MonoBehaviour
     public void HandleSelection(GameObject clickedObject){
         ///<summary> makes Combat handle the character and target selection </summary>
 
-        if (combatScript.getCurrentPhase() != BattlePhase.WAITING){
+        if (combatScript.getCurrentTeam() != -1){
             combatScript.select(clickedObject);
         }
+        else {
+                if(clickedObject.GetComponent<Character>() != null){
+                    clickedObject.GetComponent<Character>().Deselect();
+                    clickedObject.GetComponent<Character>().getSelectionCircle().SetActive(false);
+                }
+                else if(clickedObject.GetComponent<Enemy>() != null){
+                    clickedObject.GetComponent<Enemy>().Deselect();
+                    clickedObject.GetComponent<Enemy>().GetSelectionCircle().SetActive(false);
+                }
+            }
     }
 
     public void OnClickSimpleAttack(){
@@ -231,5 +243,23 @@ public class BattleUIController : MonoBehaviour
         combatScript.setIsBattleOver(false);
         combatScript.setCurrentPhase(combatScript.getCurrentPhase()); 
         ButtonAccess();
+    }
+    public void ShowSkillTooltip(int index) {
+        GameObject selected = combatScript.getSelectedCharacter();
+        if (selected == null) return;
+
+        Character data = selected.GetComponent<Character>();
+        
+        if (data != null && index < data.skillNames.Length) {
+            skillTooltip.SetActive(true);
+            
+            titleTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", data.skillNames[index]);
+            descriptionTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text", data.skillDescriptions[index]);
+        }
+    }
+
+    public void HideSkillTooltip() {
+        if(skillTooltip != null)
+            skillTooltip.SetActive(false);
     }
 }

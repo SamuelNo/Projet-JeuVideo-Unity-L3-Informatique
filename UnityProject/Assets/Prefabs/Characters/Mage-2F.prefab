@@ -174,6 +174,25 @@ MonoBehaviour:
   statBar: {fileID: 0}
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
+  characterDescription: "Arm\xE9 d'une baguette magique, il est sp\xE9cialis\xE9
+    dans les attaques magiques \xE0 distance, le mage inflige d\u2019importants d\xE9g\xE2ts
+    \xE9l\xE9mentaires. Il poss\xE8de une r\xE9sistance magique \xE9lev\xE9e, mais
+    reste fragile au combat rapproch\xE9. 150 PV et 80 MP"
+  characterName: Mage
+  skillNames:
+  - 'Attaque de Base '
+  - Boule de feu
+  - Entrave de givre
+  - Foudre
+  skillDescriptions:
+  - "Impact rocheux : G\xE9n\xE8re un projectile de pierre depuis le sol et l\u2019envoie
+    sur un ennemi unique. D\xE9g\xE2t de base : 10."
+  - "10 MP : Cr\xE9er une boule de feu devant lui et l'envoie dur un enemi unique.
+    20 de d\xE9g\xE2ts."
+  - "20 MP : Entoure l'ennemi de glace. Peut geler l'ennemi et l'emp\xEAcher d'agir
+    pendant un tour."
+  - "30 MP : D\xE9chaine une puissante d'attaque \xE9lectrique qui inglige des d\xE9gats
+    partag\xE9s \xE0 tous les ennemis.  40 de d\xE9g\xE2ts."
 --- !u!1 &8672076707429445554
 GameObject:
   m_ObjectHideFlags: 0

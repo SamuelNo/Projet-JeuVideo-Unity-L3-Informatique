@@ -170,12 +170,16 @@ MonoBehaviour:
   nameText: Monster-2
   type: 1
   textInfoPV: {fileID: 0}
+  offset: {x: 0, y: 3.5, z: 0}
   isPhase2: 0
   buffAttack: 1
   isProtected: 0
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
+  enemyDescription: "R\xE9sistance neutre. Attaque \xE0 ditance : Attaque cibl\xE9e,
+    Attaque de zone. "
+  enemyName: Monstre de rang B
 --- !u!1 &6232505616473213972
 GameObject:
   m_ObjectHideFlags: 0

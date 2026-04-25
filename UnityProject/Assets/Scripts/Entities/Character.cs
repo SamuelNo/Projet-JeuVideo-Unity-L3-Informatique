@@ -23,7 +23,11 @@ abstract public class Character : MonoBehaviour
     protected BattleUIController buttonScript;
     public GameObject textInfoPV;
     public Vector3 offset = new Vector3(0, 3.5f, 0); 
-    
+    public string characterDescription;
+    public string characterName;
+    public string[] skillNames = new string[4];
+    public string[] skillDescriptions = new string[4];
+        
     // ---------- Set and Get ---------- //
 
     public void setLvl(int n){ lvl = n; }
@@ -60,6 +64,7 @@ abstract public class Character : MonoBehaviour
     public float getStrengthenedMultiplier(){ return strengthenedMultiplier; }
     public AttackType getAttackType(){ return attackType; }
     public Weakness getWeakness(){ return weakness; }
+    public GameObject getSelectionCircle(){ return selectionCircle; }
     public List<(Status, int)> getStatusList() { return statusList; }
     public StatBarHandler getStatBar() {
         return statBar;

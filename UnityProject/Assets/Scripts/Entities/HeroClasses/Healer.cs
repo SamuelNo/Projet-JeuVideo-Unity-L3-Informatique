@@ -105,7 +105,3 @@ public class Healer : Character
     }
 }
 
-/* 
-Niveau 2 - Encourager :
-Augmente les dégâts d'un allié pendant deux tours
-*/

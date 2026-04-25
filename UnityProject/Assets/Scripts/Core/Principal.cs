@@ -52,8 +52,13 @@ public class Principal : MonoBehaviour
                    resetYesButton,
                    resetNoButton;
     private GameObject resetPanel;
-    
-    
+    [SerializeField] private GameObject[] characterBasePrefabs; // list of character prefabs (used for getting character data like description and skill names)
+    [SerializeField] public GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
+    public GameObject leftInfoPanel, rightInfoPanel;
+    public GameObject leftNameObj, leftBioObj, rightNameObj, rightBioObj;
+    public GameObject stageInfoPanel; 
+    public GameObject stageEnemyListObj; 
+    public GameObject[] listMapName = new GameObject[3]; // list of map name objects (used for displaying the name of the stage)
     // ---------- Set and Get ---------- //
     // set
     public void setSelectedCharacters1(int[] list){ selectedCharacters1 = list; }
@@ -164,6 +169,7 @@ public class Principal : MonoBehaviour
             if (!moving){ // stops code from changing selected stage outside of stage selection, or when character is moving
                 if (selectedStage > 0)
                     selectedStage -= 1; // chose the previous stage
+                    UpdateStageInfo(); // updates stage info panel
                 StartCoroutine(moveCharacter()); // moves the character towards the selected stage
             }
         }
@@ -175,11 +181,64 @@ public class Principal : MonoBehaviour
             if (!moving){ // stops code from changing selected stage outside of stage selection, or when character is moving
                 if (selectedStage < unlockedStage) 
                     selectedStage += 1; // chose the next stage
+                    UpdateStageInfo(); // updates stage info panel
                 StartCoroutine(moveCharacter()); // moves the character towards the selected stage
             }
         }
     }
+    private void UpdateDescription(int characterIndex, GameObject nameObj, GameObject bioObj) {
+        if (characterBasePrefabs == null || characterIndex >= characterBasePrefabs.Length) return;
+
+        Character data = characterBasePrefabs[characterIndex].GetComponent<Character>();
+        
+        if (data != null) {
+            nameObj.GetComponent<UnityEngine.Component>().SendMessage("set_text", data.characterName);
+
+            string details = data.characterDescription + "\n\n<b>SORTS :</b>\n";
+            for (int i = 0; i < data.skillNames.Length; i++) {
+                details += "<b>" + data.skillNames[i] + "</b>" + "\n";
+            }
+            
+            bioObj.GetComponent<UnityEngine.Component>().SendMessage("set_text", details);
+        }
+    }
+    public void UpdateStageInfo() {
+    if (stageInfoPanel == null) return;
     
+    stageInfoPanel.SetActive(true);
+    string enemyText = "<b>MONSTRES À COMBATTRE :</b>\n";
+    int[] enemiesToShow;
+
+    
+    switch (selectedStage) {
+        case 0:
+            enemiesToShow = new int[] { 0, 1 };
+            break;
+        case 1:
+            enemiesToShow = new int[] { 2, 3, 3 }; 
+            break;
+        case 2:
+            enemiesToShow = new int[] { 4 };
+            break;
+        default:
+            enemiesToShow = new int[] { };
+            break;
+    }
+
+
+    foreach (int index in enemiesToShow) {
+        if (index < monsterPrefabs.Length) {
+        
+            Enemy data = monsterPrefabs[index].GetComponent<Enemy>();
+            if (data != null) {
+                enemyText += "- " + data.enemyName + "\n"+ data.enemyDescription + "\n\n";
+            }
+        }
+    }
+
+    
+    stageEnemyListObj.GetComponent<UnityEngine.Component>().SendMessage("set_text", enemyText);
+    }
 
     // ---------- Methods ---------- //
 
@@ -253,17 +312,17 @@ public class Principal : MonoBehaviour
 
         // positions will be implemented here
         stageCharacterSprite.transform.position = stageSpriteList[selectedStage].transform.position;
-        /*
-        foreach (GameObject s in stageSpriteList){ 
-            s.gameObject.transform.position = ...;
-        }
-        */
+        UpdateStageInfo();
 
         // show components
         menuButton.gameObject.SetActive(true); // shows menu button
         choseStageButton.gameObject.SetActive(true); // shows stage validation button
         stageCharacterSprite.gameObject.SetActive(true); // shows character sprite
+        stageInfoPanel.SetActive(true); // shows stage info panel
         foreach (GameObject s in stageSpriteList){ // shows stage sprites
+            s.gameObject.SetActive(true);
+        }
+        foreach(GameObject s in listMapName){
             s.gameObject.SetActive(true);
         }
         
@@ -347,8 +406,8 @@ public class Principal : MonoBehaviour
         character1 = 0;
         character2 = 1;
         
-        // positions will be implemented here
-        // ...
+        leftInfoPanel.SetActive(true);
+        rightInfoPanel.SetActive(true);
 
         // show buttons
         leftButton1.gameObject.SetActive(true);
@@ -359,6 +418,8 @@ public class Principal : MonoBehaviour
         // show characters
         switchCharacter1(character1);
         switchCharacter2(character2);
+
+        // show info panels
     }
 
     public void switchCharacter1(int newCharacter){
@@ -368,6 +429,7 @@ public class Principal : MonoBehaviour
         characterSpriteList1[character1].gameObject.SetActive(false);
         characterSpriteList1[newCharacter].gameObject.SetActive(true);
         character1 = newCharacter;
+        UpdateDescription(newCharacter, leftNameObj, leftBioObj);
     }
 
     public void switchCharacter2(int newCharacter){
@@ -377,6 +439,7 @@ public class Principal : MonoBehaviour
         characterSpriteList2[character2].gameObject.SetActive(false);
         characterSpriteList2[newCharacter].gameObject.SetActive(true);
         character2 = newCharacter;
+        UpdateDescription(newCharacter, rightNameObj, rightBioObj);
     }
 
     // ----- reset game ----------
@@ -403,6 +466,12 @@ public class Principal : MonoBehaviour
         stageCharacterSprite.gameObject.SetActive(false);
         resetButton.gameObject.SetActive(false);
         resetPanel.gameObject.SetActive(false);
+        leftInfoPanel.SetActive(false);
+        rightInfoPanel.SetActive(false);
+        stageInfoPanel.SetActive(false);
+        foreach(GameObject s in listMapName){
+            s.gameObject.SetActive(false);
+        }
         foreach (GameObject s in stageSpriteList){
             s.gameObject.SetActive(false);
         }

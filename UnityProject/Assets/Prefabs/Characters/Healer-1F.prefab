@@ -155,8 +155,8 @@ MonoBehaviour:
   lvl: 5
   maxHP: 150
   currentHP: 150
-  maxMP: 80
-  currentMP: 80
+  maxMP: 100
+  currentMP: 100
   baseAtk: 5
   teamID: 0
   mpCostSkillLvl1: 10
@@ -164,7 +164,7 @@ MonoBehaviour:
   mpCostSkillLvl3: 30
   dodgeProbability: 0.1
   damageMultiplier: 1
-  weakenedMultiplier: 1.5
+  weakenedMultiplier: 1.7
   strengthenedMultiplier: 1
   attackType: 2
   weakness: 3
@@ -174,6 +174,24 @@ MonoBehaviour:
   statBar: {fileID: 0}
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
+  characterDescription: "Arm\xE9 d'un b\xE2ton, il est sp\xE9cialis\xE9 dans les
+    soins, le soigneur va soutenir l\u2019\xE9quipe en restaurant les points de vie
+    de ses alli\xE9s. Poss\xE8de une grande r\xE9serve de Mana.  Attaques peu puissantes
+    et faible d\xE9fense. 150 PV et 100 MP."
+  characterName: Healer
+  skillNames:
+  - Attaque de base
+  - Soin
+  - Encourager
+  - "Vent gu\xE9risseur"
+  skillDescriptions:
+  - "Inflige des d\xE9g\xE2ts \xE0 un ennemi unique: D\xE9g\xE2t de base : 5"
+  - "10 MP : Restaure une petite quantit\xE9 de vie d'un alli\xE9 cibl\xE9. +10%
+    des pv de base. Impossible sur une cible avec une vie pleine. Possible sur soi-m\xEAme."
+  - "20 MP : Augmente les d\xE9gats d'un alli\xE9 pendant deux tours.X 1.5 de d\xE9gats
+    suppl\xE9mentaire. Non cumulable et possible sur soi-m\xEAme."
+  - "30 MP : Restaure une grande quantit\xE9 de vie \xE0 tous les alli\xE9. Ne peut
+    \xEAtre utilis\xE9 si tous les alli\xE9s ont une vie pleine."
 --- !u!1 &6232505616473213972
 GameObject:
   m_ObjectHideFlags: 0

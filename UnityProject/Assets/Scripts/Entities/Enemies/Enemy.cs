@@ -39,6 +39,8 @@ abstract public class Enemy : MonoBehaviour
     // Number of turns remaining before the temporary effect is removed
     [SerializeField] protected int buffTurnsRemaining = 0;
     [SerializeField] protected int protectionTurnsRemaining = 0;
+    public string enemyDescription;
+    public string enemyName;
 
     // ---------- Set and Get ---------- //
 
@@ -57,7 +59,7 @@ abstract public class Enemy : MonoBehaviour
     public AttackType Resistance{ get => resistance;  set => resistance = value; }
     public AttackType AttackTypeUsed { get => attackTypeUsed;  set => attackTypeUsed = value; }
     public bool ElementalAttack { get => elementalAttack;  set => elementalAttack = value; }
-
+    public GameObject GetSelectionCircle() { return selectionCircle; }
     public void setStatusList(List<(Status,int)> list){ statusList = list; }
     public List<(Status,int)> getStatusList(){ return statusList; }
     public StatBarHandler getStatBar() { return statBar; }
