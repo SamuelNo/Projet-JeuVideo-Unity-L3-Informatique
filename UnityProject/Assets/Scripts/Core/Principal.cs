@@ -235,20 +235,13 @@ public class Principal : MonoBehaviour
 
     public void startPvPFight(){
         ///<summary> displays the stage and starts the PvP fight </summary>
-
-        saveScript.currentStage = selectedStage;
-        saveScript.save();
-
+        
         selectedCharacters2 = new int[]{character1, character2}; // saves characters
         SelectionData.Instance.team1 = selectedCharacters1;
         SelectionData.Instance.team2 = selectedCharacters2;
         SelectionData.Instance.isPvP = true;
         SelectionData.Instance.selectedStage = 0;
         SceneManager.LoadScene("Combat_Scene");
-        
-        //stageList[selectedStage].setEnemyList(selectedCharacters2); // ?
-        //stageList[selectedStage].start(); // displays stage
-        /* combatScript.startPvPFight(); // starts fight */
     }
     
     // ----- PvM mode ----------
@@ -335,6 +328,9 @@ public class Principal : MonoBehaviour
 
     public void startPvMFight(){
         ///<summary> displays the stage and starts the PvP fight </summary>
+
+        saveScript.currentStage = selectedStage;
+        saveScript.save();
 
         selectedCharacters1 = new int[]{character1, character2}; // saves characters
         SelectionData.Instance.team1 = selectedCharacters1;
