@@ -76,7 +76,8 @@ public class Protector : Character
 
         // applies shield to all allies
         for (int i=0; i<target.Length; i++){
-            target[i].GetComponent<Character>().getStatusList().Add((Status.SHIELDED,1));
+            if (target[i] != null) // if ally isn't dead
+                target[i].GetComponent<Character>().getStatusList().Add((Status.SHIELDED,1));
         }
     }
 
