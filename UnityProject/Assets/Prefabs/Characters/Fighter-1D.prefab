@@ -256,7 +256,7 @@ MonoBehaviour:
   dodgeProbability: 0.1
   damageMultiplier: 1
   weakenedMultiplier: 1.5
-  strengthenedMultiplier: 0.5
+  strengthenedMultiplier: 3
   attackType: 0
   weakness: 1
   selectionCircle: {fileID: 238444792877392269}

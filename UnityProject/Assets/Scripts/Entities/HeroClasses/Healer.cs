@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class Healer : Character
 {
@@ -57,7 +58,13 @@ public class Healer : Character
     override public void skillLvl2(GameObject [] target){
         ///<param> target : the targets of the attack </param> 
         ///<summary> strengthens the target </summary>
-        
+        if (target[0].GetComponent<Character>().getStatusList().Contains((Status.STRENGTHENED,1))){
+            Debug.LogException(new Exception("[Classe Healer] The target is already strengthened"));
+            buttonScript.setWarningText("Cible déjà renforcée");
+            buttonScript.getCombatScript().setCurrentPhase(BattlePhase.SELECT_SKILL);
+            buttonScript.ButtonAccess();
+            return;
+        }
         // uses MP (20MP)
         useMP(mpCostSkillLvl2);
 

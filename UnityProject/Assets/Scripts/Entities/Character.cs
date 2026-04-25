@@ -20,7 +20,7 @@ abstract public class Character : MonoBehaviour
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
 
-    private BattleUIController buttonScript;
+    protected BattleUIController buttonScript;
     public GameObject textInfoPV;
     public Vector3 offset = new Vector3(0, 3.5f, 0); 
     

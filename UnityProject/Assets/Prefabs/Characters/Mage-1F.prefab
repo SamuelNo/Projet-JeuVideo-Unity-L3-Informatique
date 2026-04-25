@@ -157,7 +157,7 @@ MonoBehaviour:
   currentHP: 150
   maxMP: 80
   currentMP: 80
-  baseAtk: 5
+  baseAtk: 10
   teamID: 0
   mpCostSkillLvl1: 10
   mpCostSkillLvl2: 20
@@ -165,7 +165,7 @@ MonoBehaviour:
   dodgeProbability: 0.1
   damageMultiplier: 1
   weakenedMultiplier: 1.5
-  strengthenedMultiplier: 3
+  strengthenedMultiplier: 2
   attackType: 1
   weakness: 0
   selectionCircle: {fileID: 8672076707429445554}

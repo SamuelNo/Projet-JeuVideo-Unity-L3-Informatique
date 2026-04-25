@@ -37,36 +37,37 @@ public class Fighter : Character
     override public void skillLvl1(GameObject target){
         ///<param> target : the target of the attack </param> 
         ///<summary> Attacks the target a certain amount of times </summary>
-
-        Debug.Log("test");
         // uses MP (10MP)
         useMP(mpCostSkillLvl1);
-
+        int damageReceived = (int) ((float) baseAtk /2);
         // increases damage if the healer's lvl2 skill is used
-        int damageReceived = (int) ((float) baseAtk * damageMultiplier);
-        
+        damageReceived = (int) ((float) damageReceived * damageMultiplier);
+        int bigDamage = 0;
         // attacks target 2 to 4 times
         if (target.GetComponent<Character>() != null){ // if target is a character
             for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
-                target.GetComponent<Character>().receiveDamage(damageReceived, attackType, false); 
+                Debug.Log("Attaque " + (i+1) + " : " + damageReceived + " dégâts");
+                bigDamage += damageReceived; // damage is increased for each attack
             }
+            target.GetComponent<Character>().receiveDamage(bigDamage, attackType, false);
         } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
             for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
-                target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false); 
+                Debug.Log("Attaque " + (i+1) + " : " + damageReceived + " dégâts");
+                bigDamage += damageReceived; // damage is increased for each attack
             }
+            target.GetComponent<Character>().receiveDamage(bigDamage, attackType, false);
         }
     }
 
     override public void skillLvl2(GameObject [] target){
         ///<param> target : the targets of the attack (themselves) </param> 
         ///<summary> strengthens the target (themselves) </summary>
-        
         // uses MP (20MP)
         useMP(mpCostSkillLvl2);
 
         // applies skill
         target[0].GetComponent<Character>().getStatusList().Add((Status.STRENGTHENED,1));
-        target[0].GetComponent<Character>().setDamageMultiplier(target[0].GetComponent<Character>().getDamageMultiplier()*2); // multiplies applied damage by 2
+        target[0].GetComponent<Character>().setDamageMultiplier(target[0].GetComponent<Character>().getDamageMultiplier()*1.5f); // multiplies applied damage by 2
     }
 
     override public void skillLvl3(GameObject [] target){

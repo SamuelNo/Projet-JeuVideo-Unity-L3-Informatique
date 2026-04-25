@@ -95,8 +95,8 @@ public class Mage : Character
         // increases damage because the skill has to be stronger than a basic attack
         damageReceived = (int) ((float) damageReceived * strengthenedMultiplier); 
         
-        // damage is increased (x3 for now) (multiple targets) and shared equally by all targets
-        damageReceived *= 3; 
+        // damage is increased (x2 for now) (multiple targets) and shared equally by all targets
+        damageReceived *= 2; 
         damageReceived /= target.Length;
 
         // for each target

@@ -830,7 +830,7 @@ public class Combat : MonoBehaviour
                                 if (s.Item2 > 0){
                                     characterScript.getStatusList().Add((Status.STRENGTHENED, s.Item2-1)); // makes the status last one more turn
                                 } else {
-                                    characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/2); // do not change '2' unless you change it in Healer and Fighter too
+                                    characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/1.5f); // do not change '2' unless you change it in Healer and Fighter too
                                 }
                                 break;
                         }
@@ -908,21 +908,51 @@ public class Combat : MonoBehaviour
         } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)| // if character is a healer and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
             // skill affects all allies (player doesn't need to select target)
-            if (currentTeam == 1){
-                selectedTargets = playerList;
-            } else {
-                selectedTargets = player2List;
+            GameObject[] allies = (currentTeam == 1) ? playerList : player2List;
+
+            if (selectedCharacter.GetComponent<Healer>() != null && selectedSkill == 3) {
+                
+                bool teamIsFullLife = true;
+
+                foreach (GameObject allyGO in allies) {
+                    if (allyGO != null) {
+                        Character allyScript = allyGO.GetComponent<Character>();
+                        if (allyScript != null && allyScript.getCurrentHP() < allyScript.getMaxHP()) {
+                            teamIsFullLife = false;
+                            break; 
+                        }
+                    }
+                }
+
+                if (teamIsFullLife) {
+                    Debug.LogWarning("Toute l'équipe est déjà au maximum de sa vie ! Choisissez une autre compétence.");
+                    buttonScript.setWarningText("Équipe déjà au maximum de sa vie !");
+                    
+                    currentPhase = BattlePhase.SELECT_SKILL;
+                    buttonScript.ButtonAccess();
+                    
+                    selectedTargets = null;
+                    return; 
+                }
             }
+
+            selectedTargets = allies;
             Debug.Log("Tous les alliés ont étés ciblés. (La compétence affecte tous les alliés)");
 
 
         } else if ((selectedCharacter.GetComponent<Fighter>() != null & selectedSkill == 2)){ // if character is a fighter and using skill lvl 2
             // skill affects themselves 
+            if(selectedCharacter.GetComponent<Fighter>().getStatusList().Contains((Status.STRENGTHENED,1))){
+                Debug.LogWarning("Le personnage est déjà renforcé et ne peut pas utiliser cette compétence.");
+                buttonScript.setWarningText("Le personnage est déjà renforcé et ne peut pas utiliser cette compétence.");
+                currentPhase = BattlePhase.SELECT_SKILL;
+                buttonScript.ButtonAccess();
+                return;
+            }
             selectedTargets = new GameObject[] {selectedCharacter};
             Debug.Log("Il n'y a pas besoin de sélectionner une cible. (La compétence n'a pas besoin de cible)");
-
-
-        } else if ((selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 1)){ // if character is a protector and using skill lvl 1
+            
+        }else if ((selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 1)){ // if character is a protector and using skill lvl 1
             // checks if the protector has an ally
             if (currentTeamList[0]==null | currentTeamList[1]==null){
                 Debug.LogWarning("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
@@ -1072,14 +1102,44 @@ public class Combat : MonoBehaviour
             
         } else if (currentPhase == BattlePhase.SELECT_TARGET){
             if (clickedTeam == currentTeam){ // if character is an ally
+
                 if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0) | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if an ally can be targeted, target the character
+                        if (selectedCharacter.GetComponent<Healer>() != null && selectedSkill == 1) {
+                            Character targetCharacter = clickedObject.GetComponent<Character>();
+                            if (targetCharacter != null && targetCharacter.getCurrentHP() == targetCharacter.getMaxHP()) {
+                                Debug.LogWarning(targetCharacter.name + " a déjà tous ses points de vie. Choisissez une autre cible.");
+                                buttonScript.setWarningText(targetCharacter.name + " a déjà tous ses points de vie !");
+                                if(clickedObject.GetComponent<Healer>() == null){
+                                    targetCharacter.Deselect();
+                                }
+                                return; 
+                            }
+                        }    
+                    
+                        if (selectedCharacter.GetComponent<Healer>() != null && selectedSkill == 2) {
+                        
+                        Character targetCharacter = clickedObject.GetComponent<Character>();
+
+                        if (targetCharacter != null) {
+                            bool isAlreadyStrong = targetCharacter.getStatusList().Any(s => s.Item1 == Status.STRENGTHENED);
+
+                            if (isAlreadyStrong) {
+                                Debug.LogWarning(targetCharacter.name + " est déjà renforcé ! Choisissez une autre cible.");
+                                buttonScript.setWarningText(targetCharacter.name + " est déjà renforcé !");
+                                if(clickedObject.GetComponent<Healer>() == null){
+                                    targetCharacter.Deselect();
+                                }
+                                return; 
+                            }
+                        }
+                    }
                     selectedTargets = new GameObject[] {clickedObject};
                     Debug.Log("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
                     buttonScript.setInstructionText("Vous avez ciblé le personnage " + selectedTargets[0].name + ".");
 
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
-
+                    
 
                 } else if (clickedObject != selectedCharacter & clickedObject == usedCharacter){
                     Debug.LogWarning("Vous avez déjà utilisé ce personnage. Veuillez en choisir un autre ou passer le tour.");
@@ -1150,8 +1210,8 @@ public class Combat : MonoBehaviour
                     }
 
                 } else if ((selectedCharacter.GetComponent<Healer>() & selectedSkill != 0)   | (selectedCharacter.GetComponent<Protector>() & selectedSkill != 2 & selectedSkill != 0)){ // if the target has to be an ally, nothing happens
-                    Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
-                    buttonScript.setWarningText("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le clibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
+                    Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le cibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
+                    buttonScript.setWarningText("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le cibler (compétence aidant un allié). Veuillez choisir un autre personnage.");
 
                     if(clickedObject.GetComponent<Character>() != null){
                         clickedObject.GetComponent<Character>().Deselect();
