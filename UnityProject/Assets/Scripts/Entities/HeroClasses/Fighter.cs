@@ -55,7 +55,7 @@ public class Fighter : Character
                 Debug.Log("Attaque " + (i+1) + " : " + damageReceived + " dégâts");
                 bigDamage += damageReceived; // damage is increased for each attack
             }
-            target.GetComponent<Character>().receiveDamage(bigDamage, attackType, false);
+            target.GetComponent<Enemy>().ReceiveDamage(bigDamage, attackType, false);
         }
     }
 

@@ -10,9 +10,8 @@ public class Principal : MonoBehaviour
     // ---------- Attributes ---------- //
 
     // script access
-    private GameObject scriptsGameObject; 
-    private MenuButtons buttonScript; 
-    private Combat combatScript;
+    private MenuButtons buttonScript;
+    private Save saveScript;
 
     // player selection data
     private int[] selectedCharacters1, selectedCharacters2; // saved characters for player1 and player2 respectively
@@ -48,7 +47,11 @@ public class Principal : MonoBehaviour
                    leftButton1, // character selection button that switches the character appearing on the left side of the screen
                    rightButton1, // character selection button that switches the character appearing on the left side of the screen
                    leftButton2, // character selection button that switches the character appearing on the right side of the screen
-                   rightButton2; // character selection button that switches the character appearing on the right side of the screen
+                   rightButton2, // character selection button that switches the character appearing on the right side of the screen
+                   resetButton,
+                   resetYesButton,
+                   resetNoButton;
+    private GameObject resetPanel;
     
     
     // ---------- Set and Get ---------- //
@@ -77,8 +80,8 @@ public class Principal : MonoBehaviour
     // ---------- Initialisation ---------- //
     void Awake(){
         // ----- script access ----------
-        scriptsGameObject = this.gameObject;
-        buttonScript = scriptsGameObject.AddComponent<MenuButtons>(); // to access MenuButtons script
+        buttonScript = this.gameObject.AddComponent<MenuButtons>(); // to access MenuButtons script
+        saveScript = this.gameObject.AddComponent<Save>();
 
 
         // ----- button initialisation ----------
@@ -95,6 +98,11 @@ public class Principal : MonoBehaviour
         rightButton2 = GameObject.Find("RightButton2").GetComponent<Button>();
         stageButton = GameObject.Find("StageButton").GetComponent<Button>();
         choseStageButton = GameObject.Find("ChoseStageButton").GetComponent<Button>();
+        resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        resetYesButton = GameObject.Find("ResetYesButton").GetComponent<Button>();
+        resetNoButton = GameObject.Find("ResetNoButton").GetComponent<Button>();
+
+        resetPanel = GameObject.Find("ResetPanel");
 
         // adds OnClick() to each button
         pvpButton.onClick.AddListener(delegate{ buttonScript.PvPButton(); });
@@ -109,6 +117,9 @@ public class Principal : MonoBehaviour
         rightButton2.onClick.AddListener(delegate{ buttonScript.characterButton2(false); });
         stageButton.onClick.AddListener(delegate{ buttonScript.PvMButton(); });
         choseStageButton.onClick.AddListener(delegate{ buttonScript.choseStageButton(); });
+        resetButton.onClick.AddListener(delegate{ buttonScript.resetButton(resetPanel); });
+        resetYesButton.onClick.AddListener(delegate{ buttonScript.confirmReset(resetPanel); });
+        resetNoButton.onClick.AddListener(delegate{ buttonScript.refuseReset(resetPanel); });
 
 
         // ----- character initialisation ----------
@@ -131,10 +142,6 @@ public class Principal : MonoBehaviour
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
         
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
-        unlockedStage = 2; // will change when saving system is implemented
-
-        // other
-        selectedStage = 0;
     }
 
     void Reset(){
@@ -145,6 +152,7 @@ public class Principal : MonoBehaviour
     // ---------- Start ---------- //
 
     void Start(){
+        saveScript.loadFile();
         menu();
     }
 
@@ -187,6 +195,7 @@ public class Principal : MonoBehaviour
         // show components
         pvmButton.gameObject.SetActive(true); // shows PvP button
         pvpButton.gameObject.SetActive(true); // shows PvM button
+        resetButton.gameObject.SetActive(true); // shows PvM button
 
     }
 
@@ -226,6 +235,9 @@ public class Principal : MonoBehaviour
 
     public void startPvPFight(){
         ///<summary> displays the stage and starts the PvP fight </summary>
+
+        saveScript.currentStage = selectedStage;
+        saveScript.save();
 
         selectedCharacters2 = new int[]{character1, character2}; // saves characters
         SelectionData.Instance.team1 = selectedCharacters1;
@@ -371,6 +383,11 @@ public class Principal : MonoBehaviour
         character2 = newCharacter;
     }
 
+    // ----- reset game ----------
+    public void resetGame(){
+        saveScript.reset();
+    }
+
     // ----- general ----------
     private void hideAll(){
         ///<summary> hides all components </summary>
@@ -388,6 +405,8 @@ public class Principal : MonoBehaviour
         stageButton.gameObject.SetActive(false);
         choseStageButton.gameObject.SetActive(false);
         stageCharacterSprite.gameObject.SetActive(false);
+        resetButton.gameObject.SetActive(false);
+        resetPanel.gameObject.SetActive(false);
         foreach (GameObject s in stageSpriteList){
             s.gameObject.SetActive(false);
         }

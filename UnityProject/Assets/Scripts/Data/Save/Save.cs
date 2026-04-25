@@ -9,15 +9,23 @@ public class Save : MonoBehaviour
 
     // saved data
     private string[] data;
-    private int unlockedStage;
+    public int currentStage, unlockedStage;
 
     //  ---------- Initialisation  ---------- 
-    void Start(){
+    void Awake(){
         filePath = Application.dataPath + "/Scripts/Data/Save/save.txt";
         principalScript = this.GetComponent<Principal>();
+    }
 
-        loadFile();
-        reset();
+    void Start(){
+        // loads data from the file
+        data = read().Split(" ");
+        
+        // current stage number
+        currentStage = int.Parse(data[0]);
+        
+        // unlocked stage number
+        unlockedStage = int.Parse(data[1]);
     }
 
     //  ----------  Methods  ---------- 
@@ -28,34 +36,27 @@ public class Save : MonoBehaviour
         // loads data from the file
         data = read().Split(" ");
         
+        // current stage number
+        currentStage = int.Parse(data[0]);
+        principalScript.setSelectedStage(currentStage);
+        
         // unlocked stage number
-        unlockedStage = int.Parse(data[0]);
+        unlockedStage = int.Parse(data[1]);
         principalScript.setUnlockedStage(unlockedStage);
-
-        // other data
-        // ...
     }
 
     public void save(){
         ///<summary> saves data into the file </summary>
         
-        // unlocked stage number
-        unlockedStage = principalScript.getUnlockedStage();
-        writeOverwrite(unlockedStage.ToString());
-
-        // other data
-        // ...
+        // saves data
+        writeOverwrite(currentStage.ToString() +" "+ unlockedStage.ToString());
     }
 
     public void reset(){
         ///<summary> resets all the data in the file and loads it </summary>
         
-        // unlocked stage number
-        writeOverwrite("0");
-
-        // other data
-        // ...
-
+        // resets data
+        writeOverwrite("0 0");
 
         // loads the new data
         loadFile();

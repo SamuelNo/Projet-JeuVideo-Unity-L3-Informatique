@@ -41,6 +41,18 @@ public class MenuButtons : MonoBehaviour
         principalScript.stageSelection();
     }
 
+    // ----- reset buttons ---------------
+    public void resetButton(GameObject panel){
+        panel.SetActive(true);
+    }
+    public void confirmReset(GameObject panel){
+        principalScript.resetGame();
+        panel.SetActive(false);
+    }
+    public void refuseReset(GameObject panel){
+        panel.SetActive(false);
+    }
+
     // ----- back to menu button ---------------
     public void backToMenuButton(){
         ///<summary> goes back to main menu </summary>
