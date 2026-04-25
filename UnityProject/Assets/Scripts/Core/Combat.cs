@@ -398,7 +398,7 @@ public class Combat : MonoBehaviour
                     wait = false;
                     buttonScript.setInstructionText("Fin du combat.");
                     
-                } else if (turnCount == 2 || numberAliveMembers(currentTeamList) == 1){ // if the two characters have been used, the player's turn is over
+                } else if (turnCount == 2 || usedCharacter!=null){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
                     finishedTurn = true;
                     wait = false;
