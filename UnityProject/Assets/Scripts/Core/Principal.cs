@@ -59,6 +59,7 @@ public class Principal : MonoBehaviour
     public GameObject stageInfoPanel; 
     public GameObject stageEnemyListObj; 
     public GameObject[] listMapName = new GameObject[3]; // list of map name objects (used for displaying the name of the stage)
+    public GameObject[] titles = new GameObject[4]; // list of title objects (used for displaying the title of the stage)
     // ---------- Set and Get ---------- //
     // set
     public void setSelectedCharacters1(int[] list){ selectedCharacters1 = list; }
@@ -255,6 +256,10 @@ public class Principal : MonoBehaviour
         pvmButton.gameObject.SetActive(true); // shows PvP button
         pvpButton.gameObject.SetActive(true); // shows PvM button
         resetButton.gameObject.SetActive(true); // shows PvM button
+        foreach(GameObject s in titles){
+            s.gameObject.SetActive(true);
+        }
+        titles[3].gameObject.SetActive(false);
 
     }
 
@@ -269,7 +274,7 @@ public class Principal : MonoBehaviour
 
         // show components
         showCharacterSelectionButtons(); // shows character selection buttons and characters
-
+        titles[3].gameObject.SetActive(true);
         menuButton.gameObject.SetActive(true); // shows menu button
         nextPlayerButton.gameObject.SetActive(true); // shows next player button
     }
@@ -287,7 +292,7 @@ public class Principal : MonoBehaviour
 
         // show components
         showCharacterSelectionButtons(); // shows character selection buttons and characters
-
+        titles[3].gameObject.SetActive(true);
         menuButton.gameObject.SetActive(true); // shows menu button
         startPvPFightButton.gameObject.SetActive(true); // shows startPvPFight button
     }
@@ -313,7 +318,10 @@ public class Principal : MonoBehaviour
         // positions will be implemented here
         stageCharacterSprite.transform.position = stageSpriteList[selectedStage].transform.position;
         UpdateStageInfo();
-
+        foreach(GameObject s in titles){
+            s.gameObject.SetActive(false);
+        }
+        titles[3].gameObject.SetActive(true);
         // show components
         menuButton.gameObject.SetActive(true); // shows menu button
         choseStageButton.gameObject.SetActive(true); // shows stage validation button
@@ -379,7 +387,7 @@ public class Principal : MonoBehaviour
 
         // show components
         showCharacterSelectionButtons(); // shows character selection buttons and characters
-        
+        titles[3].gameObject.SetActive(true);
         menuButton.gameObject.SetActive(true); // shows menu button
         stageButton.gameObject.SetActive(true); // shows back to stage button
         startPvMFightButton.gameObject.SetActive(true); // shows startPvMFight button
@@ -469,8 +477,13 @@ public class Principal : MonoBehaviour
         leftInfoPanel.SetActive(false);
         rightInfoPanel.SetActive(false);
         stageInfoPanel.SetActive(false);
-        foreach(GameObject s in listMapName){
+        foreach(GameObject s in titles){
             s.gameObject.SetActive(false);
+        }
+        foreach(GameObject s in listMapName){
+            if(s != titles[3]){ // because the 4th title is used for stage selection
+                s.gameObject.SetActive(false);
+            }
         }
         foreach (GameObject s in stageSpriteList){
             s.gameObject.SetActive(false);
