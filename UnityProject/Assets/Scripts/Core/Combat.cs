@@ -398,11 +398,22 @@ public class Combat : MonoBehaviour
                     wait = false;
                     buttonScript.setInstructionText("Fin du combat.");
                     
-                } else if (turnCount == 2 || usedCharacter!=null){ // if the two characters have been used, the player's turn is over
+                } else if (turnCount == 2){ // if the two characters have been used, the player's turn is over
                     usedCharacter = null;
                     finishedTurn = true;
                     wait = false;
 
+                } else if (numberAliveMembers(currentTeamList) == 1){
+                    if (currentTeamList[0] == usedCharacter){
+                        usedCharacter = null;
+                        finishedTurn = true;
+                        wait = false;
+                    } else if (currentTeamList[1] == usedCharacter){
+                        usedCharacter = null;
+                        finishedTurn = true;
+                        wait = false;
+                    }
+                    
                 } else {
                     // if a character has been used and the other is frozen, the player's turn is over
                     statusList = new List<(Status,int)>(currentTeamList[0].GetComponent<Character>().getStatusList());
@@ -440,8 +451,6 @@ public class Combat : MonoBehaviour
             statusUpdate(player2List);
             currentTeam = 1; // player1's turn
         }
-
-        
     }
 
     private IEnumerator enemyTurn()
