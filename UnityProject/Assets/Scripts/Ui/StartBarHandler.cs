@@ -28,6 +28,6 @@ public class StatBarHandler : MonoBehaviour
             manaFill.fillAmount = (float)currentMP / maxMP;
     }
     public void destroyStatBar() {
-        Destroy(gameObject,2f);
+        Destroy(gameObject,1f);
     }
 }

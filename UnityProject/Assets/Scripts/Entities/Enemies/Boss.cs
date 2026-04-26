@@ -40,7 +40,7 @@ public class Boss : Enemy
         ///<param> target : the target of the attack </param> 
         ///<summary> Attacks the target </summary>
 
-        Debug.Log(gameObject.name + " a utilisé Targeted Attack");
+        Debug.Log(gameObject.name + " a utilisÃ© Targeted Attack");
 
         int damage = (int)(basePower * GetRankMultiplier() * BuffAttack);
         target.GetComponent<Character>().receiveDamage(damage, AttackTypeUsed, ElementalAttack);
@@ -52,7 +52,7 @@ public class Boss : Enemy
         ///<param> target : the targets of the attack </param> 
         ///<summary> Attacks the targets </summary>
 
-        Debug.Log(gameObject.name + " a utilisé AOE Attack");
+        Debug.Log(gameObject.name + " a utilisÃ© AOE Attack");
 
         UseMp(GetMPCost(costAOE));
 
@@ -71,7 +71,7 @@ public class Boss : Enemy
         ///<param> target : the targets of the attack </param> 
         ///<summary> Attacks the targets </summary>
         ///
-        Debug.Log(gameObject.name + " a utilisé Special Attack");
+        Debug.Log(gameObject.name + " a utilisÃ© Special Attack");
 
         UseMp(GetMPCost(costSpecial));
 

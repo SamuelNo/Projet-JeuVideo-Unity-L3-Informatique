@@ -380,7 +380,7 @@ public class Combat : MonoBehaviour
                 // applies skill to target(s)
                 skillHandler();
                 buttonScript.setAnnouncementText("Waiting...");
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
                 selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
                     if (selectedTargets[i] != null){
