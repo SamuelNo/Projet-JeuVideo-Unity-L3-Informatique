@@ -551,10 +551,11 @@ public class Combat : MonoBehaviour
                 // array for AoE attacks
                 selectedTargets = charactersAlive.ToArray();
 
-                // if the target is protected, attack the protector instead
-                if (target.GetComponent<Character>() != null)
+                
+                // if a target is protected, attack the protector instead
+                for (int x=0; x<selectedTargets.Length; x++)
                 {
-                    statusList = target.GetComponent<Character>().getStatusList();
+                    statusList = selectedTargets[x].GetComponent<Character>().getStatusList();
                     foreach ((Status, int) s in statusList)
                     {
                         if (s.Item1 == Status.PROTECTED)
