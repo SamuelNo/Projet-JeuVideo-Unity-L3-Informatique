@@ -150,7 +150,8 @@ public class Principal : MonoBehaviour
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
         
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
-        hideAll(); // hides all components at the start of the game
+        saveScript.loadFile();
+        menu();
     }
 
     void Reset(){
@@ -160,10 +161,7 @@ public class Principal : MonoBehaviour
 
     // ---------- Start ---------- //
 
-    void Start(){
-        saveScript.loadFile();
-        menu();
-    }
+    
 
     // ---------- Key inputs ---------- //
 
@@ -466,44 +464,54 @@ public class Principal : MonoBehaviour
     private void hideAll(){
         ///<summary> hides all components </summary>
         
-        pvpButton.gameObject.SetActive(false);
-        pvmButton.gameObject.SetActive(false);
-        menuButton.gameObject.SetActive(false);
-        nextPlayerButton.gameObject.SetActive(false);
-        startPvPFightButton.gameObject.SetActive(false);
-        startPvMFightButton.gameObject.SetActive(false);
-        leftButton1.gameObject.SetActive(false);
-        rightButton1.gameObject.SetActive(false);
-        leftButton2.gameObject.SetActive(false);
-        rightButton2.gameObject.SetActive(false);
-        stageButton.gameObject.SetActive(false);
-        choseStageButton.gameObject.SetActive(false);
-        stageCharacterSprite.gameObject.SetActive(false);
-        resetButton.gameObject.SetActive(false);
-        resetPanel.gameObject.SetActive(false);
-        applicationQuitButton.gameObject.SetActive(false);
-        leftInfoPanel.SetActive(false);
-        rightInfoPanel.SetActive(false);
-        stageInfoPanel.SetActive(false);
+        if (pvpButton != null) pvpButton.gameObject.SetActive(false);
+        if (pvmButton != null) pvmButton.gameObject.SetActive(false);
+        if (menuButton != null) menuButton.gameObject.SetActive(false);
+        if (nextPlayerButton != null) nextPlayerButton.gameObject.SetActive(false);
+        if (startPvPFightButton != null) startPvPFightButton.gameObject.SetActive(false);
+        if (startPvMFightButton != null) startPvMFightButton.gameObject.SetActive(false);
+        if (leftButton1 != null) leftButton1.gameObject.SetActive(false);
+        if (rightButton1 != null) rightButton1.gameObject.SetActive(false);
+        if (leftButton2 != null) leftButton2.gameObject.SetActive(false);
+        if (rightButton2 != null) rightButton2.gameObject.SetActive(false);
+        if (stageButton != null) stageButton.gameObject.SetActive(false);
+        if (choseStageButton != null) choseStageButton.gameObject.SetActive(false);
+        if (stageCharacterSprite != null) stageCharacterSprite.gameObject.SetActive(false);
+        if (resetButton != null) resetButton.gameObject.SetActive(false);
+        if (resetPanel != null) resetPanel.gameObject.SetActive(false);
+        if (applicationQuitButton != null) applicationQuitButton.gameObject.SetActive(false);
+        if (leftInfoPanel != null) leftInfoPanel.SetActive(false);
+        if (rightInfoPanel != null) rightInfoPanel.SetActive(false);
+        if (stageInfoPanel != null) stageInfoPanel.SetActive(false);
         foreach(GameObject s in titles){
-            s.gameObject.SetActive(false);
+            if (s != null) {
+                s.gameObject.SetActive(false);
+            }
         }
         foreach(GameObject s in listMapName){
-            if(s != titles[3]){ // because the 4th title is used for stage selection
+            if(s != titles[3] && s != null){ // because the 4th title is used for stage selection
                 s.gameObject.SetActive(false);
             }
         }
         foreach (GameObject s in blockedSpriteList){
-            s.gameObject.SetActive(false);
+            if (s != null) {
+                s.gameObject.SetActive(false);
+            }
         }
         foreach (GameObject s in stageSpriteList){
-            s.gameObject.SetActive(false);
+            if (s != null) {
+                s.gameObject.SetActive(false);
+            }
         }
         foreach (GameObject c in characterSpriteList1){
-            c.gameObject.SetActive(false);
+            if (c != null) {
+                c.gameObject.SetActive(false);
+            }
         }
         foreach (GameObject c in characterSpriteList2){
-            c.gameObject.SetActive(false);
+            if (c != null) {
+                c.gameObject.SetActive(false);
+            }
         }
     }
 }
