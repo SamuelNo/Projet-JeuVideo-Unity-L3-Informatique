@@ -150,6 +150,7 @@ public class Principal : MonoBehaviour
         stageCharacterSprite = GameObject.Find("StageCharacterSprite");
         
         stageSpriteList = new GameObject[] {stageSprite0, stageSprite1, stageSprite2};
+        hideAll(); // hides all components at the start of the game
     }
 
     void Reset(){
