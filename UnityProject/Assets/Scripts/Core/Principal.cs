@@ -113,7 +113,6 @@ public class Principal : MonoBehaviour
         resetPanel = GameObject.Find("ResetPanel");*/
 
         // adds OnClick() to each button
-        pvpButton.onClick.AddListener(delegate{ buttonScript.PvPButton(); });
         pvmButton.onClick.AddListener(delegate{ buttonScript.PvMButton(); });
         menuButton.onClick.AddListener(delegate{ buttonScript.backToMenuButton(); });
         nextPlayerButton.onClick.AddListener(delegate{ buttonScript.nextPlayerButton(); });
