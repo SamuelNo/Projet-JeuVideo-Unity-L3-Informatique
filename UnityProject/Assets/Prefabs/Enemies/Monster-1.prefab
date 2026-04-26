@@ -258,7 +258,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.54509807}
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.54509807}
   statBar: {fileID: 0}
-  nameText: Monster-1
   type: 0
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
@@ -268,6 +267,6 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "R\xE9sistant aux attaques \xE0 distance. Attaque au corps \xE0
-    corps : Attaque cibl\xE9e, Attaque de zone. "
-  enemyName: Monster de rang C
+  enemyDescription: "Monster de rang C -> R\xE9sistant aux attaques \xE0 distance.
+    Attaque au corps \xE0 corps : Attaque cibl\xE9e, Attaque de zone. "
+  enemyName: Wild Tree

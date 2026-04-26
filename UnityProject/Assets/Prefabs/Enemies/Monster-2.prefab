@@ -167,7 +167,6 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.54509807}
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.5529412}
   statBar: {fileID: 0}
-  nameText: Monster-2
   type: 0
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
@@ -177,9 +176,9 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "R\xE9sistant aux attaques \xE0 distance. Attaque \xE0 ditance
-    : Attaque cibl\xE9e, Attaque de zone. "
-  enemyName: Monstre de rang B
+  enemyDescription: "Monstre de rang B -> R\xE9sistant aux attaques \xE0 distance.
+    Attaque \xE0 ditance : Attaque cibl\xE9e, Attaque de zone. "
+  enemyName: Scary Tree
 --- !u!1 &6232505616473213972
 GameObject:
   m_ObjectHideFlags: 0

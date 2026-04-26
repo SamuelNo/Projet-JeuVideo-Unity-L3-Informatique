@@ -15,7 +15,6 @@ abstract public class Enemy : MonoBehaviour
     [SerializeField] private Color hoverColor = Color.yellow; 
     [SerializeField] private Color selectedColor = Color.orange;
     [SerializeField] public StatBarHandler statBar;
-    [SerializeField] private string nameText;
     [SerializeField] protected EnemyType type;
 
 
@@ -49,7 +48,6 @@ abstract public class Enemy : MonoBehaviour
     public Rank Rank { get => rank; set => rank = value; }
     public int BasePower { get => basePower; set => basePower = value; }
     public EnemyType Type { get => type; set => type = value; }
-
     public int MaxHP { get => maxHP;  set => maxHP = value; }
     public int CurrentHP { get => currentHP;  set => currentHP = value; }
     public int MaxMP { get => maxMP;  set => maxMP = value; }
@@ -89,7 +87,8 @@ abstract public class Enemy : MonoBehaviour
     }
     }
     protected virtual void Awake() 
-    {   this.gameObject.name = nameText; // default name, can be changed in inspector
+    {   this.gameObject.name = enemyName; // default name, can be changed in inspector
+
         buttonScript = UnityEngine.Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
         if (selectionCircle != null) {
             circleRenderer = selectionCircle.GetComponent<SpriteRenderer>();

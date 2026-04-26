@@ -535,7 +535,7 @@ public class Combat : MonoBehaviour
                 if (s.Item1 == Status.FROZEN) effect = true;
             }
             if (effect){
-                buttonScript.setInfoText("L'ennemi "+enemy.name+" est gelé et ne peut pas attaquer.");
+                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" est gelé et ne peut pas attaquer.");
 
             } else {
 
@@ -616,10 +616,10 @@ public class Combat : MonoBehaviour
 
                                 enemy.TargetedAttack(target);
 
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué "+target.name+".");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a attaqué "+target.name+".");
 
                             } else {
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a sauté son tour.");
                             }
                             // if the target is dead after the attack, remove it from the list
                             if (isDead(target))
@@ -644,10 +644,10 @@ public class Combat : MonoBehaviour
                                 }
 
                                 enemy.AoeAttack(selectedTargets);
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué les 2 personnages.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a attaqué les 2 personnages.");
                                 
                             } else {
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a sauté son tour.");
                             }
 
                             // clean up dead targets
@@ -673,10 +673,10 @@ public class Combat : MonoBehaviour
                                 }
 
                                 boss.SpecialAttack(selectedTargets);
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a utilisé son attaque spéciale.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a utilisé son attaque spéciale.");
                                
                             } else {
-                                buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a sauté son tour.");
                             }
 
                             // clean up dead targets
@@ -698,7 +698,7 @@ public class Combat : MonoBehaviour
 
                             enemy.Heal(target);
 
-                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a soigné "+target.name+".");
+                            buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a soigné "+target.name+".");
                         }
                         break;
 
@@ -713,7 +713,7 @@ public class Combat : MonoBehaviour
 
                             enemy.BoostAttack(target);
 
-                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a renforcé les attaques de "+target.name+".");
+                            buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a renforcé les attaques de "+target.name+".");
                         }
                         break;
 
@@ -728,7 +728,7 @@ public class Combat : MonoBehaviour
 
                             enemy.Protection(target);
 
-                            buttonScript.setInfoText("L'ennemi "+enemy.name+" a protégé "+target.name+".");
+                            buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a protégé "+target.name+".");
                         }
                         break;
                 }
