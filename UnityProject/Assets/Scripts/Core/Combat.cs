@@ -553,36 +553,35 @@ public class Combat : MonoBehaviour
 
                 
                 // if a target is protected, attack the protector instead
-                for (int x=0; x<selectedTargets.Length; x++)
-                {
-                    statusList = selectedTargets[x].GetComponent<Character>().getStatusList();
-                    foreach ((Status, int) s in statusList)
-                    {
-                        if (s.Item1 == Status.PROTECTED)
-                        {
-                            // if the protector is dead, the character is no longer protected
-                            if (charactersAlive.ElementAt(0) == null)
-                            {
-                                charactersAlive.ElementAt(1).GetComponent<Character>().getStatusList().Remove(s);
-                            }
-                            else if (charactersAlive.ElementAt(1) == null)
-                            {
-                                charactersAlive.ElementAt(0).GetComponent<Character>().getStatusList().Remove(s);
+                if (target.GetComponent<Character>() != null){
+                    for (int x=0; x<selectedTargets.Length; x++) {
+                        statusList = selectedTargets[x].GetComponent<Character>().getStatusList();
+                        foreach ((Status, int) s in statusList){
+                            if (s.Item1 == Status.PROTECTED) {
+                                // if the protector is dead, the character is no longer protected
+                                if (charactersAlive.ElementAt(0) == null)
+                                {
+                                    charactersAlive.ElementAt(1).GetComponent<Character>().getStatusList().Remove(s);
+                                }
+                                else if (charactersAlive.ElementAt(1) == null)
+                                {
+                                    charactersAlive.ElementAt(0).GetComponent<Character>().getStatusList().Remove(s);
 
-                            }
-                            else
-                            { // otherwise, replaces the target with the protector
-                                target = (charactersAlive.ElementAt(0).GetComponent<Protector>() != null) ? charactersAlive.ElementAt(0) : charactersAlive.ElementAt(1);
-                            }
+                                }
+                                else
+                                { // otherwise, replaces the target with the protector
+                                    target = (charactersAlive.ElementAt(0).GetComponent<Protector>() != null) ? charactersAlive.ElementAt(0) : charactersAlive.ElementAt(1);
+                                }
 
-                            // new array with the protector x2 (for AoE attacks) so the protected target doesn't get attacked
-                            if (charactersAlive.ElementAt(0).GetComponent<Protector>() != null)
-                            {
-                                selectedTargets = new GameObject[] { charactersAlive.ElementAt(0), charactersAlive.ElementAt(0) };
-                            }
-                            else
-                            {
-                                selectedTargets = new GameObject[] { charactersAlive.ElementAt(1), charactersAlive.ElementAt(1) };
+                                // new array with the protector x2 (for AoE attacks) so the protected target doesn't get attacked
+                                if (charactersAlive.ElementAt(0).GetComponent<Protector>() != null)
+                                {
+                                    selectedTargets = new GameObject[] { charactersAlive.ElementAt(0), charactersAlive.ElementAt(0) };
+                                }
+                                else
+                                {
+                                    selectedTargets = new GameObject[] { charactersAlive.ElementAt(1), charactersAlive.ElementAt(1) };
+                                }
                             }
                         }
                     }
