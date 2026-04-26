@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Boss
   rank: 3
-  maxHP: 150
-  currentHP: 150
+  maxHP: 170
+  currentHP: 170
   maxMP: 100
   currentMP: 100
   teamId: -1

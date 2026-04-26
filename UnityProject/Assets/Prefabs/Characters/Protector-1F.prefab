@@ -182,7 +182,7 @@ MonoBehaviour:
   skillNames:
   - Attaque de base
   - Protection
-  - Genade
+  - Grenade
   - "Barri\xE8re protectrice"
   skillDescriptions:
   - "Percute un ennemi unique avec son bouclier. D\xE9g\xE2ts de base : 10."

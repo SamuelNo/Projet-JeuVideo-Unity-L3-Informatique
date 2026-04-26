@@ -155,6 +155,12 @@ public class DPSStrategy : IEnemyStrategy
 			scoreTargeted += 20;
 		}
 
+		if (playerList.Count == 1)
+		{
+			scoreTargeted += 30;
+			scoreAOE -= 30;
+        }
+
         // -- check MP --
         mpRatio = (float)enemy.CurrentMP / enemy.MaxMP;
         // low MP => avoid big costs
@@ -182,12 +188,12 @@ public class DPSStrategy : IEnemyStrategy
 			scoreAOE = int.MinValue;
         }
 
-            /* Verification
-            Debug.Log("ScoreTargeted = " + scoreTargeted);
-            Debug.Log("ScoreAOE = " + scoreAOE); */
+        /* Verification
+        Debug.Log("ScoreTargeted = " + scoreTargeted);
+        Debug.Log("ScoreAOE = " + scoreAOE); */
 
-            // Priotize the attack with the highest score depending on the context
-            if (scoreAOE > scoreTargeted)
+        // Priotize the attack with the highest score depending on the context
+        if (scoreAOE > scoreTargeted)
 		{
 			return EnemyBehaviour.AOE_pressure;
 		}
@@ -302,8 +308,8 @@ public class DPSStrategy : IEnemyStrategy
         }
 
         // Light random
-        scoreTargeted += Random.Range(-10, 11);
-		scoreAOE += Random.Range(-10, 11);
+        scoreTargeted += Random.Range(-5, 6);
+		scoreAOE += Random.Range(-5, 6);
 
 		// Impossible actions
 		if (!ai.CanUseMP(enemy, enemy.GetMPCost(enemy.CostAOE)))

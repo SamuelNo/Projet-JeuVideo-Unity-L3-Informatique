@@ -153,12 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Monster
   rank: 2
-  maxHP: 80
-  currentHP: 80
-  maxMP: 60
-  currentMP: 60
+  maxHP: 100
+  currentHP: 100
+  maxMP: 70
+  currentMP: 70
   teamId: -1
-  basePower: 7
+  basePower: 15
   dodgeProbability: 0.1
   resistance: 0
   attackTypeUsed: 1

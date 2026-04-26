@@ -587,6 +587,20 @@ public class Combat : MonoBehaviour
                     }
                 }
 
+                // Security check in case the target is dead or has been destroyed since the enemy decided to attack it
+                if (target == null || target.GetComponent<Character>() == null || isDead(target))
+                {
+                    Debug.LogWarning("Target invalide, nouvelle sélection...");
+
+                    // Re-choose a target among the living characters
+                    target = ai.DecideTarget(enemy, charactersAlive, enemiesAlive);
+
+                    // ultimate fallback
+                    if (target == null && charactersAlive.Count > 0)
+                    {
+                        target = charactersAlive[Random.Range(0, charactersAlive.Count)];
+                    }
+                }
                 switch (action)
                 {
                     // Targeted attack
@@ -948,7 +962,7 @@ public class Combat : MonoBehaviour
                                 break;
                         }
                     }
-                    return;
+                    continue;
                 }
             }
         }
