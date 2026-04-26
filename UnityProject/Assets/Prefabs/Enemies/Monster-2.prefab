@@ -152,15 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae4fb86a7a7942b6851a64c78176654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Monster
-  rank: 2
+  rank: 1
   maxHP: 100
   currentHP: 100
-  maxMP: 50
-  currentMP: 50
+  maxMP: 60
+  currentMP: 60
   teamId: -1
-  basePower: 10
+  basePower: 15
   dodgeProbability: 0.1
-  resistance: 2
+  resistance: 1
   attackTypeUsed: 1
   elementalAttack: 1
   selectionCircle: {fileID: 6232505616473213972}
@@ -168,7 +168,7 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.6470588, b: 0, a: 0.5529412}
   statBar: {fileID: 0}
   nameText: Monster-2
-  type: 1
+  type: 0
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
   isPhase2: 0
@@ -177,8 +177,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "R\xE9sistance neutre. Attaque \xE0 ditance : Attaque cibl\xE9e,
-    Attaque de zone. "
+  enemyDescription: "R\xE9sistant aux attaques \xE0 distance. Attaque \xE0 ditance
+    : Attaque cibl\xE9e, Attaque de zone. "
   enemyName: Monstre de rang B
 --- !u!1 &6232505616473213972
 GameObject:

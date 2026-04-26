@@ -153,14 +153,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Boss
   rank: 3
-  maxHP: 200
-  currentHP: 200
+  maxHP: 150
+  currentHP: 150
   maxMP: 100
   currentMP: 100
   teamId: -1
   basePower: 10
   dodgeProbability: 0.1
-  resistance: 0
+  resistance: 2
   attackTypeUsed: 0
   elementalAttack: 1
   selectionCircle: {fileID: 3382017922349067435}
@@ -177,8 +177,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "R\xE9sistant au corps \xE0 corps. Attaque cibl\xE9e, Attaque
-    de zone, Attaque sp\xE9ciale. "
+  enemyDescription: "R\xE9sistance neutre. Attaque cibl\xE9e, Attaque de zone, Attaque
+    sp\xE9ciale. "
   enemyName: Boss de rang S
 --- !u!1 &3382017922349067435
 GameObject:

@@ -19,6 +19,7 @@ abstract public class Character : MonoBehaviour
 
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
+    private bool isTargetedByEnemy = false;
 
     protected BattleUIController buttonScript;
     public GameObject textInfoPV;
@@ -91,14 +92,14 @@ abstract public class Character : MonoBehaviour
         statusList = new List<(Status,int)>();
     }
     protected void OnMouseEnter() {
-    if (isSelected || circleRenderer == null || buttonScript.getCombatScript().getIsBattleOver()) return;
+    if (isSelected || isTargetedByEnemy || circleRenderer == null || buttonScript.getCombatScript().getIsBattleOver()) return;
         
         selectionCircle.SetActive(true);
         circleRenderer.color = hoverColor;
     }
 
     protected void OnMouseExit() {
-        if (isSelected || selectionCircle == null || buttonScript.getCombatScript().getIsBattleOver()) return;
+        if (isSelected || isTargetedByEnemy || selectionCircle == null || buttonScript.getCombatScript().getIsBattleOver()) return;
         
         selectionCircle.SetActive(false);
     }
@@ -228,6 +229,22 @@ abstract public class Character : MonoBehaviour
         } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
             target.GetComponent<Enemy>().ReceiveDamage(damageReceived, attackType, false); 
         }
+    }
+
+    public void ShowTargetCircle(Color color)
+    {
+        ///<param> color : the color of the target circle </param>
+        ///<summary> Shows the target circle with the specified color (used to indicate that the character is targeted by an enemy) </summary>
+        isTargetedByEnemy = true;
+        selectionCircle.SetActive(true);
+        circleRenderer.color = color;
+    }
+
+    public void HideTargetCircle()
+    {
+        ///<summary> Hides the target circle (used to indicate that the character is no longer targeted by an enemy) </summary>
+        isTargetedByEnemy = false;
+        selectionCircle.SetActive(false);
     }
 
     abstract public void receiveDamage(int attack, AttackType attackType, bool elemental);

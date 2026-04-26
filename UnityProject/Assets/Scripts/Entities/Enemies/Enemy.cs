@@ -21,6 +21,8 @@ abstract public class Enemy : MonoBehaviour
 
     private SpriteRenderer circleRenderer; 
     private bool isSelected = false;
+    private bool isTargetedByEnemy = false;
+    private bool isCurrentEnemy = false;
 
     private BattleUIController buttonScript;
     public GameObject textInfoPV;
@@ -96,14 +98,14 @@ abstract public class Enemy : MonoBehaviour
         statusList = new List<(Status,int)>();
     }
     protected void OnMouseEnter() {
-    if (isSelected || circleRenderer == null) return;
+    if (isSelected || isTargetedByEnemy || isCurrentEnemy || circleRenderer == null) return;
         
         selectionCircle.SetActive(true);
         circleRenderer.color = hoverColor;
     }
 
     protected void OnMouseExit() {
-        if (isSelected || selectionCircle == null) return;
+        if (isSelected || isTargetedByEnemy || isCurrentEnemy || selectionCircle == null) return;
         
         selectionCircle.SetActive(false);
     }
@@ -271,6 +273,8 @@ abstract public class Enemy : MonoBehaviour
         boostAmount += 0.1f * GetRankMultiplier();
         target.GetComponent<Enemy>().BuffAttack = boostAmount;
         enemyTarget.buffTurnsRemaining = 2;
+
+        Debug.Log(gameObject.name + " a boosté l'attaque de " + target.name);
     }
 
     public void Protection(GameObject target)
@@ -319,6 +323,35 @@ abstract public class Enemy : MonoBehaviour
         }
         CurrentMP -= amount;
         UpdateBars();
+    }
+
+    public void ShowTargetCircle()
+    {
+        /// <summary> Shows the target circle (used to indicate that the character is targeted by an enemy) </summary>
+        isTargetedByEnemy = true;
+        selectionCircle.SetActive(true);
+        circleRenderer.color = Color.red;
+    }
+    public void ShowActiveCircle()
+    {
+        /// <summary> Shows the active circle (used to indicate that the character is the current enemy) </summary>
+        isCurrentEnemy = true;
+
+        selectionCircle.SetActive(true);
+        circleRenderer.color = Color.orange;
+    }
+
+    public void HideTargetCircle()
+    {
+        ///<summary> Hides the target circle (used to indicate that the character is no longer targeted by an enemy) </summary>
+        isTargetedByEnemy = false;
+        selectionCircle.SetActive(false);
+    }
+    public void HideActiveCircle()
+    {
+        ///<summary> Hides the active circle (used to indicate that the character is no longer the current enemy) </summary>
+        isCurrentEnemy = false;
+        selectionCircle.SetActive(false);
     }
 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);

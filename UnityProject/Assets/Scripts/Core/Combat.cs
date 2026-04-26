@@ -457,11 +457,15 @@ public class Combat : MonoBehaviour
     {
         ///<summary> makes the enemies attack during the enemies' turn </summary>
 
+        wait = true;
+        yield return new WaitForSeconds(1.5f);
         Debug.Log("Tour de l'ennemi.");
+        
         buttonScript.setAnnouncementText("Tour de l'ennemi.");
         buttonScript.setAttackerName("");
         buttonScript.setInstructionText("L'ennemi attaque...");
         wait = true;
+
 
         // build initial lists of living units
         List<GameObject> charactersAlive = new List<GameObject>();
@@ -489,7 +493,8 @@ public class Combat : MonoBehaviour
             }
         }
 
-
+        List<GameObject> targetsWithCircle = new List<GameObject>(); // UI for the targets of the enemy's attack
+        yield return new WaitForSeconds(4f); 
         // loop over enemies
         for (int i = 0; i < enemyList.Length; i++)
         {
@@ -505,6 +510,7 @@ public class Combat : MonoBehaviour
                 Debug.Log("Composant ennemi null : " + currentEnemy.name);
                 continue;
             }
+            enemy.ShowActiveCircle(); // shows the enemy selected
 
             if (enemy.AI == null)
             {
@@ -518,6 +524,8 @@ public class Combat : MonoBehaviour
             {
                 target = ai.GetLowestHP(enemiesAlive);
             }
+
+            yield return new WaitForSeconds(2f); // short delay before the enemy acts
 
             // if the enemy is frozen, skip the turn
             effect = false;
@@ -541,27 +549,38 @@ public class Combat : MonoBehaviour
 
                 // array for AoE attacks
                 selectedTargets = charactersAlive.ToArray();
-            
+
                 // if the target is protected, attack the protector instead
-                if (target.GetComponent<Character>() != null){
+                if (target.GetComponent<Character>() != null)
+                {
                     statusList = target.GetComponent<Character>().getStatusList();
-                    foreach ((Status,int) s in statusList){
-                        if (s.Item1 == Status.PROTECTED) {
+                    foreach ((Status, int) s in statusList)
+                    {
+                        if (s.Item1 == Status.PROTECTED)
+                        {
                             // if the protector is dead, the character is no longer protected
-                            if (charactersAlive.ElementAt(0) == null){
+                            if (charactersAlive.ElementAt(0) == null)
+                            {
                                 charactersAlive.ElementAt(1).GetComponent<Character>().getStatusList().Remove(s);
-                            } else if (charactersAlive.ElementAt(1) == null){
+                            }
+                            else if (charactersAlive.ElementAt(1) == null)
+                            {
                                 charactersAlive.ElementAt(0).GetComponent<Character>().getStatusList().Remove(s);
 
-                            } else { // otherwise, replaces the target with the protector
+                            }
+                            else
+                            { // otherwise, replaces the target with the protector
                                 target = (charactersAlive.ElementAt(0).GetComponent<Protector>() != null) ? charactersAlive.ElementAt(0) : charactersAlive.ElementAt(1);
                             }
 
                             // new array with the protector x2 (for AoE attacks) so the protected target doesn't get attacked
-                            if (charactersAlive.ElementAt(0).GetComponent<Protector>() != null){
-                                selectedTargets = new GameObject[]{charactersAlive.ElementAt(0), charactersAlive.ElementAt(0)};
-                            } else {
-                                selectedTargets = new GameObject[]{charactersAlive.ElementAt(1), charactersAlive.ElementAt(1)};
+                            if (charactersAlive.ElementAt(0).GetComponent<Protector>() != null)
+                            {
+                                selectedTargets = new GameObject[] { charactersAlive.ElementAt(0), charactersAlive.ElementAt(0) };
+                            }
+                            else
+                            {
+                                selectedTargets = new GameObject[] { charactersAlive.ElementAt(1), charactersAlive.ElementAt(1) };
                             }
                         }
                     }
@@ -574,7 +593,14 @@ public class Combat : MonoBehaviour
                         if (target != null)
                         {
                             if (!effect){ // if the character isn't shielded
+
+                                // shows the target circle for the attacked target
+                                target.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                if (!targetsWithCircle.Contains(target))
+                                    targetsWithCircle.Add(target);
+
                                 enemy.TargetedAttack(target);
+
                                 buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué "+target.name+".");
 
                             } else {
@@ -593,9 +619,18 @@ public class Combat : MonoBehaviour
                         if (charactersAlive.Count > 0)
                         {
                             if (!effect){ // if the character isn't shielded
+
+                                // shows the target circle
+                                foreach (var t in selectedTargets)
+                                {
+                                    t.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                    if (!targetsWithCircle.Contains(t))
+                                        targetsWithCircle.Add(t);
+                                }
+
                                 enemy.AoeAttack(selectedTargets);
                                 buttonScript.setInfoText("L'ennemi "+enemy.name+" a attaqué les 2 personnages.");
-
+                                
                             } else {
                                 buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
                             }
@@ -614,9 +649,17 @@ public class Combat : MonoBehaviour
                         if (boss != null && charactersAlive.Count > 0)
                         {
                             if (!effect){ // if the character isn't shielded
+                                // shows the target circle
+                                foreach (var t in selectedTargets)
+                                {
+                                    t.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                    if (!targetsWithCircle.Contains(t))
+                                        targetsWithCircle.Add(t);
+                                }
+
                                 boss.SpecialAttack(selectedTargets);
                                 buttonScript.setInfoText("L'ennemi "+enemy.name+" a utilisé son attaque spéciale.");
-
+                               
                             } else {
                                 buttonScript.setInfoText("L'ennemi "+enemy.name+" a sauté son tour.");
                             }
@@ -633,7 +676,13 @@ public class Combat : MonoBehaviour
                         // heal the ally with the lowest HP (including themselves)
                         if (target != null)
                         {
+                            // shows the target circle 
+                            target.GetComponent<Enemy>().ShowTargetCircle();
+                            if (!targetsWithCircle.Contains(target))
+                                targetsWithCircle.Add(target);
+
                             enemy.Heal(target);
+
                             buttonScript.setInfoText("L'ennemi "+enemy.name+" a soigné "+target.name+".");
                         }
                         break;
@@ -642,7 +691,13 @@ public class Combat : MonoBehaviour
                         // boost the attack of the ally with the lowest HP (including themselves)
                         if (target != null)
                         {
+                            // shows the target circle 
+                            target.GetComponent<Enemy>().ShowTargetCircle();
+                            if (!targetsWithCircle.Contains(target))
+                                targetsWithCircle.Add(target);
+
                             enemy.BoostAttack(target);
+
                             buttonScript.setInfoText("L'ennemi "+enemy.name+" a renforcé les attaques de "+target.name+".");
                         }
                         break;
@@ -651,7 +706,13 @@ public class Combat : MonoBehaviour
                         // protect the ally with the lowest HP (including themselves)
                         if (target != null)
                         {
+                            // shows the target circle
+                            target.GetComponent<Enemy>().ShowTargetCircle();
+                            if (!targetsWithCircle.Contains(target))
+                                targetsWithCircle.Add(target);
+
                             enemy.Protection(target);
+
                             buttonScript.setInfoText("L'ennemi "+enemy.name+" a protégé "+target.name+".");
                         }
                         break;
@@ -662,6 +723,22 @@ public class Combat : MonoBehaviour
             enemy.EndTurnConsumeTemporaryEffects();
 
             yield return new WaitForSeconds(3f);
+
+            foreach (GameObject c in targetsWithCircle)
+            {
+                if (c == null) continue; // if the target is dead and has been destroyed, skip it
+                if (c.GetComponent<Character>() != null)
+                {
+                    c.GetComponent<Character>().HideTargetCircle();
+                }
+                else if (c.GetComponent<Enemy>() != null)
+                {
+                    c.GetComponent<Enemy>().HideTargetCircle();
+                }
+            }
+
+            enemy.HideActiveCircle();
+            targetsWithCircle.Clear();
 
             // break the enemy loop early if all characters are dead (the battle is over)
             if (charactersAlive.Count == 0)

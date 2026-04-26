@@ -6,6 +6,7 @@ public class Boss : Enemy
     protected override void Awake()
     {
         base.Awake();
+        this.Rank = Rank.S;
 
         this.costAOE = 10;
         this.costSpecial = 15;
