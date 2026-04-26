@@ -18,14 +18,14 @@ public class Principal : MonoBehaviour
     private int selectedStage, character1, character2; 
 
     // character selection data
-    //[SerializeField] 
+    [SerializeField] 
     private GameObject fighterSprite1, healerSprite1, mageSprite1, protectorSprite1, // character sprites
                        fighterSprite2, healerSprite2, mageSprite2, protectorSprite2;
     private GameObject[] characterSpriteList1, characterSpriteList2; // list of character sprites
     private GameObject[] teamPlayer1, teamPlayer2; // list of the characters of player1 and player2 respectively (might be removed) 
 
     // stage selection data
-    //[SerializeField] 
+    [SerializeField] 
     private GameObject stageCharacterSprite; // the character that will be moving on the map
     private bool moving; // indicates if the character is moving (used for player inputs)
     //[SerializeField]
@@ -35,7 +35,7 @@ public class Principal : MonoBehaviour
     //private Stage[] stageList;
 
     // other visual components
-    //[SerializeField] 
+    [SerializeField] 
     private Button pvpButton, // PvP button on the main menu screen
                    pvmButton, // PvM button on the main menu screen
                    menuButton, // lets the player go back to the main menu
@@ -52,7 +52,7 @@ public class Principal : MonoBehaviour
                    resetYesButton,
                    resetNoButton,
                    applicationQuitButton;
-    private GameObject resetPanel;
+    [SerializeField] private GameObject resetPanel;
     [SerializeField] private GameObject[] characterBasePrefabs; // list of character prefabs (used for getting character data like description and skill names)
     [SerializeField] private GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
     [SerializeField] private GameObject leftInfoPanel, rightInfoPanel;
@@ -93,7 +93,7 @@ public class Principal : MonoBehaviour
 
 
         // ----- button initialisation ----------
-        // finds each component that will be used (make sure that all components have the correct name)
+        /*// finds each component that will be used (make sure that all components have the correct name)
         pvpButton = GameObject.Find("PvPButton").GetComponent<Button>();
         pvmButton = GameObject.Find("PvMButton").GetComponent<Button>();
         menuButton = GameObject.Find("MenuButton").GetComponent<Button>();
@@ -110,7 +110,7 @@ public class Principal : MonoBehaviour
         resetYesButton = GameObject.Find("ResetYesButton").GetComponent<Button>();
         resetNoButton = GameObject.Find("ResetNoButton").GetComponent<Button>();
         applicationQuitButton = GameObject.Find("ApplicationQuitButton").GetComponent<Button>();
-        resetPanel = GameObject.Find("ResetPanel");
+        resetPanel = GameObject.Find("ResetPanel");*/
 
         // adds OnClick() to each button
         pvpButton.onClick.AddListener(delegate{ buttonScript.PvPButton(); });

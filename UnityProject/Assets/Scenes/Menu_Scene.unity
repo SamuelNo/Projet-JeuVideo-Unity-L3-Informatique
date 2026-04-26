@@ -4370,7 +4370,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf7bd4003f784d9a998cd18af04471e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Principal
+  fighterSprite1: {fileID: 2095416499}
+  healerSprite1: {fileID: 1287263275}
+  mageSprite1: {fileID: 1419279796}
+  protectorSprite1: {fileID: 587435971}
+  fighterSprite2: {fileID: 150391832}
+  healerSprite2: {fileID: 1687190467}
+  mageSprite2: {fileID: 769949992}
+  protectorSprite2: {fileID: 1151887196}
+  stageCharacterSprite: {fileID: 478703746}
   unlockedStage: 0
+  pvpButton: {fileID: 2019314775}
+  pvmButton: {fileID: 1364816231}
+  menuButton: {fileID: 708668837}
+  nextPlayerButton: {fileID: 590003369}
+  startPvPFightButton: {fileID: 1646096625}
+  choseStageButton: {fileID: 643738864}
+  stageButton: {fileID: 2054704153}
+  startPvMFightButton: {fileID: 508926178}
+  leftButton1: {fileID: 586147938}
+  rightButton1: {fileID: 561137851}
+  leftButton2: {fileID: 1427203433}
+  rightButton2: {fileID: 597709771}
+  resetButton: {fileID: 1973051973}
+  resetYesButton: {fileID: 236737421}
+  resetNoButton: {fileID: 271382607}
+  applicationQuitButton: {fileID: 396940776}
+  resetPanel: {fileID: 710426924}
   characterBasePrefabs:
   - {fileID: 5811174022743772249, guid: c8e9d50238fb84ffc9f1d4e60481376a, type: 3}
   - {fileID: 2309590706307864900, guid: 681b6545c8a28402a86731e51de1f035, type: 3}
