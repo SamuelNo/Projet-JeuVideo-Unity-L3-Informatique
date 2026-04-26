@@ -6693,6 +6693,7 @@ MonoBehaviour:
   - {fileID: 2309590706307864900, guid: 47226a2aff1a040a0a94748036ecf024, type: 3}
   - {fileID: 2411812255610314467, guid: c43c7a1aaeb744e52ba9d70cb321105c, type: 3}
   - {fileID: 2411812255610314467, guid: 84708ce2ff84548119a95996d3ecb0d2, type: 3}
+  - {fileID: 2411812255610314467, guid: 21c131126749440d78b724251a66ede1, type: 3}
   - {fileID: 2082636301774231366, guid: 89d31401f40f54e5d80408c419f52a32, type: 3}
   allMapsSpawns:
   - points:
@@ -10397,8 +10398,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.6377, y: -25}
-  m_SizeDelta: {x: 245.59, y: 172.74}
+  m_AnchoredPosition: {x: -0.0000047684, y: -11.684998}
+  m_SizeDelta: {x: 245.59, y: 199.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &936829362
 MonoBehaviour:
@@ -11253,7 +11254,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.6387, y: 86.37}
+  m_AnchoredPosition: {x: -2.6377, y: 113}
   m_SizeDelta: {x: 245.59, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1136968089
@@ -11309,7 +11310,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

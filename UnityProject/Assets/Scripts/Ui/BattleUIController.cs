@@ -262,4 +262,9 @@ public class BattleUIController : MonoBehaviour
         if(skillTooltip != null)
             skillTooltip.SetActive(false);
     }
+    public void SetSkillUI(bool visible) {
+    if (skillTooltip != null) {
+        skillTooltip.SetActive(visible);
+    }
+}
 }

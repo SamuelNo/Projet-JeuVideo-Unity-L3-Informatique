@@ -133,7 +133,7 @@ public class Combat : MonoBehaviour
             if(selectedStage == 2){
                 GameObject m1 = SpawnUnit(3, allMapsSpawns[selectedStage].points[2], 2, -1);
                 GameObject m2 = SpawnUnit(2, allMapsSpawns[selectedStage].points[3], 3, -1);
-                GameObject m3 = SpawnUnit(3, allMapsSpawns[selectedStage].points[4], 4, -1);
+                GameObject m3 = SpawnUnit(4, allMapsSpawns[selectedStage].points[4], 4, -1);
                 GameObject[] currentEnemies = { m1, m2, m3 };
                 float newOffset = 1.5f;
 
@@ -147,7 +147,7 @@ public class Combat : MonoBehaviour
                 enemyList = currentEnemies;
             }
             if(selectedStage == 3){
-                GameObject m1 = SpawnUnit(4, allMapsSpawns[selectedStage].points[2], 4, -1);
+                GameObject m1 = SpawnUnit(5, allMapsSpawns[selectedStage].points[2], 4, -1);
                 enemyList = new GameObject[] { m1};
             }
         }
@@ -458,6 +458,9 @@ public class Combat : MonoBehaviour
         ///<summary> makes the enemies attack during the enemies' turn </summary>
 
         Debug.Log("Tour de l'ennemi.");
+        buttonScript.setAnnouncementText("Tour de l'ennemi.");
+        buttonScript.setAttackerName("");
+        buttonScript.setInstructionText("L'ennemi attaque...");
         wait = true;
 
         // build initial lists of living units

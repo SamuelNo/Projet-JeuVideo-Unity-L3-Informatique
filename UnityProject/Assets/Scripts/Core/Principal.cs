@@ -216,10 +216,10 @@ public class Principal : MonoBehaviour
             enemiesToShow = new int[] { 0, 1 };
             break;
         case 1:
-            enemiesToShow = new int[] { 2, 3, 3 }; 
+            enemiesToShow = new int[] { 2, 3, 4 }; 
             break;
         case 2:
-            enemiesToShow = new int[] { 4 };
+            enemiesToShow = new int[] { 5 };
             break;
         default:
             enemiesToShow = new int[] { };

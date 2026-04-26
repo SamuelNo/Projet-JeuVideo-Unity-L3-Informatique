@@ -187,7 +187,7 @@ MonoBehaviour:
   skillDescriptions:
   - "Impact rocheux : G\xE9n\xE8re un projectile de pierre depuis le sol et l\u2019envoie
     sur un ennemi unique. D\xE9g\xE2t de base : 10."
-  - "10 MP : Cr\xE9er une boule de feu devant lui et l'envoie dur un enemi unique.
+  - "10 MP : Cr\xE9er une boule de feu devant lui et l'envoie dur un ennemi unique.
     20 de d\xE9g\xE2ts."
   - "20 MP : Entoure l'ennemi de glace. Peut geler l'ennemi et l'emp\xEAcher d'agir
     pendant un tour."

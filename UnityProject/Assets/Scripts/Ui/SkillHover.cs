@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class SkillHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public int skillIndex; // À régler dans l'Inspector : 0, 1, 2 ou 3
+    public int skillIndex; 
     private BattleUIController uiController;
 
     void Start() {
@@ -11,12 +11,13 @@ public class SkillHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        // On demande à l'UI d'afficher la bulle d'info
+        if (uiController.getCombatScript() == null || uiController.getCombatScript().getCurrentTeam() == -1 || uiController.getCombatScript().getCurrentPhase() == BattlePhase.WAITING) {
+            return;
+        }
         uiController.ShowSkillTooltip(skillIndex);
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        // On demande à l'UI de cacher la bulle d'info
         uiController.HideSkillTooltip();
     }
 }

@@ -266,7 +266,7 @@ MonoBehaviour:
   textInfoPV: {fileID: 0}
   offset: {x: 0, y: 3.5, z: 0}
   characterDescription: "Arm\xE9 de gantelets, il est sp\xE9cialis\xE9 dans les attaques
-    de combat  rapproch\xE9, le combattant  excelle dans les affrontements au corps
+    de combat rapproch\xE9, le combattant excelle dans les affrontements au corps
     \xE0 corps. Il poss\xE8de une grande force physique et inflige d\u2019importants
     d\xE9g\xE2ts \xE0 courte port\xE9e. Vuln\xE9rable face aux attaques \xE0 distance.
     130 PV et 80 MP."

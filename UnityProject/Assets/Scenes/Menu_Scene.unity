@@ -4242,6 +4242,7 @@ MonoBehaviour:
   - {fileID: 2309590706307864900, guid: 47226a2aff1a040a0a94748036ecf024, type: 3}
   - {fileID: 2411812255610314467, guid: c43c7a1aaeb744e52ba9d70cb321105c, type: 3}
   - {fileID: 2411812255610314467, guid: 84708ce2ff84548119a95996d3ecb0d2, type: 3}
+  - {fileID: 2411812255610314467, guid: 21c131126749440d78b724251a66ede1, type: 3}
   - {fileID: 2082636301774231366, guid: 89d31401f40f54e5d80408c419f52a32, type: 3}
   leftInfoPanel: {fileID: 1052541862}
   rightInfoPanel: {fileID: 438268539}

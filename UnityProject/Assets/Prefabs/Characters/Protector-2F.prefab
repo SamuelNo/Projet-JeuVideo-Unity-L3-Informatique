@@ -188,7 +188,7 @@ MonoBehaviour:
   - Percute un ennemi unique avec son bouclier
   - "10 MP : Prot\xE8ge un personnage pendant un tour. Si celui-ci prend des d\xE9gats,
     le protecteur sera touch\xE9 \xE0 la place. Si le protecteur meurt, son alli\xE9
-    n'est plus prot\xE9ger."
+    n'est plus prot\xE9g\xE9.."
   - "20 MP : Lance une bombe qui inlfige des d\xE9gats \xE0 plusieurs ennemis simultan\xE9ment.
     15 de d\xE9g\xE2ts. "
   - "30 MP : D\xE9ploie une barri\xE8re qui prot\xE8ge tous les alli\xE9s pendant
