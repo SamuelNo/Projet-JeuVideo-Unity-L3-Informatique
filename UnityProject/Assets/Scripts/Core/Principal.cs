@@ -50,7 +50,8 @@ public class Principal : MonoBehaviour
                    rightButton2, // character selection button that switches the character appearing on the right side of the screen
                    resetButton,
                    resetYesButton,
-                   resetNoButton;
+                   resetNoButton,
+                   applicationQuitButton;
     private GameObject resetPanel;
     [SerializeField] private GameObject[] characterBasePrefabs; // list of character prefabs (used for getting character data like description and skill names)
     [SerializeField] private GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
@@ -108,7 +109,7 @@ public class Principal : MonoBehaviour
         resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
         resetYesButton = GameObject.Find("ResetYesButton").GetComponent<Button>();
         resetNoButton = GameObject.Find("ResetNoButton").GetComponent<Button>();
-
+        applicationQuitButton = GameObject.Find("ApplicationQuitButton").GetComponent<Button>();
         resetPanel = GameObject.Find("ResetPanel");
 
         // adds OnClick() to each button
@@ -127,7 +128,7 @@ public class Principal : MonoBehaviour
         resetButton.onClick.AddListener(delegate{ buttonScript.resetButton(resetPanel); });
         resetYesButton.onClick.AddListener(delegate{ buttonScript.confirmReset(resetPanel); });
         resetNoButton.onClick.AddListener(delegate{ buttonScript.refuseReset(resetPanel); });
-
+        applicationQuitButton.onClick.AddListener(delegate{ buttonScript.ApplicationQuitButton(); });
 
         // ----- character initialisation ----------
         fighterSprite1 = GameObject.Find("FighterSpriteLeft");
@@ -257,6 +258,7 @@ public class Principal : MonoBehaviour
         pvmButton.gameObject.SetActive(true); // shows PvP button
         pvpButton.gameObject.SetActive(true); // shows PvM button
         resetButton.gameObject.SetActive(true); // shows PvM button
+        applicationQuitButton.gameObject.SetActive(true); // shows application quit button
         foreach(GameObject s in titles){
             s.gameObject.SetActive(true);
         }
@@ -478,6 +480,7 @@ public class Principal : MonoBehaviour
         stageCharacterSprite.gameObject.SetActive(false);
         resetButton.gameObject.SetActive(false);
         resetPanel.gameObject.SetActive(false);
+        applicationQuitButton.gameObject.SetActive(false);
         leftInfoPanel.SetActive(false);
         rightInfoPanel.SetActive(false);
         stageInfoPanel.SetActive(false);

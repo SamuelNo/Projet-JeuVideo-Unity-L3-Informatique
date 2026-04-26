@@ -124,4 +124,18 @@ public class MenuButtons : MonoBehaviour
 
         principalScript.startPvMFight();
     }
+
+    public void ApplicationQuitButton()
+    ///<summary> quits the application </summary>
+    {
+        Debug.Log("Tentative de fermeture du jeu...");
+
+        #if UNITY_EDITOR
+            // Arrête le mode "Play" dans l'éditeur
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            // Ferme l'application réelle
+            Application.Quit();
+        #endif
+    }
 }
