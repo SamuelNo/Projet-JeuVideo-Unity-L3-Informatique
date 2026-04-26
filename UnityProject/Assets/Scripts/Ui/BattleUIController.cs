@@ -46,6 +46,7 @@ public class BattleUIController : MonoBehaviour
     }
     // --------------- Methods --------------- 
     public Combat getCombatScript(){ return combatScript; }
+    public CombatButton getButtonEndTurn(){ return endTurnButton; }
     private IEnumerator ClearTextAfterDelay(float delay, GameObject textObject) 
     {
         yield return new WaitForSeconds(delay);

@@ -157,7 +157,7 @@ MonoBehaviour:
   currentHP: 200
   maxMP: 80
   currentMP: 80
-  baseAtk: 15
+  baseAtk: 10
   teamID: 0
   mpCostSkillLvl1: 10
   mpCostSkillLvl2: 20
@@ -185,7 +185,7 @@ MonoBehaviour:
   - Genade
   - "Barri\xE8re protectrice"
   skillDescriptions:
-  - Percute un ennemi unique avec son bouclier
+  - "Percute un ennemi unique avec son bouclier. D\xE9g\xE2ts de base : 10"
   - "10 MP : Prot\xE8ge un personnage pendant un tour. Si celui-ci prend des d\xE9gats,
     le protecteur sera touch\xE9 \xE0 la place. Si le protecteur meurt, son alli\xE9
     n'est plus prot\xE9g\xE9.."

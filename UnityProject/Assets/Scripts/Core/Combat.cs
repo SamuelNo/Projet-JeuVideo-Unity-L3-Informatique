@@ -460,10 +460,10 @@ public class Combat : MonoBehaviour
         wait = true;
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Tour de l'ennemi.");
-        
         buttonScript.setAnnouncementText("Tour de l'ennemi.");
         buttonScript.setAttackerName("");
         buttonScript.setInstructionText("L'ennemi attaque...");
+        buttonScript.getButtonEndTurn().SetState(ButtonState.BLOCKED);
         wait = true;
 
 
@@ -748,7 +748,7 @@ public class Combat : MonoBehaviour
         }
         currentTeam = 1;
         wait = false;
-        // gets rid of frozen status
+        buttonScript.getButtonEndTurn().SetState(ButtonState.SHOWN);
         statusUpdate(enemyList);
         yield return null;
     }
@@ -1075,7 +1075,6 @@ public class Combat : MonoBehaviour
         effect = false;
 
         if (currentPhase == BattlePhase.SELECT_CHARACTER){
-
             // an enemy shouldn't be clickable right now
             if (clickedObject.GetComponent<Character>() == null) {
                 Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe. Veuillez choisir un autre personnage.");
@@ -1171,7 +1170,8 @@ public class Combat : MonoBehaviour
                 buttonScript.setAttackerName(selectedCharacter.name);
                 Debug.Log("Changement.Vous avez sélectionné le personnage " + selectedCharacter.name + ". Veuillez choisir une compétence.");
                 buttonScript.setInstructionText("Changement. Vous avez sélectionné le personnage " + selectedCharacter.name + ". Veuillez choisir une compétence.");
-
+                currentPhase = BattlePhase.SELECT_SKILL;
+                buttonScript.ButtonAccess();
 
             } else if (clickedTeam != currentTeam){ // if character is an opponent
                 Debug.LogWarning("Ce personnage ne fait pas partie de votre équipe, vous ne pouvez pas le sélectionner.");
