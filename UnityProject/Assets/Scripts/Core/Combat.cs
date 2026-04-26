@@ -49,7 +49,7 @@ public class Combat : MonoBehaviour
     private GameObject usedCharacter; // saves the character that was just used
     private BattlePhase currentPhase;
     private int currentTeam; // the team currently attacking (for now, player1 = 1, player2 = 2 & enemies = -1)
-
+    private bool isActionLocked = false; // used to prevent the player from clicking on multiple targets when selecting multiple targets for a skill
     private GameObject[] currentTeamList;
     private Character characterScript;
     private Enemy enemyScript;
@@ -76,6 +76,7 @@ public class Combat : MonoBehaviour
     public int getCurrentTeam(){ return currentTeam; }
     public GameObject getUsedCharacter(){ return usedCharacter; }
     public bool getIsBattleOver(){ return isBattleOver; }
+    public bool getWait(){ return wait; }
 
 
     // --------------- Initialisation ---------------
@@ -322,6 +323,7 @@ public class Combat : MonoBehaviour
     // --------------- Methods ---------------
     private IEnumerator playerTurn(){
         ///<summary> goes through the character, skill and target selection during the player's turn </summary>
+        currentPhase = BattlePhase.WAITING;
         Debug.Log("Tour de l'équipe " + currentTeam + ".");
         buttonScript.setAnnouncementText("Tour de l'équipe " + currentTeam + ".");
         buttonScript.setAttackerName("");
@@ -330,7 +332,6 @@ public class Combat : MonoBehaviour
         finishedTurn = false;
         currentTeamList = (currentTeam == 1) ? playerList : (currentTeam == 2) ? player2List : null;
         turnCount = 0;
-
         foreach (GameObject c in currentTeamList){ // once per character that is alive
             if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
                 // waits for player to select a character, a skill and a target
@@ -372,13 +373,14 @@ public class Combat : MonoBehaviour
                         break; // if the "Fin du tour" button was clicked, end the turn
                     }   
                 }
-
+                currentPhase = BattlePhase.WAITING;
                 // handles the character's status 
                 statusHandler();
 
                 // applies skill to target(s)
                 skillHandler();
-               
+                buttonScript.setAnnouncementText("Waiting...");
+                yield return new WaitForSeconds(2f);
                 selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
                     if (selectedTargets[i] != null){
@@ -390,7 +392,6 @@ public class Combat : MonoBehaviour
                         }
                     }
                 }
-
                 // checks if the turn is over
                 Debug.Log("Nombre de personnages encore en vie dans l'équipe du joueur" + currentTeam+ ": " + numberAliveMembers(currentTeamList));
                 if (teamDead(enemyList) | teamDead(playerList) | teamDead(player2List)){ // if a team is dead, the battle is over
@@ -816,6 +817,14 @@ public class Combat : MonoBehaviour
                 characterScript.Deselect();
             }
         }
+        int firstTargetTeam = (selectedTargets[0].GetComponent<Character>() != null) 
+        ? selectedTargets[0].GetComponent<Character>().getTeamID() 
+        : -1;
+
+    
+        if (currentTeam == firstTargetTeam) {
+            return; 
+        }
 
         for (int i=0; i<selectedTargets.Length; i++){ // for each target
 
@@ -828,6 +837,7 @@ public class Combat : MonoBehaviour
 
             foreach ((Status,int) s in statusList){
                 if (s.Item1 == Status.PROTECTED){ // if target is protected, the opponent's protector takes on the damage instead
+                
                     if (currentTeam == 1 & PvP){ 
                         // if the protector is dead, the character is no longer protected
                         if (player2List[0] == null){
@@ -947,7 +957,6 @@ public class Combat : MonoBehaviour
 
     public void automaticTargetSelection(){
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
-        
         if (currentTeam == -1) return;
         
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
@@ -1044,6 +1053,7 @@ public class Combat : MonoBehaviour
             
         }else if ((selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 1)){ // if character is a protector and using skill lvl 1
             // checks if the protector has an ally
+            currentPhase = BattlePhase.WAITING;
             if (currentTeamList[0]==null | currentTeamList[1]==null){
                 Debug.LogWarning("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
                 buttonScript.setWarningText("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
@@ -1060,7 +1070,6 @@ public class Combat : MonoBehaviour
 
     public void select(GameObject clickedObject){
         ///<summary> handles the character and target selection </summary>
-
         if (currentTeam == -1) {
             if(clickedObject.GetComponent<Character>() != null){
                 clickedObject.GetComponent<Character>().Deselect();

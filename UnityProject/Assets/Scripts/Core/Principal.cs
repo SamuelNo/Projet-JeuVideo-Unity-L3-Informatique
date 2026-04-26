@@ -53,13 +53,14 @@ public class Principal : MonoBehaviour
                    resetNoButton;
     private GameObject resetPanel;
     [SerializeField] private GameObject[] characterBasePrefabs; // list of character prefabs (used for getting character data like description and skill names)
-    [SerializeField] public GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
-    public GameObject leftInfoPanel, rightInfoPanel;
-    public GameObject leftNameObj, leftBioObj, rightNameObj, rightBioObj;
-    public GameObject stageInfoPanel; 
-    public GameObject stageEnemyListObj; 
-    public GameObject[] listMapName = new GameObject[3]; // list of map name objects (used for displaying the name of the stage)
-    public GameObject[] titles = new GameObject[4]; // list of title objects (used for displaying the title of the stage)
+    [SerializeField] private GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
+    [SerializeField] private GameObject leftInfoPanel, rightInfoPanel;
+    [SerializeField] private GameObject leftNameObj, leftBioObj, rightNameObj, rightBioObj;
+    [SerializeField] private GameObject stageInfoPanel; 
+    [SerializeField] private GameObject stageEnemyListObj; 
+    [SerializeField] private GameObject[] listMapName; // list of map name objects (used for displaying the name of the stage)
+    [SerializeField] private GameObject[] titles ; // list of title objects (used for displaying the title of the stage)
+    [SerializeField] private GameObject[] blockedSpriteList;
     // ---------- Set and Get ---------- //
     // set
     public void setSelectedCharacters1(int[] list){ selectedCharacters1 = list; }
@@ -337,9 +338,12 @@ public class Principal : MonoBehaviour
         // makes the locked stages grey
         for (int i=0; i<stageSpriteList.Length; i++){
             if (i > unlockedStage){
-                stageSpriteList[i].GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f, 0.7f); 
+                stageSpriteList[i].GetComponent<Image>().color = new Color(0.3f, 0.3f, 0.3f, 0.7f);
+                blockedSpriteList[i].SetActive(true); // shows the locked sprite on top of the stage sprite
+                 
             } else {
-                stageSpriteList[i].GetComponent<Image>().color = Color.white; 
+                stageSpriteList[i].GetComponent<Image>().color = Color.white;
+                blockedSpriteList[i].SetActive(false); // hides the locked sprite 
             }
         }
         
@@ -484,6 +488,9 @@ public class Principal : MonoBehaviour
             if(s != titles[3]){ // because the 4th title is used for stage selection
                 s.gameObject.SetActive(false);
             }
+        }
+        foreach (GameObject s in blockedSpriteList){
+            s.gameObject.SetActive(false);
         }
         foreach (GameObject s in stageSpriteList){
             s.gameObject.SetActive(false);

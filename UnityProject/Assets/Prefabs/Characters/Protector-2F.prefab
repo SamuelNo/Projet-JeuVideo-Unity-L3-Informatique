@@ -155,8 +155,8 @@ MonoBehaviour:
   lvl: 5
   maxHP: 200
   currentHP: 200
-  maxMP: 80
-  currentMP: 80
+  maxMP: 90
+  currentMP: 90
   baseAtk: 10
   teamID: 0
   mpCostSkillLvl1: 10
@@ -177,7 +177,7 @@ MonoBehaviour:
   characterDescription: "Arm\xE9 d'un bouclier, il est sp\xE9cialis\xE9 dans la d\xE9fense,
     le protecteur se concentre sur la protection de ses alli\xE9s. Il poss\xE8de
     une grande d\xE9fense et peut encaisser d\u2019importants d\xE9g\xE2ts. 200 PV
-    et 100 MP."
+    et 90 MP."
   characterName: Protector
   skillNames:
   - Attaque de base
@@ -185,14 +185,14 @@ MonoBehaviour:
   - Genade
   - "Barri\xE8re protectrice"
   skillDescriptions:
-  - "Percute un ennemi unique avec son bouclier. D\xE9g\xE2ts de base : 10"
-  - "10 MP : Prot\xE8ge un personnage pendant un tour. Si celui-ci prend des d\xE9gats,
-    le protecteur sera touch\xE9 \xE0 la place. Si le protecteur meurt, son alli\xE9
-    n'est plus prot\xE9g\xE9.."
-  - "20 MP : Lance une bombe qui inlfige des d\xE9gats \xE0 plusieurs ennemis simultan\xE9ment.
-    15 de d\xE9g\xE2ts. "
-  - "30 MP : D\xE9ploie une barri\xE8re qui prot\xE8ge tous les alli\xE9s pendant
-    un tour. "
+  - "Percute un ennemi unique avec son bouclier. D\xE9g\xE2ts de base : 10."
+  - "10 MP : Action automatique -> Prot\xE8ge son alli\xE9 pendant un tour. Si celui-ci
+    prend des d\xE9gats, le protecteur sera touch\xE9 \xE0 la place. Si le protecteur
+    meurt, son alli\xE9 n'est plus prot\xE9g\xE9."
+  - "20 MP : Action automatique -> Lance une bombe qui inlfige des d\xE9gats \xE0
+    plusieurs ennemis simultan\xE9ment. 15 de d\xE9g\xE2ts. "
+  - "30 MP : Action automatique -> D\xE9ploie une barri\xE8re qui le prot\xE8ge lui
+    et tous ses alli\xE9s pendant un tour."
 --- !u!1 &3382017922349067435
 GameObject:
   m_ObjectHideFlags: 0

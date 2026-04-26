@@ -185,13 +185,13 @@ MonoBehaviour:
   - Encourager
   - "Vent gu\xE9risseur"
   skillDescriptions:
-  - "Inflige des d\xE9g\xE2ts \xE0 un ennemi unique: D\xE9g\xE2t de base : 5"
+  - "Inflige des d\xE9g\xE2ts \xE0 un ennemi unique: D\xE9g\xE2t de base : 5."
   - "10 MP : Restaure une petite quantit\xE9 de vie d'un alli\xE9 cibl\xE9. +10%
     des pv de base. Impossible sur une cible avec une vie pleine. Possible sur soi-m\xEAme."
   - "20 MP : Augmente les d\xE9gats d'un alli\xE9 pendant deux tours.X 1.5 de d\xE9gats
     suppl\xE9mentaire. Non cumulable et possible sur soi-m\xEAme."
-  - "30 MP : Restaure une grande quantit\xE9 de vie \xE0 tous les alli\xE9. Ne peut
-    \xEAtre utilis\xE9 si tous les alli\xE9s ont une vie pleine."
+  - "30 MP : Action automatique -> Restaure une grande quantit\xE9 de vie \xE0 tous
+    les alli\xE9. Ne peut \xEAtre utilis\xE9 si tous les alli\xE9s ont une vie pleine."
 --- !u!1 &6232505616473213972
 GameObject:
   m_ObjectHideFlags: 0

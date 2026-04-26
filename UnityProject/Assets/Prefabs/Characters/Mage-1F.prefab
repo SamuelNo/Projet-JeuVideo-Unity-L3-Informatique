@@ -191,8 +191,8 @@ MonoBehaviour:
     20 de d\xE9g\xE2ts."
   - "20 MP : Entoure l'ennemi de glace. Peut geler l'ennemi et l'emp\xEAcher d'agir
     pendant un tour."
-  - "30 MP : D\xE9chaine une puissante d'attaque \xE9lectrique qui inglige des d\xE9gats
-    partag\xE9s \xE0 tous les ennemis.  40 de d\xE9g\xE2ts."
+  - "30 MP : Action automatique -> D\xE9chaine une puissante attaque \xE9lectrique
+    qui inglige des d\xE9g\xE2ts partag\xE9s \xE0 tous les ennemis.  40 de d\xE9g\xE2ts."
 --- !u!1 &8672076707429445554
 GameObject:
   m_ObjectHideFlags: 0

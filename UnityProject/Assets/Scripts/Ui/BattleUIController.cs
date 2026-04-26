@@ -138,7 +138,16 @@ public class BattleUIController : MonoBehaviour
 
     public void HandleSelection(GameObject clickedObject){
         ///<summary> makes Combat handle the character and target selection </summary>
-
+        if(combatScript.getCurrentPhase() == BattlePhase.WAITING){
+            if(clickedObject.GetComponent<Character>() != null){
+                    clickedObject.GetComponent<Character>().Deselect();
+                    clickedObject.GetComponent<Character>().getSelectionCircle().SetActive(false);
+            }else if(clickedObject.GetComponent<Enemy>() != null){
+                    clickedObject.GetComponent<Enemy>().Deselect();
+                    clickedObject.GetComponent<Enemy>().GetSelectionCircle().SetActive(false);
+            }
+            return;
+        }
         if (combatScript.getCurrentTeam() != -1){
             combatScript.select(clickedObject);
         }

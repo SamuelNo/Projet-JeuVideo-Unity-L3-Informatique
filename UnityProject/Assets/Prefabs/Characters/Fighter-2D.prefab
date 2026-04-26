@@ -279,10 +279,10 @@ MonoBehaviour:
   skillDescriptions:
   - "Inflige des d\xE9g\xE2ts \xE0 un ennemi unique. D\xE9g\xE2t de base = 10. "
   - "10 MP : Frappe plusieurs fois un unique ennemi. Le nombre de coups est al\xE9atoire
-    (2 \xE0 4 coups). Entre 10 et 20 de d\xE9gats"
-  - "20 MP : Charge son poing et attaque au tour suivant avec un poing enflamm\xE9
-    infligeant de lourds d\xE9g\xE2ts.  X 1.5 de d\xE9gats suppl\xE9mentaire sur
-    l'attaque de votre choix. Boost de d\xE9gat non cumulable."
+    (2 \xE0 4 coups). Entre 10 et 20 de d\xE9gats."
+  - "20 MP : Action automatique -> Charge son poing et attaque au tour suivant avec
+    un poing enflamm\xE9 infligeant de lourds d\xE9g\xE2ts.  X 1.5 de d\xE9gats suppl\xE9mentaire
+    sur l'attaque de votre choix. Boost de d\xE9gat non cumulable."
   - "30 MP : Se jette violemment sur un ennemi et lui inflige des d\xE9g\xE2ts massifs.
     Le combattant perd une partie de ses points de vie apr\xE8s l\u2019attaque. D\xE9gat
-    de base multipli\xE9 par 3 et perd 20% de sa vie"
+    de base multipli\xE9 par 3 et perd 20% de sa vie."

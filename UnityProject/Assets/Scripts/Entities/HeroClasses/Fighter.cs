@@ -51,7 +51,7 @@ public class Fighter : Character
             }
             target.GetComponent<Character>().receiveDamage(bigDamage, attackType, false);
         } else if (target.GetComponent<Enemy>() != null){ // if target is an enemy
-            for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
+            for (int i=0; i<UnityEngine.Random.Range(2,5); i++){ // attacks 2 to 4 times
                 Debug.Log("Attaque " + (i+1) + " : " + damageReceived + " dégâts");
                 bigDamage += damageReceived; // damage is increased for each attack
             }
