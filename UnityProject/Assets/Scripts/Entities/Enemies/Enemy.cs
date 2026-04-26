@@ -148,6 +148,7 @@ abstract public class Enemy : MonoBehaviour
         setTextInfoPV("Mort !");
         StartCoroutine(ClearTextAfterDelay(2.0f, textInfoPV));*/
         Destroy(gameObject, 0.1f); 
+        statBar.destroyStatBar();
         setTextInfoPV("");
         Debug.Log(gameObject.name + " a été supprimé de la scène.");
     }

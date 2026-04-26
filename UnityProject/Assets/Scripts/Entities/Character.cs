@@ -142,7 +142,8 @@ abstract public class Character : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
         }
         Destroy(gameObject, 0.1f); 
-        
+        statBar.destroyStatBar();
+        setTextInfoPV("");
         Debug.Log(gameObject.name + " a été supprimé de la scène.");
     }
     public void setTextInfoPV(string text) 

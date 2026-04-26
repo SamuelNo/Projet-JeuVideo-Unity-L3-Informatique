@@ -45,7 +45,7 @@ public class Fighter : Character
         int bigDamage = 0;
         // attacks target 2 to 4 times
         if (target.GetComponent<Character>() != null){ // if target is a character
-            for (int i=0; i<UnityEngine.Random.Range(2,4); i++){ // attacks 2 to 4 times
+            for (int i=0; i<UnityEngine.Random.Range(2,5); i++){ // attacks 2 to 5 times
                 Debug.Log("Attaque " + (i+1) + " : " + damageReceived + " dégâts");
                 bigDamage += damageReceived; // damage is increased for each attack
             }
