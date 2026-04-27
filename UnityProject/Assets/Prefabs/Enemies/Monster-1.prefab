@@ -267,6 +267,6 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "Monster de rang C -> R\xE9sistant aux attaques \xE0 distance.
-    Attaque au corps \xE0 corps : Attaque cibl\xE9e, Attaque de zone. "
+  enemyDescription: "Monstre de rang C \\nR\xE9sistant aux attaques \xE0 distance.
+    \\nAttaque au corps \xE0 corps."
   enemyName: Wild Tree

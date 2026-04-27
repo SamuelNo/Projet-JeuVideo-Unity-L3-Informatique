@@ -525,6 +525,21 @@ public class Combat : MonoBehaviour
                 target = ai.GetLowestHP(enemiesAlive);
             }
 
+            // Security check in case the target is dead or has been destroyed since the enemy decided to attack it
+            if (target == null || target.GetComponent<Character>() == null || isDead(target))
+            {
+                Debug.LogWarning("Target invalide, nouvelle sélection...");
+
+                // Re-choose a target among the living characters
+                target = ai.DecideTarget(enemy, charactersAlive, enemiesAlive);
+
+                // ultimate fallback
+                if (target == null && charactersAlive.Count > 0)
+                {
+                    target = charactersAlive[Random.Range(0, charactersAlive.Count)];
+                }
+            }
+
             yield return new WaitForSeconds(2f); // short delay before the enemy acts
 
             // if the enemy is frozen, skip the turn
@@ -550,7 +565,6 @@ public class Combat : MonoBehaviour
                 // array for AoE attacks
                 selectedTargets = charactersAlive.ToArray();
 
-                
                 // if a target is protected, attack the protector instead
                 if (target.GetComponent<Character>() != null){
                     for (int x=0; x<selectedTargets.Length; x++) {
@@ -586,6 +600,7 @@ public class Combat : MonoBehaviour
                     }
                 }
 
+
                 // Security check in case the target is dead or has been destroyed since the enemy decided to attack it
                 if (target == null || target.GetComponent<Character>() == null || isDead(target))
                 {
@@ -600,6 +615,7 @@ public class Combat : MonoBehaviour
                         target = charactersAlive[Random.Range(0, charactersAlive.Count)];
                     }
                 }
+
                 switch (action)
                 {
                     // Targeted attack
@@ -633,7 +649,7 @@ public class Combat : MonoBehaviour
                         if (charactersAlive.Count > 0)
                         {
                             if (!effect){ // if the character isn't shielded
-
+                                
                                 // shows the target circle
                                 foreach (var t in selectedTargets)
                                 {
@@ -643,7 +659,7 @@ public class Combat : MonoBehaviour
                                 }
 
                                 enemy.AoeAttack(selectedTargets);
-                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a attaqué les 2 personnages.");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" fait une attaque de zone.");
                                 
                             } else {
                                 buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a sauté son tour.");
@@ -976,7 +992,7 @@ public class Combat : MonoBehaviour
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)){ // or if character is a protector and using skill lvl 2
             // skill affects all opponents (player doesn't need to select target)
             if (PvM){ // if it's a PvM
-                selectedTargets = enemyList;
+                selectedTargets = enemyList.Where(e => e != null && !isDead(e)).ToArray();
                 Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
             } else if (currentTeam == 1){
                 // checks the that the player's team isn't shielded
@@ -991,7 +1007,7 @@ public class Combat : MonoBehaviour
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.ButtonAccess();
                 } else {
-                    selectedTargets = player2List;
+                    selectedTargets = player2List.Where(a => a != null && !isDead(a)).ToArray();
                     Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
                 }
             } else {
@@ -1007,7 +1023,7 @@ public class Combat : MonoBehaviour
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.ButtonAccess();
                 } else {
-                    selectedTargets = playerList;
+                    selectedTargets = playerList.Where(a => a != null && !isDead(a)).ToArray();
                     Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
                 }
             }

@@ -176,8 +176,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "Monstre de rang B -> R\xE9sistant aux attaques \xE0 distance.
-    Attaque \xE0 ditance : Attaque cibl\xE9e, Attaque de zone. "
+  enemyDescription: "Monstre de rang B \\nR\xE9sistant aux attaques \xE0 distance.
+    \\nInflige des d\xE9g\xE2ts \xE0 distance."
   enemyName: Scary Tree
 --- !u!1 &6232505616473213972
 GameObject:

@@ -176,8 +176,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "Boss de rang S -> R\xE9sistance neutre. Attaque cibl\xE9e, Attaque
-    de zone, Attaque sp\xE9ciale. "
+  enemyDescription: "Boss de rang S \\nR\xE9sistance neutre. \\nAttaque au corps
+    \xE0 corps. \\nAttention \xE0 son attaque sp\xE9ciale !"
   enemyName: Hell Titan
 --- !u!1 &3382017922349067435
 GameObject:

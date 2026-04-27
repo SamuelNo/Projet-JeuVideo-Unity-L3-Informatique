@@ -176,9 +176,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "Monstre de rang A -> R\xE9sistant aux attaques \xE0 distance.
-    Attaque \xE0 distance: Attaque cibl\xE9e, soin, am\xE9lioration des d\xE9g\xE2ts,
-    protection."
+  enemyDescription: "Monstre de rang A \\nR\xE9sistant aux attaques \xE0 distance.
+    \\nUnit\xE9 de soutien."
   enemyName: Ashes
 --- !u!1 &8672076707429445554
 GameObject:
