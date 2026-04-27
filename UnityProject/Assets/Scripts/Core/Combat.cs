@@ -330,9 +330,10 @@ public class Combat : MonoBehaviour
         usedCharacter = null;
         finishedTurn = false;
         currentTeamList = (currentTeam == 1) ? playerList : (currentTeam == 2) ? player2List : null;
+        int maxActionsThisTurn = currentTeamList.Count(c => c != null && !isDead(c));
         turnCount = 0;
         foreach (GameObject c in currentTeamList){ // once per character that is alive
-            if (!finishedTurn & !isDead(c)){ // or until the "Fin du tour" button is clicked
+            if (!finishedTurn && c != null && !isDead(c)){ // or until the "Fin du tour" button is clicked
                 // waits for player to select a character, a skill and a target
                 turnCount += 1;
                 selectedCharacter = null;
@@ -380,7 +381,15 @@ public class Combat : MonoBehaviour
                 skillHandler();
                 buttonScript.setAnnouncementText("Waiting...",2f);
                 yield return new WaitForSeconds(2f);
-                selectedCharacter.GetComponent<Character>().Deselect();
+                if (selectedCharacter != null)
+                {
+                    Character charac = selectedCharacter.GetComponent<Character>();
+                    if (charac != null)
+                    {
+                        charac.Deselect();
+                    }
+                }
+                //selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
                     if (selectedTargets[i] != null){
                         if (selectedTargets[i].GetComponent<Character>() != null){
@@ -403,36 +412,51 @@ public class Combat : MonoBehaviour
                     finishedTurn = true;
                     wait = false;
 
-                } else if (numberAliveMembers(currentTeamList) == 1){
-                    if (currentTeamList[0] == usedCharacter){
-                        usedCharacter = null;
-                        finishedTurn = true;
-                        wait = false;
-                    } else if (currentTeamList[1] == usedCharacter){
-                        usedCharacter = null;
-                        finishedTurn = true;
-                        wait = false;
-                    }
-                    
-                } else {
+                }else if (turnCount >= maxActionsThisTurn)
+                {
+                    usedCharacter = null;
+                    finishedTurn = true;
+                    wait = false;
+                }
+                else {
                     // if a character has been used and the other is frozen, the player's turn is over
-                    statusList = new List<(Status,int)>(currentTeamList[0].GetComponent<Character>().getStatusList());
-                    foreach ((Status,int) s in statusList){
-                        if (s.Item1 == Status.FROZEN){
-                            usedCharacter = null;
-                            finishedTurn = true;
-                            wait = false;
-                        }
-                    }
-                    statusList = new List<(Status,int)>(currentTeamList[1].GetComponent<Character>().getStatusList());
-                    foreach ((Status,int) s in statusList){
-                        if (s.Item1 == Status.FROZEN){
-                            usedCharacter = null;
-                            finishedTurn = true;
-                            wait = false;
+                    if (currentTeamList[0] != null)
+                    {
+                        Character chara0 = currentTeamList[0].GetComponent<Character>();
+                        if (chara0 != null)
+                        {
+                            statusList = new List<(Status, int)>(chara0.getStatusList());
+
+                            foreach ((Status, int) s in statusList)
+                            {
+                                if (s.Item1 == Status.FROZEN)
+                                {
+                                    usedCharacter = null;
+                                    finishedTurn = true;
+                                    wait = false;
+                                }
+                            }
                         }
                     }
 
+                    if (currentTeamList.Length > 1 && currentTeamList[1] != null)
+                    {
+                        Character chara1 = currentTeamList[1].GetComponent<Character>();
+                        if (chara1 != null)
+                        {
+                            statusList = new List<(Status, int)>(chara1.getStatusList());
+
+                            foreach ((Status, int) s in statusList)
+                            {
+                                if (s.Item1 == Status.FROZEN)
+                                {
+                                    usedCharacter = null;
+                                    finishedTurn = true;
+                                    wait = false;
+                                }
+                            }
+                        }
+                    }
 
                     // otherwise, the character that has just been used is saved
                     usedCharacter = selectedCharacter;
@@ -839,7 +863,8 @@ public class Combat : MonoBehaviour
             return;
         }
         // deselects the character
-        if (selectedTargets.Length == 1){ 
+        if (selectedTargets.Length == 1 && selectedTargets[0] != null)
+        { 
             characterScript = selectedTargets[0].GetComponent<Character>();
             if (characterScript != null)
             {
@@ -1054,7 +1079,7 @@ public class Combat : MonoBehaviour
                     return; 
                 }
             }
-            selectedTargets = allies;
+            selectedTargets = allies.Where(a => a != null && !isDead(a)).ToArray();
             Debug.Log("Tous les alliés ont étés ciblés. (La compétence affecte tous les alliés)");
         } else if ((selectedCharacter.GetComponent<Fighter>() != null & selectedSkill == 2)){ // if character is a fighter and using skill lvl 2
             // skill affects themselves 
