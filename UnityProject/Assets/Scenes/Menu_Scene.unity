@@ -718,13 +718,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleUIController, GameScripts
-        m_MethodName: OnClickYesEndGameChoice
-        m_Mode: 1
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: confirmReset
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 710426924}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1062,13 +1062,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleUIController, GameScripts
-        m_MethodName: OnClickNoEndGameChoice
-        m_Mode: 1
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: refuseReset
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 710426924}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1587,7 +1587,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 396940777}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: ApplicationQuitButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &396940777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2251,7 +2263,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 561137852}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: characterButton1
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &561137852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2371,7 +2395,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 586147939}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: characterButton1
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &586147939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2605,7 +2641,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 590003367}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: nextPlayerButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &597709769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2687,7 +2735,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 597709772}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: characterButton2
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &597709772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2846,7 +2906,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 643738862}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: choseStageButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &650906674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3121,7 +3193,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 708668838}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: backToMenuButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &708668838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5068,7 +5152,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1364816229}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: PvMButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1396747431
 GameObject:
   m_ObjectHideFlags: 0
@@ -5408,7 +5504,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1427203434}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: characterButton2
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1427203434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6854,7 +6962,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1973051974}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: resetButton
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 710426924}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1973051974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7509,7 +7629,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2054704151}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108401045}
+        m_TargetAssemblyTypeName: MenuButtons, GameScripts
+        m_MethodName: PvMButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2095416499
 GameObject:
   m_ObjectHideFlags: 0

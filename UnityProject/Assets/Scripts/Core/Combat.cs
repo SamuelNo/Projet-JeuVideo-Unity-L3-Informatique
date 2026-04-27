@@ -378,8 +378,8 @@ public class Combat : MonoBehaviour
 
                 // applies skill to target(s)
                 skillHandler();
-                buttonScript.setAnnouncementText("Waiting...");
-                yield return new WaitForSeconds(1f);
+                buttonScript.setAnnouncementText("Waiting...",2f);
+                yield return new WaitForSeconds(2f);
                 selectedCharacter.GetComponent<Character>().Deselect();
                 for(int i = 0; i < selectedTargets?.Length; i++){
                     if (selectedTargets[i] != null){
@@ -978,7 +978,6 @@ public class Combat : MonoBehaviour
             if (PvM){ // if it's a PvM
                 selectedTargets = enemyList;
                 Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
-
             } else if (currentTeam == 1){
                 // checks the that the player's team isn't shielded
                 statusList = player2List[0].GetComponent<Character>().getStatusList();
@@ -991,12 +990,10 @@ public class Combat : MonoBehaviour
                     Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.ButtonAccess();
-
                 } else {
                     selectedTargets = player2List;
                     Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
                 }
-
             } else {
                 // checks the that the player's team isn't shielded
                 statusList = playerList[0].GetComponent<Character>().getStatusList();
@@ -1009,23 +1006,18 @@ public class Combat : MonoBehaviour
                     Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.ButtonAccess();
-
                 } else {
                     selectedTargets = playerList;
                     Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
                 }
             }
-
-
         } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)| // if character is a healer and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
             // skill affects all allies (player doesn't need to select target)
             GameObject[] allies = (currentTeam == 1) ? playerList : player2List;
-
             if (selectedCharacter.GetComponent<Healer>() != null && selectedSkill == 3) {
                 
                 bool teamIsFullLife = true;
-
                 foreach (GameObject allyGO in allies) {
                     if (allyGO != null) {
                         Character allyScript = allyGO.GetComponent<Character>();
@@ -1035,7 +1027,6 @@ public class Combat : MonoBehaviour
                         }
                     }
                 }
-
                 if (teamIsFullLife) {
                     Debug.LogWarning("Toute l'équipe est déjà au maximum de sa vie ! Choisissez une autre compétence.");
                     buttonScript.setWarningText("Équipe déjà au maximum de sa vie !");
@@ -1047,11 +1038,8 @@ public class Combat : MonoBehaviour
                     return; 
                 }
             }
-
             selectedTargets = allies;
             Debug.Log("Tous les alliés ont étés ciblés. (La compétence affecte tous les alliés)");
-
-
         } else if ((selectedCharacter.GetComponent<Fighter>() != null & selectedSkill == 2)){ // if character is a fighter and using skill lvl 2
             // skill affects themselves 
             if(selectedCharacter.GetComponent<Fighter>().getStatusList().Contains((Status.STRENGTHENED,1))){
@@ -1074,13 +1062,11 @@ public class Combat : MonoBehaviour
                 buttonScript.ButtonAccess();
                 return;
             }
-
             // skill affects their ally
             selectedTargets = new GameObject[] {(currentTeamList[0].GetComponent<Protector>() != null) ? currentTeamList[1] : currentTeamList[0]};
             Debug.Log("L'allié a été ciblé. (La compétence affecte l'allié)");
         }
     }
-
     public void select(GameObject clickedObject){
         ///<summary> handles the character and target selection </summary>
         if (currentTeam == -1) {

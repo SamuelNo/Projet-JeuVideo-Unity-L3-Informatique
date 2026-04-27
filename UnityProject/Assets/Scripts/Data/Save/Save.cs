@@ -12,9 +12,18 @@ public class Save : MonoBehaviour
     public int currentStage, unlockedStage;
 
     //  ---------- Initialisation  ---------- 
-    void Awake(){
-        filePath = Application.dataPath + "/Scripts/Data/Save/save.txt";
+    void Awake()
+    {
+        filePath = Application.persistentDataPath + "/save.txt";
         principalScript = this.GetComponent<Principal>();
+
+        if (!File.Exists(filePath))
+        {
+            File.WriteAllText(filePath, "0 0");
+            Debug.Log("Premier lancement : Fichier créé dans " + filePath);
+        }
+
+        loadFile();
     }
 
     void Start(){
@@ -30,19 +39,21 @@ public class Save : MonoBehaviour
 
     //  ----------  Methods  ---------- 
 
-    public void loadFile(){
-        ///<summary> loads the data saved in the file </summary>
-        
-        // loads data from the file
-        data = read().Split(" ");
-        
-        // current stage number
-        currentStage = int.Parse(data[0]);
-        principalScript.setSelectedStage(currentStage);
-        
-        // unlocked stage number
-        unlockedStage = int.Parse(data[1]);
-        principalScript.setUnlockedStage(unlockedStage);
+    public void loadFile() {
+        string rawData = read().Trim(); 
+        if (string.IsNullOrEmpty(rawData)) return;
+
+        data = rawData.Split(' ');
+        Debug.Log("Données brutes lues : " + rawData);
+        if (data.Length >= 2) {
+            currentStage = int.Parse(data[0]);
+            unlockedStage = int.Parse(data[1]);
+
+            principalScript.setSelectedStage(currentStage);
+            principalScript.setUnlockedStage(unlockedStage);
+            
+            Debug.Log("Chargement réussi : Stage " + currentStage + " / Unlocked " + unlockedStage);
+        }
     }
 
     public void save(){

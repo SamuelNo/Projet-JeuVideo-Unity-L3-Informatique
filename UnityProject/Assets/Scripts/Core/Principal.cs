@@ -113,7 +113,7 @@ public class Principal : MonoBehaviour
         resetPanel = GameObject.Find("ResetPanel");*/
 
         // adds OnClick() to each button
-        pvmButton.onClick.AddListener(delegate{ buttonScript.PvMButton(); });
+        /* pvmButton.onClick.AddListener(delegate{ buttonScript.PvMButton(); });
         menuButton.onClick.AddListener(delegate{ buttonScript.backToMenuButton(); });
         nextPlayerButton.onClick.AddListener(delegate{ buttonScript.nextPlayerButton(); });
         startPvPFightButton.onClick.AddListener(delegate{ buttonScript.startPvPFightButton(); });
@@ -127,17 +127,17 @@ public class Principal : MonoBehaviour
         resetButton.onClick.AddListener(delegate{ buttonScript.resetButton(resetPanel); });
         resetYesButton.onClick.AddListener(delegate{ buttonScript.confirmReset(resetPanel); });
         resetNoButton.onClick.AddListener(delegate{ buttonScript.refuseReset(resetPanel); });
-        applicationQuitButton.onClick.AddListener(delegate{ buttonScript.ApplicationQuitButton(); });
+        applicationQuitButton.onClick.AddListener(delegate{ buttonScript.ApplicationQuitButton(); }); */
 
         // ----- character initialisation ----------
-        fighterSprite1 = GameObject.Find("FighterSpriteLeft");
+        /* fighterSprite1 = GameObject.Find("FighterSpriteLeft");
         healerSprite1 = GameObject.Find("HealerSpriteLeft");
         mageSprite1 = GameObject.Find("MageSpriteLeft");
         protectorSprite1 = GameObject.Find("ProtectorSpriteLeft");
         fighterSprite2 = GameObject.Find("FighterSpriteRight");
         healerSprite2 = GameObject.Find("HealerSpriteRight");
         mageSprite2 = GameObject.Find("MageSpriteRight");
-        protectorSprite2 = GameObject.Find("ProtectorSpriteRight");
+        protectorSprite2 = GameObject.Find("ProtectorSpriteRight"); */
         characterSpriteList1 = new GameObject[] {fighterSprite1, healerSprite1, mageSprite1, protectorSprite1};
         characterSpriteList2 = new GameObject[] {fighterSprite2, healerSprite2, mageSprite2, protectorSprite2};
 
@@ -349,33 +349,25 @@ public class Principal : MonoBehaviour
         
     }
 
-    public IEnumerator moveCharacter(){
-    ///<summary> moves the stage selection character sprite towards the selected stage </summary>
+    public IEnumerator moveCharacter() {
+        ///<summary> moves the character sprite from its current position to the position of the selected stage </summary>
+        moving = true;
+        float duration = 0.5f; 
+        float elapsedTime = 0f;
+        Vector3 startingPos = stageCharacterSprite.transform.position;
         Vector3 targetPosition = stageSpriteList[selectedStage].transform.position;
+
         Vector3 characterScale = stageCharacterSprite.transform.localScale;
-
-        if (targetPosition.x < stageCharacterSprite.transform.position.x) {
-            characterScale.x = 1; 
-        } 
-        else if (targetPosition.x > stageCharacterSprite.transform.position.x) {
-            characterScale.x = -1; 
-        }
-
+        characterScale.x = (targetPosition.x < startingPos.x) ? 1 : -1;
         stageCharacterSprite.transform.localScale = characterScale;
 
-        moving = true;
-        while (Vector3.Distance(stageCharacterSprite.transform.position, targetPosition) > 1f) {
-            stageCharacterSprite.transform.position = Vector3.MoveTowards(stageCharacterSprite.transform.position, targetPosition, 500f * Time.deltaTime);
+        while (elapsedTime < duration) {
+            stageCharacterSprite.transform.position = Vector3.Lerp(startingPos, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        if (selectedStage == 0) {
-            characterScale.x = 1; 
-        } 
-        else if (selectedStage == stageSpriteList.Length - 1) {
-            characterScale.x = -1;
-        }
 
-        stageCharacterSprite.transform.localScale = characterScale;
+        stageCharacterSprite.transform.position = targetPosition; // On assure la position finale
         moving = false;
     }
     
