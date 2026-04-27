@@ -238,7 +238,6 @@ public class Combat : MonoBehaviour
     void FixedUpdate(){
         if (playerList == null || playerList.Length == 0) return;
         if (endGameClicked) {
-                    buttonScript.setInfoText("Fin du combat");
                     buttonScript.DisplayEndGame("Combat terminé");
                     buttonScript.setAttackerName("");
                     wait = true;
@@ -522,6 +521,14 @@ public class Combat : MonoBehaviour
         // loop over enemies
         for (int i = 0; i < enemyList.Length; i++)
         {
+            // Keep runtime lists clean in case units were destroyed during previous actions.
+            charactersAlive.RemoveAll(c => c == null || isDead(c));
+            enemiesAlive.RemoveAll(e => e == null || isDead(e));
+            if (charactersAlive.Count == 0)
+            {
+                break;
+            }
+
             GameObject currentEnemy = enemyList[i];
             if (currentEnemy == null || isDead(currentEnemy))
             {
@@ -578,7 +585,7 @@ public class Combat : MonoBehaviour
             } else {
 
                 // if the target is shielded, skip the attacks
-                if (target.GetComponent<Character>() != null){
+                if (target != null && target.GetComponent<Character>() != null){
                     effect = false;
                     statusList = target.GetComponent<Character>().getStatusList();
                     foreach ((Status,int) s in statusList){
@@ -587,14 +594,25 @@ public class Combat : MonoBehaviour
                 }
 
                 // array for AoE attacks
-                selectedTargets = charactersAlive.ToArray();
+                selectedTargets = charactersAlive.Where(c => c != null && !isDead(c)).ToArray();
 
                 // if a target is protected, attack the protector instead
-                if (target.GetComponent<Character>() != null){
+                if (target != null && target.GetComponent<Character>() != null){
                     for (int x=0; x<selectedTargets.Length; x++) {
-                        statusList = selectedTargets[x].GetComponent<Character>().getStatusList();
+                        if (selectedTargets[x] == null) continue;
+
+                        Character selectedTargetCharacter = selectedTargets[x].GetComponent<Character>();
+                        if (selectedTargetCharacter == null) continue;
+
+                        statusList = selectedTargetCharacter.getStatusList();
                         foreach ((Status, int) s in statusList){
                             if (s.Item1 == Status.PROTECTED) {
+                                if (charactersAlive.Count < 2)
+                                {
+                                    selectedTargets = charactersAlive.Where(c => c != null && !isDead(c)).ToArray();
+                                    continue;
+                                }
+
                                 // if the protector is dead, the character is no longer protected
                                 if (charactersAlive.ElementAt(0) == null)
                                 {
@@ -624,6 +642,11 @@ public class Combat : MonoBehaviour
                     }
                 }
 
+                // Rebuild AoE target list after retargeting/protection handling.
+                selectedTargets = selectedTargets
+                    .Where(t => t != null && t.GetComponent<Character>() != null && !isDead(t))
+                    .ToArray();
+
 
                 // Security check in case the target is dead or has been destroyed since the enemy decided to attack it
                 if (target == null || target.GetComponent<Character>() == null || isDead(target))
@@ -647,9 +670,14 @@ public class Combat : MonoBehaviour
                         if (target != null)
                         {
                             if (!effect){ // if the character isn't shielded
+                                Character targetCharacter = target.GetComponent<Character>();
+                                if (targetCharacter == null)
+                                {
+                                    break;
+                                }
 
                                 // shows the target circle for the attacked target
-                                target.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                targetCharacter.ShowTargetCircle(Color.red);
                                 if (!targetsWithCircle.Contains(target))
                                     targetsWithCircle.Add(target);
 
@@ -670,14 +698,18 @@ public class Combat : MonoBehaviour
 
                     // Aoe Attack
                     case 2:
-                        if (charactersAlive.Count > 0)
+                        if (charactersAlive.Count > 0 && selectedTargets.Length > 0)
                         {
                             if (!effect){ // if the character isn't shielded
                                 
                                 // shows the target circle
                                 foreach (var t in selectedTargets)
                                 {
-                                    t.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                    if (t == null) continue;
+                                    Character tCharacter = t.GetComponent<Character>();
+                                    if (tCharacter == null) continue;
+
+                                    tCharacter.ShowTargetCircle(Color.red);
                                     if (!targetsWithCircle.Contains(t))
                                         targetsWithCircle.Add(t);
                                 }
@@ -700,13 +732,17 @@ public class Combat : MonoBehaviour
                     // Special Attack
                     case 3:
                         Boss boss = enemy as Boss;
-                        if (boss != null && charactersAlive.Count > 0)
+                        if (boss != null && charactersAlive.Count > 0 && selectedTargets.Length > 0)
                         {
                             if (!effect){ // if the character isn't shielded
                                 // shows the target circle
                                 foreach (var t in selectedTargets)
                                 {
-                                    t.GetComponent<Character>().ShowTargetCircle(Color.red);
+                                    if (t == null) continue;
+                                    Character tCharacter = t.GetComponent<Character>();
+                                    if (tCharacter == null) continue;
+
+                                    tCharacter.ShowTargetCircle(Color.red);
                                     if (!targetsWithCircle.Contains(t))
                                         targetsWithCircle.Add(t);
                                 }

@@ -247,6 +247,7 @@ public class BattleUIController : MonoBehaviour
     {
         Debug.Log("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
         setInstructionText("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
+        infoTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text","Fin du combat.");
         choicePanel.SetActive(false);
         combatScript.setFinishedGame(true);
     }

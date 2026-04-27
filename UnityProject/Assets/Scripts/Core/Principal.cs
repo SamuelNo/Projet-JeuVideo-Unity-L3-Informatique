@@ -448,7 +448,7 @@ public class Principal : MonoBehaviour
 
     // ----- reset game ----------
     public void resetGame(){
-        saveScript.reset();
+        saveScript.ResetSave();
     }
 
     // ----- general ----------

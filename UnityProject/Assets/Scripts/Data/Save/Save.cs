@@ -17,6 +17,11 @@ public class Save : MonoBehaviour
         filePath = Application.persistentDataPath + "/save.txt";
         principalScript = this.GetComponent<Principal>();
 
+        if (principalScript == null)
+        {
+            principalScript = Object.FindAnyObjectByType<Principal>();
+        }
+
         if (!File.Exists(filePath))
         {
             File.WriteAllText(filePath, "0 0");
@@ -49,8 +54,11 @@ public class Save : MonoBehaviour
             currentStage = int.Parse(data[0]);
             unlockedStage = int.Parse(data[1]);
 
-            principalScript.setSelectedStage(currentStage);
-            principalScript.setUnlockedStage(unlockedStage);
+            if (principalScript != null)
+            {
+                principalScript.setSelectedStage(currentStage);
+                principalScript.setUnlockedStage(unlockedStage);
+            }
             
             Debug.Log("Chargement réussi : Stage " + currentStage + " / Unlocked " + unlockedStage);
         }
@@ -63,7 +71,7 @@ public class Save : MonoBehaviour
         writeOverwrite(currentStage.ToString() +" "+ unlockedStage.ToString());
     }
 
-    public void reset(){
+    public void ResetSave(){
         ///<summary> resets all the data in the file and loads it </summary>
         
         // resets data
