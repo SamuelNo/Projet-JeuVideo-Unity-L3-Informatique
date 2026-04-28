@@ -1052,6 +1052,8 @@ public class Combat : MonoBehaviour
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)){ // or if character is a protector and using skill lvl 2
             // skill affects all opponents (player doesn't need to select target)
+            currentPhase = BattlePhase.WAITING;
+            buttonScript.ButtonAccess();
             if (PvM){ // if it's a PvM
                 selectedTargets = enemyList.Where(e => e != null && !isDead(e)).ToArray();
                 Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
@@ -1066,6 +1068,7 @@ public class Combat : MonoBehaviour
                 if (effect){ // if it is, do not select them
                     Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    currentPhase = BattlePhase.SELECT_SKILL;
                     buttonScript.ButtonAccess();
                 } else {
                     selectedTargets = player2List.Where(a => a != null && !isDead(a)).ToArray();
@@ -1082,6 +1085,7 @@ public class Combat : MonoBehaviour
                 if (effect){ // if it is, do not select them
                     Debug.LogWarning("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
                     buttonScript.setWarningText("Les adversaires ont un bouclier et ne recevront pas de dégats. Veuillez choisir une autre compétence ou passer le tour.");
+                    currentPhase = BattlePhase.SELECT_SKILL;
                     buttonScript.ButtonAccess();
                 } else {
                     selectedTargets = playerList.Where(a => a != null && !isDead(a)).ToArray();
@@ -1091,6 +1095,8 @@ public class Combat : MonoBehaviour
         } else if ((selectedCharacter.GetComponent<Healer>() != null & selectedSkill == 3)| // if character is a healer and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 3)){ // or if character is a protector and using skill lvl 3
             // skill affects all allies (player doesn't need to select target)
+            currentPhase = BattlePhase.WAITING;
+            buttonScript.ButtonAccess();
             GameObject[] allies = (currentTeam == 1) ? playerList : player2List;
             if (selectedCharacter.GetComponent<Healer>() != null && selectedSkill == 3) {
                 
@@ -1103,11 +1109,11 @@ public class Combat : MonoBehaviour
                             break; 
                         }
                     }
+
                 }
                 if (teamIsFullLife) {
                     Debug.LogWarning("Toute l'équipe est déjà au maximum de sa vie ! Choisissez une autre compétence.");
                     buttonScript.setWarningText("Équipe déjà au maximum de sa vie !");
-                    
                     currentPhase = BattlePhase.SELECT_SKILL;
                     buttonScript.ButtonAccess();
                     
@@ -1119,6 +1125,8 @@ public class Combat : MonoBehaviour
             Debug.Log("Tous les alliés ont étés ciblés. (La compétence affecte tous les alliés)");
         } else if ((selectedCharacter.GetComponent<Fighter>() != null & selectedSkill == 2)){ // if character is a fighter and using skill lvl 2
             // skill affects themselves 
+            currentPhase = BattlePhase.WAITING;
+            buttonScript.ButtonAccess();
             if(selectedCharacter.GetComponent<Fighter>().getStatusList().Contains((Status.STRENGTHENED,1))){
                 Debug.LogWarning("Le personnage est déjà renforcé et ne peut pas utiliser cette compétence.");
                 buttonScript.setWarningText("Le personnage est déjà renforcé et ne peut pas utiliser cette compétence.");
@@ -1132,6 +1140,7 @@ public class Combat : MonoBehaviour
         }else if ((selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 1)){ // if character is a protector and using skill lvl 1
             // checks if the protector has an ally
             currentPhase = BattlePhase.WAITING;
+            buttonScript.ButtonAccess();
             if (currentTeamList[0]==null | currentTeamList[1]==null){
                 Debug.LogWarning("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
                 buttonScript.setWarningText("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
