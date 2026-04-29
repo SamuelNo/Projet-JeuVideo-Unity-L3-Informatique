@@ -930,24 +930,32 @@ public class Combat : MonoBehaviour
                 
                     if (currentTeam == 1 & PvP){ 
                         // if the protector is dead, the character is no longer protected
-                        if (player2List[0] == null){
-                            player2List[1].GetComponent<Character>().getStatusList().Remove(s);
-                        } else if (player2List[1] == null){
-                            player2List[0].GetComponent<Character>().getStatusList().Remove(s);
+                        GameObject player2Alive0 = (player2List != null && player2List.Length > 0) ? player2List[0] : null;
+                        GameObject player2Alive1 = (player2List != null && player2List.Length > 1) ? player2List[1] : null;
+                        if (player2Alive0 == null){
+                            Character player2Character1 = player2Alive1 != null ? player2Alive1.GetComponent<Character>() : null;
+                            if (player2Character1 != null) player2Character1.getStatusList().Remove(s);
+                        } else if (player2Alive1 == null){
+                            Character player2Character0 = player2Alive0.GetComponent<Character>();
+                            if (player2Character0 != null) player2Character0.getStatusList().Remove(s);
 
                         } else { // otherwise, replaces the target with the protector
-                            selectedTargets = new GameObject[] {(player2List[0].GetComponent<Protector>() != null) ? player2List[0] : player2List[1]};
+                            selectedTargets = new GameObject[] {(player2Alive0.GetComponent<Protector>() != null) ? player2Alive0 : player2Alive1};
                         }
                         
                     } else {
                         // if the protector is dead, the character is no longer protected
-                        if (playerList[0] == null){
-                            playerList[1].GetComponent<Character>().getStatusList().Remove(s);
-                        } else if (playerList[1] == null){
-                            playerList[0].GetComponent<Character>().getStatusList().Remove(s);
+                        GameObject playerAlive0 = (playerList != null && playerList.Length > 0) ? playerList[0] : null;
+                        GameObject playerAlive1 = (playerList != null && playerList.Length > 1) ? playerList[1] : null;
+                        if (playerAlive0 == null){
+                            Character playerCharacter1 = playerAlive1 != null ? playerAlive1.GetComponent<Character>() : null;
+                            if (playerCharacter1 != null) playerCharacter1.getStatusList().Remove(s);
+                        } else if (playerAlive1 == null){
+                            Character playerCharacter0 = playerAlive0.GetComponent<Character>();
+                            if (playerCharacter0 != null) playerCharacter0.getStatusList().Remove(s);
 
                         } else { // otherwise, replaces the target with the protector
-                            selectedTargets = new GameObject[] {(playerList[0].GetComponent<Protector>() != null) ? playerList[0] : playerList[1]};
+                            selectedTargets = new GameObject[] {(playerAlive0.GetComponent<Protector>() != null) ? playerAlive0 : playerAlive1};
                         }
                     }
                 }
@@ -957,8 +965,15 @@ public class Combat : MonoBehaviour
 
     private void skillHandler(){
         ///<summary> applies the selected character's skill to the target(s) </summary>
-        
+        if (selectedCharacter == null || selectedTargets == null || selectedTargets.Length == 0 || selectedTargets[0] == null)
+        {
+            return;
+        }
         characterScript = selectedCharacter.GetComponent<Character>();
+        if (characterScript == null)
+        {
+            return;
+        }
 
         switch (selectedSkill){
             case 0 : characterScript.baseAttack(selectedTargets[0]);
@@ -1047,7 +1062,7 @@ public class Combat : MonoBehaviour
 
     public void automaticTargetSelection(){
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
-        if (currentTeam == -1) return;
+        if (currentTeam == -1 || selectedCharacter == null) return;
         effect = false;
         
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
@@ -1158,7 +1173,9 @@ public class Combat : MonoBehaviour
             // checks if the protector has an ally
             currentPhase = BattlePhase.WAITING;
             buttonScript.ButtonAccess();
-            if (currentTeamList[0]==null | currentTeamList[1]==null){
+            GameObject ally0 = (currentTeamList != null && currentTeamList.Length > 0) ? currentTeamList[0] : null;
+            GameObject ally1 = (currentTeamList != null && currentTeamList.Length > 1) ? currentTeamList[1] : null;
+            if (ally0 == null | ally1 == null){
                 Debug.LogWarning("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
                 buttonScript.setWarningText("Le protecteur n'a pas d'allié et donc personne à protéger. Veuillez choisir une autre compétence ou passer le tour.");
                 currentPhase = BattlePhase.SELECT_SKILL;
@@ -1166,12 +1183,16 @@ public class Combat : MonoBehaviour
                 return;
             }
             // skill affects their ally
-            selectedTargets = new GameObject[] {(currentTeamList[0].GetComponent<Protector>() != null) ? currentTeamList[1] : currentTeamList[0]};
+            selectedTargets = new GameObject[] {(ally0.GetComponent<Protector>() != null) ? ally1 : ally0};
             Debug.Log("L'allié a été ciblé. (La compétence affecte l'allié)");
         }
     }
     public void select(GameObject clickedObject){
         ///<summary> handles the character and target selection </summary>
+        if (clickedObject == null)
+        {
+            return;
+        }
         if (currentTeam == -1) {
             if(clickedObject.GetComponent<Character>() != null){
                 clickedObject.GetComponent<Character>().Deselect();
