@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+
 public class Principal : MonoBehaviour
 {
     // ---------- Attributes ---------- //
@@ -51,7 +52,8 @@ public class Principal : MonoBehaviour
                    resetButton,
                    resetYesButton,
                    resetNoButton,
-                   applicationQuitButton;
+                   applicationQuitButton,
+                   muteMusicButton;
     [SerializeField] private GameObject resetPanel;
     [SerializeField] private GameObject[] characterBasePrefabs; // list of character prefabs (used for getting character data like description and skill names)
     [SerializeField] private GameObject[] monsterPrefabs; // list of monster prefabs (might be used for getting monster data like description and skill names)
@@ -62,6 +64,7 @@ public class Principal : MonoBehaviour
     [SerializeField] private GameObject[] listMapName; // list of map name objects (used for displaying the name of the stage)
     [SerializeField] private GameObject[] titles ; // list of title objects (used for displaying the title of the stage)
     [SerializeField] private GameObject[] blockedSpriteList;
+    [SerializeField] private GameObject instructionPanel; 
     // ---------- Set and Get ---------- //
     // set
     public void setSelectedCharacters1(int[] list){ selectedCharacters1 = list; }
@@ -232,7 +235,7 @@ public class Principal : MonoBehaviour
         
             Enemy data = monsterPrefabs[index].GetComponent<Enemy>();
             if (data != null) {
-                enemyText += "- " + data.enemyName + "\n"+ data.enemyDescription + "\n\n";
+                enemyText += "- " + data.enemyName + "\n"+ data.enemyDescription + "\n";
             }
         }
     }
@@ -260,6 +263,7 @@ public class Principal : MonoBehaviour
         foreach(GameObject s in titles){
             s.gameObject.SetActive(true);
         }
+        muteMusicButton.gameObject.SetActive(true); // shows mute music button
         titles[3].gameObject.SetActive(false);
 
     }
@@ -328,6 +332,7 @@ public class Principal : MonoBehaviour
         choseStageButton.gameObject.SetActive(true); // shows stage validation button
         stageCharacterSprite.gameObject.SetActive(true); // shows character sprite
         stageInfoPanel.SetActive(true); // shows stage info panel
+        instructionPanel.SetActive(true); // shows instruction panel
         foreach (GameObject s in stageSpriteList){ // shows stage sprites
             s.gameObject.SetActive(true);
         }
@@ -466,6 +471,7 @@ public class Principal : MonoBehaviour
         if (leftButton2 != null) leftButton2.gameObject.SetActive(false);
         if (rightButton2 != null) rightButton2.gameObject.SetActive(false);
         if (stageButton != null) stageButton.gameObject.SetActive(false);
+        if(muteMusicButton != null) muteMusicButton.gameObject.SetActive(false);
         if (choseStageButton != null) choseStageButton.gameObject.SetActive(false);
         if (stageCharacterSprite != null) stageCharacterSprite.gameObject.SetActive(false);
         if (resetButton != null) resetButton.gameObject.SetActive(false);
@@ -474,8 +480,9 @@ public class Principal : MonoBehaviour
         if (leftInfoPanel != null) leftInfoPanel.SetActive(false);
         if (rightInfoPanel != null) rightInfoPanel.SetActive(false);
         if (stageInfoPanel != null) stageInfoPanel.SetActive(false);
+        if(instructionPanel != null) instructionPanel.SetActive(false);
         foreach(GameObject s in titles){
-            if (s != null) {
+            if(s != null){
                 s.gameObject.SetActive(false);
             }
         }

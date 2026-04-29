@@ -13,7 +13,7 @@ public class BattleUIController : MonoBehaviour
     private Combat combatScript;
 
     // buttons
-    [SerializeField] private CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton;
+    [SerializeField] private CombatButton simpleAttackButton, skillLvl1Button, skillLvl2Button, skillLvl3Button, endTurnButton, endGameButton;
     [SerializeField] private GameObject attackerNameObject;
     [SerializeField] private GameObject battleResultsPanel;
     [SerializeField] private GameObject instructionTextObject;
@@ -242,6 +242,7 @@ public class BattleUIController : MonoBehaviour
         skillLvl2Button.SetState(ButtonState.BLOCKED);
         skillLvl3Button.SetState(ButtonState.BLOCKED);
         endTurnButton.SetState(ButtonState.BLOCKED);
+        endGameButton.SetState(ButtonState.BLOCKED);
     }
     public void OnClickYesEndGameChoice()
     {
@@ -258,6 +259,7 @@ public class BattleUIController : MonoBehaviour
         choicePanel.SetActive(false);
         combatScript.setIsBattleOver(false);
         combatScript.setCurrentPhase(combatScript.getCurrentPhase()); 
+        endGameButton.SetState(ButtonState.SHOWN);
         ButtonAccess();
     }
     public void ShowSkillTooltip(int index) {

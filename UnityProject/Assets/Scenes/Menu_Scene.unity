@@ -346,15 +346,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Paliers
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -371,13 +371,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -558,15 +558,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Joueur vs Joueur
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -583,13 +583,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -648,6 +648,8 @@ GameObject:
   - component: {fileID: 236737423}
   - component: {fileID: 236737422}
   - component: {fileID: 236737421}
+  - component: {fileID: 236737424}
+  - component: {fileID: 236737425}
   m_Layer: 5
   m_Name: ResetYesButton
   m_TagString: Untagged
@@ -768,6 +770,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236737419}
   m_CullTransparentMesh: 1
+--- !u!114 &236737424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236737419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &236737425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236737419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &254154324
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,15 +856,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Reset Paliers
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -852,13 +881,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -992,6 +1021,8 @@ GameObject:
   - component: {fileID: 271382609}
   - component: {fileID: 271382608}
   - component: {fileID: 271382607}
+  - component: {fileID: 271382610}
+  - component: {fileID: 271382611}
   m_Layer: 5
   m_Name: ResetNoButton
   m_TagString: Untagged
@@ -1112,6 +1143,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271382605}
   m_CullTransparentMesh: 1
+--- !u!114 &271382610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271382605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &271382611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271382605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &282456743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1198,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1396747432}
   - {fileID: 289153898}
   - {fileID: 114441541}
   - {fileID: 1026424078}
@@ -1290,15 +1349,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Retour Au Menu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1315,13 +1374,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1402,8 +1461,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: 0}
-  m_SizeDelta: {x: -39.47, y: 0}
+  m_AnchoredPosition: {x: 0.0009460449, y: 0}
+  m_SizeDelta: {x: -84.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &379408462
 MonoBehaviour:
@@ -1427,15 +1486,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Retour Aux Paliers
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1452,13 +1511,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1517,6 +1576,8 @@ GameObject:
   - component: {fileID: 396940778}
   - component: {fileID: 396940777}
   - component: {fileID: 396940776}
+  - component: {fileID: 396940779}
+  - component: {fileID: 396940780}
   m_Layer: 5
   m_Name: ApplicationQuitButton
   m_TagString: Untagged
@@ -1638,6 +1699,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396940774}
   m_CullTransparentMesh: 1
+--- !u!114 &396940779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396940774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &396940780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396940774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &403642842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,7 +1816,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2013,6 +2101,8 @@ GameObject:
   - component: {fileID: 508926180}
   - component: {fileID: 508926179}
   - component: {fileID: 508926178}
+  - component: {fileID: 508926182}
+  - component: {fileID: 508926183}
   m_Layer: 5
   m_Name: StartPvMFightButton
   m_TagString: Untagged
@@ -2133,6 +2223,33 @@ RectTransform:
   m_AnchoredPosition: {x: -0.000012279, y: -229.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &508926182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508926177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &508926183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508926177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &560905520
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,6 +2311,8 @@ GameObject:
   - component: {fileID: 561137853}
   - component: {fileID: 561137852}
   - component: {fileID: 561137851}
+  - component: {fileID: 561137854}
+  - component: {fileID: 561137855}
   m_Layer: 5
   m_Name: RightButton1
   m_TagString: Untagged
@@ -2314,6 +2433,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561137849}
   m_CullTransparentMesh: 1
+--- !u!114 &561137854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561137849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &561137855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561137849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &586147936
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,6 +2472,8 @@ GameObject:
   - component: {fileID: 586147940}
   - component: {fileID: 586147939}
   - component: {fileID: 586147938}
+  - component: {fileID: 586147941}
+  - component: {fileID: 586147942}
   m_Layer: 5
   m_Name: LeftButton1
   m_TagString: Untagged
@@ -2446,6 +2594,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 586147936}
   m_CullTransparentMesh: 1
+--- !u!114 &586147941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586147936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &586147942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586147936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &587435971
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,6 +2708,8 @@ GameObject:
   - component: {fileID: 590003368}
   - component: {fileID: 590003367}
   - component: {fileID: 590003369}
+  - component: {fileID: 590003370}
+  - component: {fileID: 590003371}
   m_Layer: 5
   m_Name: NextPlayerButton
   m_TagString: Untagged
@@ -2654,6 +2831,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &590003370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590003365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &590003371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590003365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &597709769
 GameObject:
   m_ObjectHideFlags: 0
@@ -2666,6 +2870,8 @@ GameObject:
   - component: {fileID: 597709773}
   - component: {fileID: 597709772}
   - component: {fileID: 597709771}
+  - component: {fileID: 597709774}
+  - component: {fileID: 597709775}
   m_Layer: 5
   m_Name: RightButton2
   m_TagString: Untagged
@@ -2786,6 +2992,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 597709769}
   m_CullTransparentMesh: 1
+--- !u!114 &597709774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597709769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &597709775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597709769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &643738860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2798,6 +3031,8 @@ GameObject:
   - component: {fileID: 643738863}
   - component: {fileID: 643738862}
   - component: {fileID: 643738864}
+  - component: {fileID: 643738865}
+  - component: {fileID: 643738866}
   m_Layer: 5
   m_Name: ChoseStageButton
   m_TagString: Untagged
@@ -2816,8 +3051,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1396747432}
+  m_Children: []
   m_Father: {fileID: 2108401044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2919,6 +3153,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &643738865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643738860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &643738866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643738860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &650906674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2978,8 +3239,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
+  m_sharedMaterial: {fileID: -3834751848279237874, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3009,7 +3270,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -3143,6 +3404,8 @@ GameObject:
   - component: {fileID: 708668839}
   - component: {fileID: 708668838}
   - component: {fileID: 708668837}
+  - component: {fileID: 708668841}
+  - component: {fileID: 708668842}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -3264,6 +3527,33 @@ RectTransform:
   m_AnchoredPosition: {x: 737, y: -393}
   m_SizeDelta: {x: 390, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &708668841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708668836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &708668842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708668836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &710426924
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,7 +3745,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1.3274, y: 12.496506}
-  m_SizeDelta: {x: 335.6359, y: 455.2201}
+  m_SizeDelta: {x: 336, y: 456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &918702882
 MonoBehaviour:
@@ -3857,8 +4147,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
+  m_sharedMaterial: {fileID: -3834751848279237874, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3888,7 +4178,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4045,8 +4335,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 200, y: 39.2292}
+  m_AnchoredPosition: {x: 0, y: 6.07}
+  m_SizeDelta: {x: 200, y: 47.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1065736000
 MonoBehaviour:
@@ -4070,8 +4360,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Bois Vert
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4095,13 +4385,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4183,7 +4473,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -2.6381, y: -24.605}
-  m_SizeDelta: {x: 276.07, y: 381.21}
+  m_SizeDelta: {x: 306.66, y: 374.1065}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1117681054
 MonoBehaviour:
@@ -4207,8 +4497,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
+  m_sharedMaterial: {fileID: -3834751848279237874, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4238,7 +4528,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4492,6 +4782,7 @@ MonoBehaviour:
   resetYesButton: {fileID: 236737421}
   resetNoButton: {fileID: 271382607}
   applicationQuitButton: {fileID: 396940776}
+  muteMusicButton: {fileID: 4353191425968767977}
   resetPanel: {fileID: 710426924}
   characterBasePrefabs:
   - {fileID: 5811174022743772249, guid: c8e9d50238fb84ffc9f1d4e60481376a, type: 3}
@@ -4526,6 +4817,7 @@ MonoBehaviour:
   - {fileID: 2045462971}
   - {fileID: 689709082}
   - {fileID: 976727446}
+  instructionPanel: {fileID: 1396747431}
 --- !u!4 &1198869411
 Transform:
   m_ObjectHideFlags: 0
@@ -4603,6 +4895,151 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &1201301350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1201301352}
+  - component: {fileID: 1201301351}
+  - component: {fileID: 1201301353}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1201301351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201301350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7a196dc7966745e0a84943641892f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::MusicManager
+  nomDeLaPremiereScene: Menu_Scene
+  musiqueScene1: {fileID: 8300000, guid: 68c53ce51e1bf4f00975f94ebb86e7e8, type: 3}
+  musiqueScene2: {fileID: 8300000, guid: 5de3f07cbbd4840b08080daf63b7a19a, type: 3}
+--- !u!4 &1201301352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201301350}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 774.91846, y: 757.347, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1201301353
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201301350}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.005
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1235300785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4637,8 +5074,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.0251, y: 0.00043869}
-  m_SizeDelta: {x: 419.4937, y: 182.6}
+  m_AnchoredPosition: {x: 0.00024033, y: -0.00068712}
+  m_SizeDelta: {x: 402.76, y: 167.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1235300787
 MonoBehaviour:
@@ -4663,8 +5100,8 @@ MonoBehaviour:
   m_text: "\xCAtes-vous s\xFBr de vouloir r\xE9initialiser la progression du mode
     Paliers ?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7d5312c04b3894bd3a0bf726c26c6bcc, type: 2}
+  m_sharedMaterial: {fileID: 5645067770707696942, guid: 7d5312c04b3894bd3a0bf726c26c6bcc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4694,7 +5131,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4895,6 +5332,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287263275}
   m_CullTransparentMesh: 1
+--- !u!1 &1296146655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1296146657}
+  - component: {fileID: 1296146656}
+  m_Layer: 0
+  m_Name: Cursor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1296146656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296146655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb80b5ca93d074ea68f5efbe0b824c13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::CursorManager
+  cursorTexture: {fileID: 2800000, guid: 8d9ba5c474e1d4943ad3b62626e5d9dc, type: 3}
+  hotSpot: {x: 20, y: 20}
+--- !u!4 &1296146657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296146655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 845.72174, y: 653.8372, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1362106262
 GameObject:
   m_ObjectHideFlags: 0
@@ -4954,8 +5437,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Reset Paliers
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4979,13 +5462,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -5044,6 +5527,8 @@ GameObject:
   - component: {fileID: 1364816230}
   - component: {fileID: 1364816229}
   - component: {fileID: 1364816231}
+  - component: {fileID: 1364816232}
+  - component: {fileID: 1364816233}
   m_Layer: 5
   m_Name: PvMButton
   m_TagString: Untagged
@@ -5165,6 +5650,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1364816232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364816227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &1364816233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364816227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &1396747431
 GameObject:
   m_ObjectHideFlags: 0
@@ -5190,17 +5702,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396747431}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1037995658}
-  m_Father: {fileID: 643738861}
+  m_Father: {fileID: 282456744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 678, y: 658}
+  m_AnchoredPosition: {x: 678, y: 293.0002}
   m_SizeDelta: {x: 423.4393, y: 302.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1396747433
@@ -5435,6 +5947,8 @@ GameObject:
   - component: {fileID: 1427203435}
   - component: {fileID: 1427203434}
   - component: {fileID: 1427203433}
+  - component: {fileID: 1427203436}
+  - component: {fileID: 1427203437}
   m_Layer: 5
   m_Name: LeftButton2
   m_TagString: Untagged
@@ -5555,6 +6069,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427203431}
   m_CullTransparentMesh: 1
+--- !u!114 &1427203436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427203431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &1427203437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427203431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &1447193927
 GameObject:
   m_ObjectHideFlags: 0
@@ -5690,15 +6231,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quitter le jeu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5715,13 +6256,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -5829,6 +6370,8 @@ GameObject:
   - component: {fileID: 1646096624}
   - component: {fileID: 1646096623}
   - component: {fileID: 1646096625}
+  - component: {fileID: 1646096626}
+  - component: {fileID: 1646096627}
   m_Layer: 5
   m_Name: StartPvPFightButton
   m_TagString: Untagged
@@ -5949,6 +6492,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1646096626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646096621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &1646096627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646096621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &1687190467
 GameObject:
   m_ObjectHideFlags: 0
@@ -6083,8 +6653,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
+  m_sharedMaterial: {fileID: -3834751848279237874, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6114,7 +6684,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -6429,7 +6999,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.0000050068, y: 14.5933}
-  m_SizeDelta: {x: 305.3603, y: 449.9341}
+  m_SizeDelta: {x: 336, y: 456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1817317891
 MonoBehaviour:
@@ -6528,8 +7098,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Ar\xE8ne des Braves"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6553,13 +7123,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -6665,15 +7235,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Joueur Suivant
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6690,13 +7260,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -6783,8 +7353,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Coeur de Braise
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
+  m_sharedMaterial: {fileID: -7694418111873924685, guid: 9b12bfe936a3847a8b8a9eda06804c54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6808,13 +7378,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29
-  m_fontSizeBase: 29
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -6877,8 +7447,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.071, y: 6.7871}
-  m_SizeDelta: {x: 197.8579, y: 32.8034}
+  m_AnchoredPosition: {x: -0.0010872, y: 7.4189}
+  m_SizeDelta: {x: 174.3, y: 64.707}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1973051971
 GameObject:
@@ -6892,6 +7462,8 @@ GameObject:
   - component: {fileID: 1973051975}
   - component: {fileID: 1973051974}
   - component: {fileID: 1973051973}
+  - component: {fileID: 1973051976}
+  - component: {fileID: 1973051977}
   m_Layer: 5
   m_Name: ResetButton
   m_TagString: Untagged
@@ -7013,6 +7585,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1973051971}
   m_CullTransparentMesh: 1
+--- !u!114 &1973051976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973051971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &1973051977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973051971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &1989197530
 GameObject:
   m_ObjectHideFlags: 0
@@ -7204,8 +7803,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
+  m_sharedMaterial: {fileID: -3834751848279237874, guid: a94d077e4c0b5408e9d982072473af7d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7235,7 +7834,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -7313,6 +7912,8 @@ GameObject:
   - component: {fileID: 2019314777}
   - component: {fileID: 2019314776}
   - component: {fileID: 2019314775}
+  - component: {fileID: 2019314778}
+  - component: {fileID: 2019314779}
   m_Layer: 5
   m_Name: PvPButton
   m_TagString: Untagged
@@ -7434,6 +8035,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019314773}
   m_CullTransparentMesh: 1
+--- !u!114 &2019314778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019314773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &2019314779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019314773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &2045462971
 GameObject:
   m_ObjectHideFlags: 0
@@ -7521,6 +8149,8 @@ GameObject:
   - component: {fileID: 2054704152}
   - component: {fileID: 2054704151}
   - component: {fileID: 2054704153}
+  - component: {fileID: 2054704154}
+  - component: {fileID: 2054704155}
   m_Layer: 5
   m_Name: StageButton
   m_TagString: Untagged
@@ -7642,6 +8272,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2054704154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054704149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8090004f439ab43e1baee91ec596ce65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonHoverEffect
+  multiplicateurSurvol: 1.1
+  multiplicateurClic: 0.95
+--- !u!114 &2054704155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054704149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c8868ee12dc46c6bc9fe4d8976f1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::ButtonClickSound
+  soundClip: {fileID: 8300000, guid: f1538c6b8c568415a85d17fd097e0a1c, type: 3}
 --- !u!1 &2095416499
 GameObject:
   m_ObjectHideFlags: 0
@@ -7832,6 +8489,7 @@ RectTransform:
   - {fileID: 508926181}
   - {fileID: 1973051972}
   - {fileID: 396940775}
+  - {fileID: 4353191425968767973}
   m_Father: {fileID: 1400996138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7926,6 +8584,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115790767}
   m_CullTransparentMesh: 1
+--- !u!1001 &4353191425968767972
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2108401044}
+    m_Modifications:
+    - target: {fileID: 357170781806569758, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_Name
+      value: MuteMusicButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000040054
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -398
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+--- !u!224 &4353191425968767973 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8396408231642800027, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+  m_PrefabInstance: {fileID: 4353191425968767972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4353191425968767977 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6986942431817410799, guid: b7a814fd77e94477f84270e4069580d9, type: 3}
+  m_PrefabInstance: {fileID: 4353191425968767972}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7935,3 +8706,5 @@ SceneRoots:
   - {fileID: 1772905217}
   - {fileID: 1198869411}
   - {fileID: 560905522}
+  - {fileID: 1296146657}
+  - {fileID: 1201301352}

@@ -1048,6 +1048,7 @@ public class Combat : MonoBehaviour
     public void automaticTargetSelection(){
         ///<summary> selects all opponents/allies as targets depending on the selected character and skill </summary>
         if (currentTeam == -1) return;
+        effect = false;
         
         if ((selectedCharacter.GetComponent<Mage>() != null & selectedSkill == 3)| // if character is a mage and using skill lvl 3
             (selectedCharacter.GetComponent<Protector>() != null & selectedSkill == 2)){ // or if character is a protector and using skill lvl 2
@@ -1059,10 +1060,18 @@ public class Combat : MonoBehaviour
                 Debug.Log("Tous les ennemis ont étés ciblés. (La compétence affecte tous les ennemis)");
             } else if (currentTeam == 1){
                 // checks the that the player's team isn't shielded
-                statusList = player2List[0].GetComponent<Character>().getStatusList();
-                foreach ((Status,int) s in statusList){
-                    if (s.Item1 == Status.SHIELDED){
-                        effect = true;
+                GameObject targetTeamMember = player2List.FirstOrDefault(a => a != null && !isDead(a));
+                if (targetTeamMember != null)
+                {
+                    Character targetTeamCharacter = targetTeamMember.GetComponent<Character>();
+                    if (targetTeamCharacter != null)
+                    {
+                        statusList = targetTeamCharacter.getStatusList();
+                        foreach ((Status,int) s in statusList){
+                            if (s.Item1 == Status.SHIELDED){
+                                effect = true;
+                            }
+                        }
                     }
                 }
                 if (effect){ // if it is, do not select them
@@ -1076,10 +1085,18 @@ public class Combat : MonoBehaviour
                 }
             } else {
                 // checks the that the player's team isn't shielded
-                statusList = playerList[0].GetComponent<Character>().getStatusList();
-                foreach ((Status,int) s in statusList){
-                    if (s.Item1 == Status.SHIELDED){
-                        effect = true;
+                GameObject targetTeamMember = playerList.FirstOrDefault(a => a != null && !isDead(a));
+                if (targetTeamMember != null)
+                {
+                    Character targetTeamCharacter = targetTeamMember.GetComponent<Character>();
+                    if (targetTeamCharacter != null)
+                    {
+                        statusList = targetTeamCharacter.getStatusList();
+                        foreach ((Status,int) s in statusList){
+                            if (s.Item1 == Status.SHIELDED){
+                                effect = true;
+                            }
+                        }
                     }
                 }
                 if (effect){ // if it is, do not select them
