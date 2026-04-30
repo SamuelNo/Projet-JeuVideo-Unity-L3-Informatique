@@ -220,6 +220,7 @@ abstract public class Enemy : MonoBehaviour
 
         // if dodge fails, damage is taken
         currentHP -= damage;
+        StartCoroutine(receivedDamageAnimation());
         if (currentHP <= 0){
             damage += currentHP;
             Die();
@@ -231,6 +232,21 @@ abstract public class Enemy : MonoBehaviour
         }
         UpdateBars();
         return;
+    }
+
+    private IEnumerator receivedDamageAnimation(){
+        ///<summary> turns the sprite red and makes it move slightly backwards </summary>
+        
+        SpriteRenderer sprite = this.GetComponent<SpriteRenderer>();
+        sprite.color = Color.red; 
+        transform.position = new Vector3(transform.position.x + .05f, transform.position.y, transform.position.z);
+        yield return new WaitForSeconds(.05f);
+
+        transform.position = new Vector3(transform.position.x - .1f, transform.position.y, transform.position.z);
+        yield return new WaitForSeconds(.05f);
+        
+        transform.position = new Vector3(transform.position.x + .05f, transform.position.y, transform.position.z);
+        sprite.color = Color.white; 
     }
 
     public void ReceiveHeal(int n){

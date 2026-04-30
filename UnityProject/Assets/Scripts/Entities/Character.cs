@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI; 
 
 abstract public class Character : MonoBehaviour
 {
@@ -177,6 +178,7 @@ abstract public class Character : MonoBehaviour
 
         // if dodge fails, damage is taken
         currentHP -= n;
+        StartCoroutine(receivedDamageAnimation());
         if (currentHP <= 0){
             n += currentHP;
             Die();
@@ -189,7 +191,21 @@ abstract public class Character : MonoBehaviour
         UpdateBars();
         return true;
     }
-    
+
+    private IEnumerator receivedDamageAnimation(){
+        ///<summary> turns the sprite red and makes it move slightly backwards </summary>
+        
+        SpriteRenderer sprite = this.GetComponent<SpriteRenderer>();
+        sprite.color = Color.red; 
+        transform.position = (teamID == 1) ? new Vector3(transform.position.x - .05f, transform.position.y, transform.position.z) : new Vector3(transform.position.x + .05f, transform.position.y, transform.position.z);
+        yield return new WaitForSeconds(.05f);
+
+        transform.position = (teamID == 1) ? new Vector3(transform.position.x + .1f, transform.position.y, transform.position.z) : new Vector3(transform.position.x - .1f, transform.position.y, transform.position.z);
+        yield return new WaitForSeconds(.05f);
+
+        transform.position = (teamID == 1) ? new Vector3(transform.position.x - .05f, transform.position.y, transform.position.z) : new Vector3(transform.position.x + .05f, transform.position.y, transform.position.z);
+        sprite.color = Color.white; 
+    }
 
     public void receiveHeal(int n){
         ///<param> n : amount of HP to be received by the character </param> 
