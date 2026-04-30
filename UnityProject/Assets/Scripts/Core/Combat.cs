@@ -55,6 +55,10 @@ public class Combat : MonoBehaviour
     private List<(Status, int)> statusList;
     private bool effect;
 
+    // camera shake
+    [SerializeField] private Camera camera;
+    [SerializeField] private AnimationCurve cameraShakeCurve, cameraShakeCurveLvl3;
+
     // --------------- set() & get() ---------------
     // sets
     public void setSelectedCharacter(GameObject character){ selectedCharacter = character; }
@@ -378,6 +382,7 @@ public class Combat : MonoBehaviour
 
                 // applies skill to target(s)
                 skillHandler();
+
                 buttonScript.setAnnouncementText("Waiting...",2f);
                 yield return new WaitForSeconds(2f);
                 if (selectedCharacter != null)
@@ -975,6 +980,14 @@ public class Combat : MonoBehaviour
             return;
         }
 
+        // applies camera shake
+        if ((selectedCharacter.GetComponent<Fighter>() & selectedSkill == 1) | (selectedCharacter.GetComponent<Mage>() & selectedSkill == 1) | (selectedCharacter.GetComponent<Protector>() & selectedSkill == 2)){
+            StartCoroutine(cameraShake(cameraShakeCurve));
+        } else if ((selectedCharacter.GetComponent<Fighter>() & selectedSkill == 3) | (selectedCharacter.GetComponent<Mage>() & selectedSkill == 3)){
+            StartCoroutine(cameraShake(cameraShakeCurveLvl3));
+        }
+
+        // applies skill
         switch (selectedSkill){
             case 0 : characterScript.baseAttack(selectedTargets[0]);
                      Debug.Log("Attaque basique, lancée par " + selectedCharacter.name + " sur " + selectedTargets[0].name);
@@ -1453,5 +1466,20 @@ public class Combat : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator cameraShake(AnimationCurve curve){
+        Vector3 startPosition = camera.transform.position;
+        float elapsedTime = 0f;
+        float strenght = curve.Evaluate(elapsedTime/1f);
+
+        while (elapsedTime < 1f){
+            elapsedTime += Time.deltaTime;
+            strenght = curve.Evaluate(elapsedTime/1f);
+            camera.transform.position = startPosition + Random.insideUnitSphere * strenght;
+            yield return null;
+        }
+
+        camera.transform.position = startPosition;
     }
 }
