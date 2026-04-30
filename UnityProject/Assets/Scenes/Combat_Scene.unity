@@ -1427,6 +1427,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  victoryClip: {fileID: 8300000, guid: 4df062ebb52988b48908d5a18f81009e, type: 3}
+  defeatClip: {fileID: 8300000, guid: e637f19790eb2d34bb3cad69e3e12767, type: 3}
 --- !u!1 &492345765
 GameObject:
   m_ObjectHideFlags: 0

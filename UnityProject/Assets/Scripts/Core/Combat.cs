@@ -59,6 +59,10 @@ public class Combat : MonoBehaviour
     [SerializeField] private Camera camera;
     [SerializeField] private AnimationCurve cameraShakeCurve, cameraShakeCurveLvl3;
 
+    // Audio for end of the fight
+    [SerializeField] private AudioClip victoryClip;
+    [SerializeField] private AudioClip defeatClip;
+
     // --------------- set() & get() ---------------
     // sets
     public void setSelectedCharacter(GameObject character){ selectedCharacter = character; }
@@ -264,6 +268,7 @@ public class Combat : MonoBehaviour
                     buttonScript.DisplayEndGame("Victoire du Joueur 2 !");
                     buttonScript.setAttackerName("");
                 }
+                PlayEndMusic(true);
                 wait = true;
                 isBattleOver = true;
                 currentPhase = BattlePhase.WAITING;
@@ -295,11 +300,13 @@ public class Combat : MonoBehaviour
                     buttonScript.setInfoText("Fin du combat, le joueur a gagné.");
                     buttonScript.DisplayEndGame("Victoire du Joueur !");
                     buttonScript.setAttackerName("");
+                    PlayEndMusic(true);
                 } else {
                     Debug.Log("Fin du combat, l'ennemi a gagné.");
                     buttonScript.setInfoText("Fin du combat, l'ennemi a gagné.");
                     buttonScript.DisplayEndGame("Défaite !");
                     buttonScript.setAttackerName("");
+                    PlayEndMusic(false);
                 }
                 wait = true;
                 isBattleOver = true;
@@ -1483,5 +1490,20 @@ public class Combat : MonoBehaviour
         }
 
         camera.transform.position = startPosition;
+    }
+
+    private void PlayEndMusic(bool playerWon) {
+        // Prevent multiple calls
+        if (MusicManager.instance == null)
+        {
+            return;
+        }
+        AudioClip clip;
+        if (playerWon) {
+            clip = victoryClip;
+        } else {
+            clip = defeatClip;
+        }
+        MusicManager.instance.SwitchTrack(clip);
     }
 }

@@ -38,4 +38,10 @@ public class MusicManager : MonoBehaviour {
         audioSource.clip = newClip;
         audioSource.Play();
     }
+
+    public void StopMusic() {
+        if (audioSource == null)
+            return;
+        audioSource.Stop();
+    }
 }
