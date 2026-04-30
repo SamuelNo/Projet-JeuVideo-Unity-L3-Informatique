@@ -254,6 +254,7 @@ abstract public class Enemy : MonoBehaviour
         ///<summary> Brings back n amount of HP </summary>
 
         currentHP += n;
+        StartCoroutine(recievedHealAnimation());
         if (currentHP > maxHP){
             currentHP = maxHP;
         }
@@ -274,6 +275,27 @@ abstract public class Enemy : MonoBehaviour
 
         // heals target
         target.GetComponent<Enemy>().ReceiveHeal(healAmount);
+    }
+
+    private IEnumerator recievedHealAnimation(){
+        ///<summary> turns the sprite red and makes it move slightly backwards </summary>
+        
+        SpriteRenderer sprite = this.GetComponent<SpriteRenderer>();
+        float intensity = 1f;
+
+        while(intensity > .25f){
+            intensity -= .1f;
+            sprite.color = new Color(intensity, 1f, intensity);
+            yield return new WaitForSeconds(.01f);
+        }
+
+        while(intensity < 1f){
+            intensity += .1f;
+            sprite.color = new Color(intensity, 1f, intensity);
+            yield return new WaitForSeconds(.05f);
+        }
+        
+        sprite.color = Color.white; 
     }
 
     public void BoostAttack(GameObject target)

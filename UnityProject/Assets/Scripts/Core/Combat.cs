@@ -720,6 +720,7 @@ public class Combat : MonoBehaviour
                                 }
 
                                 enemy.AoeAttack(selectedTargets);
+                                StartCoroutine(cameraShake(cameraShakeCurve));
                                 buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" fait une attaque de zone.");
                                 
                             } else {
@@ -753,6 +754,7 @@ public class Combat : MonoBehaviour
                                 }
 
                                 boss.SpecialAttack(selectedTargets);
+                                StartCoroutine(cameraShake(cameraShakeCurveLvl3));
                                 buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a utilisé son attaque spéciale.");
                                
                             } else {
