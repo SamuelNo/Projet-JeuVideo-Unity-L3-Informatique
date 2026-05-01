@@ -226,21 +226,22 @@ abstract public class Character : MonoBehaviour
         ///<summary> turns the sprite red and makes it move slightly backwards </summary>
         
         SpriteRenderer sprite = this.GetComponent<SpriteRenderer>();
+        float opacity = sprite.color.a;
         float intensity = 1f;
 
         while(intensity > .25f){
             intensity -= .1f;
-            sprite.color = new Color(intensity, 1f, intensity);
+            sprite.color = new Color(intensity, 1f, intensity, opacity);
             yield return new WaitForSeconds(.01f);
         }
 
         while(intensity < 1f){
             intensity += .1f;
-            sprite.color = new Color(intensity, 1f, intensity);
+            sprite.color = new Color(intensity, 1f, intensity, opacity);
             yield return new WaitForSeconds(.05f);
         }
         
-        sprite.color = Color.white; 
+        sprite.color = new Color(1f, 1f, 1f, opacity); 
     }
 
     public void useMP (int n){

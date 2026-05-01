@@ -59,6 +59,10 @@ public class Combat : MonoBehaviour
     [SerializeField] private Camera camera;
     [SerializeField] private AnimationCurve cameraShakeCurve, cameraShakeCurveLvl3;
 
+    // effects
+    public GameObject frozenEffectPrefab1, frozenEffectPrefab2, shieldedEffectPrefab;
+    private List<GameObject> frozenEffectList, shieldedEffectList; 
+
     // Audio for end of the fight
     [SerializeField] private AudioClip victoryClip;
     [SerializeField] private AudioClip defeatClip;
@@ -96,6 +100,8 @@ public class Combat : MonoBehaviour
         currentTeam = 1; // at the start of the fight, player1 starts attaking 
         wait = false;
         isBattleOver = false;
+        frozenEffectList = new List<GameObject>();
+        shieldedEffectList = new List<GameObject>();
 
         PvP = false;
         PvM = false;
@@ -996,6 +1002,29 @@ public class Combat : MonoBehaviour
             StartCoroutine(cameraShake(cameraShakeCurveLvl3));
         }
 
+        // applies visual effet
+        GameObject effect;
+        if (selectedCharacter.GetComponent<Mage>() & selectedSkill == 2){ // adds ice
+            if (selectedTargets[0].GetComponent<Character>() != null){ // if target is a character
+                effect = Instantiate((currentTeam == 1) ? frozenEffectPrefab1 : frozenEffectPrefab2, selectedTargets[0].transform.position, Quaternion.identity);
+                frozenEffectList.Add(effect);
+                StartCoroutine(addIceAnimation());
+            
+            } else if (selectedTargets[0].GetComponent<Enemy>() != null){ // if target is an enemy
+                effect = Instantiate(frozenEffectPrefab1, selectedTargets[0].transform.position, Quaternion.identity);
+                frozenEffectList.Add(effect);
+                StartCoroutine(addIceAnimation());
+            }
+        }
+        if (selectedCharacter.GetComponent<Protector>() & selectedSkill == 3){ // adds shield
+            foreach (GameObject target in selectedTargets){
+                effect = Instantiate(shieldedEffectPrefab, target.transform.position + Vector3.left, Quaternion.identity);
+                shieldedEffectList.Add(effect);
+                StartCoroutine(addShieldAnimation());
+            }
+            
+        }
+
         // applies skill
         switch (selectedSkill){
             case 0 : characterScript.baseAttack(selectedTargets[0]);
@@ -1020,6 +1049,28 @@ public class Combat : MonoBehaviour
                 }
     }
 
+    private IEnumerator addIceAnimation(){
+        SpriteRenderer sprite = frozenEffectList.Last().GetComponent<SpriteRenderer>();
+        float opacity = 0f;
+        while (opacity < .75f){
+            opacity += .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        sprite.color = new Color(1f, 1f, 1f, .75f);
+    }
+
+    private IEnumerator addShieldAnimation(){
+        SpriteRenderer sprite = shieldedEffectList.Last().GetComponent<SpriteRenderer>();
+        float opacity = 0f;
+        while (opacity < .75f){
+            opacity += .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        sprite.color = new Color(1f, 1f, 1f, .75f);
+    }
+
     private void statusUpdate(GameObject[] list){
         ///<param> list : list of characters (no enemy for now) </param>
         ///<summary> updates all of the characters' status </summary>
@@ -1036,12 +1087,15 @@ public class Combat : MonoBehaviour
                         switch (s.Item1){
                             case Status.FROZEN :        // (status effect is taken care of in select())
                                 characterScript.getStatusList().Remove(s);
+                                StartCoroutine(removeIce());
                                 break;
 
                             case Status.PROTECTED :     // (status effect is taken care of in statusHandler())
                                 characterScript.getStatusList().Remove(s);
                                 if (s.Item2 > 0){
                                     characterScript.getStatusList().Add((Status.PROTECTED, s.Item2-1)); 
+                                } else {
+                                    StartCoroutine(removeProtectionAnimation(list[i]));
                                 }
                                 break;
 
@@ -1049,6 +1103,8 @@ public class Combat : MonoBehaviour
                                 characterScript.getStatusList().Remove(s);
                                 if (s.Item2 > 0){
                                     characterScript.getStatusList().Add((Status.SHIELDED, s.Item2-1)); // so the status doesn't immediatly disappear
+                                } else {
+                                    StartCoroutine(removeShield());
                                 }
                                 break;
 
@@ -1072,6 +1128,8 @@ public class Combat : MonoBehaviour
                         switch (s.Item1){
                             case Status.FROZEN :
                                 enemyScript.getStatusList().Remove(s);
+                                Destroy(frozenEffectList.ElementAt(0));
+                                frozenEffectList.RemoveAt(0);
                                 break;
                         }
                     }
@@ -1080,6 +1138,41 @@ public class Combat : MonoBehaviour
             }
         }
 
+    }
+
+    private IEnumerator removeIce(){
+        SpriteRenderer sprite = frozenEffectList.ElementAt(0).GetComponent<SpriteRenderer>();
+        float opacity = .75f;
+        while (opacity > 0f){
+            opacity -= .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        Destroy(frozenEffectList.ElementAt(0));
+        frozenEffectList.RemoveAt(0);
+    }
+
+    private IEnumerator removeShield(){
+        SpriteRenderer sprite = shieldedEffectList.ElementAt(0).GetComponent<SpriteRenderer>();
+        float opacity = .75f;
+        while (opacity > 0f){
+            opacity -= .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        Destroy(shieldedEffectList.ElementAt(0));
+        shieldedEffectList.RemoveAt(0);
+    }
+
+    private IEnumerator removeProtectionAnimation(GameObject target){
+        SpriteRenderer sprite = target.GetComponent<SpriteRenderer>();
+        float opacity = .5f;
+        while (opacity < 1f){
+            opacity += .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        sprite.color = Color.white;
     }
 
     public void automaticTargetSelection(){

@@ -1,5 +1,6 @@
 using UnityEngine;
-using System;
+using System; 
+using System.Collections;
 
 public class Protector : Character
 {
@@ -44,6 +45,16 @@ public class Protector : Character
 
         // applies protection
         target.GetComponent<Character>().getStatusList().Add((Status.PROTECTED,1));
+        StartCoroutine(changeOpacityAnimation(target));
+    }
+
+    private IEnumerator changeOpacityAnimation(GameObject target){
+        float opacity = 1f;
+        while (opacity > .5f){
+            opacity -= .1f;
+            target.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
     }
 
     override public void skillLvl2(GameObject [] target){

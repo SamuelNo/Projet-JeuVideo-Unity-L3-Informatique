@@ -1427,6 +1427,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  frozenEffectPrefab1: {fileID: 8038286158399733376, guid: ddc400db19b4d4ca5b2fa2911b0247ac, type: 3}
+  frozenEffectPrefab2: {fileID: 8038286158399733376, guid: 47338a1fc863746b493bf02da32d3000, type: 3}
+  shieldedEffectPrefab: {fileID: 7881360315256951822, guid: 20623bfa0f76a49a3922c45025ff84dd, type: 3}
   victoryClip: {fileID: 8300000, guid: 4df062ebb52988b48908d5a18f81009e, type: 3}
   defeatClip: {fileID: 8300000, guid: e637f19790eb2d34bb3cad69e3e12767, type: 3}
 --- !u!1 &492345765
