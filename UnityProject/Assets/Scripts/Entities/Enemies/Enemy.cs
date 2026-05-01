@@ -40,8 +40,12 @@ abstract public class Enemy : MonoBehaviour
     // Number of turns remaining before the temporary effect is removed
     [SerializeField] protected int buffTurnsRemaining = 0;
     [SerializeField] protected int protectionTurnsRemaining = 0;
+
     public string enemyDescription;
     public string enemyName;
+
+    public GameObject shieldEffectInstance;
+    public GameObject buffEffectInstance;
 
     // ---------- Set and Get ---------- //
 
@@ -339,6 +343,7 @@ abstract public class Enemy : MonoBehaviour
                 IsBuffed = false;
                 // If it's a boss in phase 2 : buffAttack = 1.5
                 BuffAttack = (IsPhase2) ? 1.5f : 1f;
+                RemoveBuffEffect();
             }
         }
 
@@ -348,6 +353,7 @@ abstract public class Enemy : MonoBehaviour
             if (protectionTurnsRemaining == 0)
             {
                 IsProtected = false;
+                RemoveShieldEffect();
             }
         }
     }
@@ -390,6 +396,29 @@ abstract public class Enemy : MonoBehaviour
         ///<summary> Hides the active circle (used to indicate that the character is no longer the current enemy) </summary>
         isCurrentEnemy = false;
         selectionCircle.SetActive(false);
+    }
+
+    public void AddShieldEffect(GameObject prefab)
+    {
+        if (shieldEffectInstance != null) Destroy(shieldEffectInstance);
+        Vector3 shieldEffectOffset = new Vector3(-1f, -0.7f, 0f); 
+        shieldEffectInstance = Instantiate(prefab, transform.position + shieldEffectOffset, Quaternion.identity);
+        shieldEffectInstance.transform.SetParent(transform);
+    }
+    public void RemoveShieldEffect()
+    {
+        if (shieldEffectInstance != null) { Destroy(shieldEffectInstance); shieldEffectInstance = null; }
+    }
+    public void AddBuffEffect(GameObject prefab)
+    {
+        if (buffEffectInstance != null) Destroy(buffEffectInstance);
+        Vector3 buffEffectOffset = new Vector3(-0.3f, -0.5f, 0f);
+        buffEffectInstance = Instantiate(prefab, transform.position + buffEffectOffset, Quaternion.identity);
+        buffEffectInstance.transform.SetParent(transform);
+    }
+    public void RemoveBuffEffect()
+    {
+        if (buffEffectInstance != null) { Destroy(buffEffectInstance); buffEffectInstance = null; }
     }
 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);

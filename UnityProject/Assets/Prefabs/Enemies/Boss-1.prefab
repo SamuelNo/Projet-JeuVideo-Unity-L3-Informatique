@@ -153,12 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameScripts::Boss
   rank: 3
-  maxHP: 170
-  currentHP: 170
+  maxHP: 200
+  currentHP: 200
   maxMP: 100
   currentMP: 100
   teamId: -1
-  basePower: 10
+  basePower: 8
   dodgeProbability: 0.1
   resistance: 2
   attackTypeUsed: 0
@@ -179,6 +179,8 @@ MonoBehaviour:
   enemyDescription: "Boss de rang S \\nR\xE9sistance neutre. \\nAttaque au corps
     \xE0 corps. \\nAttention \xE0 son attaque sp\xE9ciale !"
   enemyName: Hell Titan
+  shieldEffectInstance: {fileID: 0}
+  buffEffectInstance: {fileID: 0}
 --- !u!1 &3382017922349067435
 GameObject:
   m_ObjectHideFlags: 0

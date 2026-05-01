@@ -31,11 +31,12 @@ public class MusicManager : MonoBehaviour {
         }
     }
 
-    public void SwitchTrack(AudioClip newClip) {
+    public void SwitchTrack(AudioClip newClip, bool loop = true) {
         if(audioSource.clip == newClip)
             return;
             
         audioSource.clip = newClip;
+        audioSource.loop = loop;
         audioSource.Play();
     }
 

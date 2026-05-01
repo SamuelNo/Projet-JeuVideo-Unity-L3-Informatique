@@ -260,6 +260,7 @@ public class Combat : MonoBehaviour
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
                     buttonScript.ClearAllBars();
+                    MusicManager.instance.StopMusic();
                     return;
         }
         if (PvP & !wait){ // only enters the loop when a turn is over
@@ -670,7 +671,7 @@ public class Combat : MonoBehaviour
                 // Security check in case the target is dead or has been destroyed since the enemy decided to attack it
                 if (target == null || target.GetComponent<Character>() == null || isDead(target))
                 {
-                    Debug.LogWarning("Target invalide, nouvelle sélection...");
+                    Debug.Log("Target invalide, nouvelle sélection...");
 
                     // Re-choose a target among the living characters
                     target = ai.DecideTarget(enemy, charactersAlive, enemiesAlive);
@@ -809,6 +810,8 @@ public class Combat : MonoBehaviour
 
                             enemy.BoostAttack(target);
 
+                            target.GetComponent<Enemy>().AddBuffEffect(reinforcedEffectPrefab);
+
                             buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a renforcé les attaques de "+target.name+".");
                         }
                         break;
@@ -823,6 +826,8 @@ public class Combat : MonoBehaviour
                                 targetsWithCircle.Add(target);
 
                             enemy.Protection(target);
+
+                            target.GetComponent<Enemy>().AddShieldEffect(shieldedEffectPrefab);
 
                             buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a protégé "+target.name+".");
                         }
@@ -1629,6 +1634,6 @@ public class Combat : MonoBehaviour
         } else {
             clip = defeatClip;
         }
-        MusicManager.instance.SwitchTrack(clip);
+        MusicManager.instance.SwitchTrack(clip, false);
     }
 }

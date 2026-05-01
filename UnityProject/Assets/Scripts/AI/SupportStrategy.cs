@@ -61,6 +61,22 @@ public class SupportStrategy : IEnemyStrategy
                     }
                 }
             }
+
+            // if no DPS or Neutral type is found, target the ally with the highest base power regardless of its type
+            if (target == null)
+            {
+                max = int.MinValue;
+
+                for (int i = 0; i < enemyList.Count; i++)
+                {
+                    Enemy e = enemyList[i].GetComponent<Enemy>();
+                    if (e.BasePower > max)
+                    {
+                        max = e.BasePower;
+                        target = enemyList[i];
+                    }
+                }
+            }
         }
 
         // if the behavior is defensive, the enemy will protect the ally with the lowest HP
