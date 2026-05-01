@@ -60,8 +60,8 @@ public class Combat : MonoBehaviour
     [SerializeField] private AnimationCurve cameraShakeCurve, cameraShakeCurveLvl3;
 
     // effects
-    public GameObject frozenEffectPrefab1, frozenEffectPrefab2, shieldedEffectPrefab;
-    private List<GameObject> frozenEffectList, shieldedEffectList; 
+    public GameObject frozenEffectPrefab1, frozenEffectPrefab2, shieldedEffectPrefab, reinforcedEffectPrefab;
+    private List<GameObject> frozenEffectList, shieldedEffectList, reinforcedEffectList; 
 
     // Audio for end of the fight
     [SerializeField] private AudioClip victoryClip;
@@ -102,6 +102,7 @@ public class Combat : MonoBehaviour
         isBattleOver = false;
         frozenEffectList = new List<GameObject>();
         shieldedEffectList = new List<GameObject>();
+        reinforcedEffectList = new List<GameObject>();
 
         PvP = false;
         PvM = false;
@@ -1004,7 +1005,8 @@ public class Combat : MonoBehaviour
 
         // applies visual effet
         GameObject effect;
-        if (selectedCharacter.GetComponent<Mage>() & selectedSkill == 2){ // adds ice
+            // adds ice
+        if (selectedCharacter.GetComponent<Mage>() & selectedSkill == 2){
             if (selectedTargets[0].GetComponent<Character>() != null){ // if target is a character
                 effect = Instantiate((currentTeam == 1) ? frozenEffectPrefab1 : frozenEffectPrefab2, selectedTargets[0].transform.position, Quaternion.identity);
                 frozenEffectList.Add(effect);
@@ -1016,13 +1018,19 @@ public class Combat : MonoBehaviour
                 StartCoroutine(addIceAnimation());
             }
         }
-        if (selectedCharacter.GetComponent<Protector>() & selectedSkill == 3){ // adds shield
+            // adds shield
+        if (selectedCharacter.GetComponent<Protector>() & selectedSkill == 3){ 
             foreach (GameObject target in selectedTargets){
                 effect = Instantiate(shieldedEffectPrefab, target.transform.position + Vector3.left, Quaternion.identity);
                 shieldedEffectList.Add(effect);
                 StartCoroutine(addShieldAnimation());
             }
-            
+        }
+            // adds reinforcement
+        if ((selectedCharacter.GetComponent<Fighter>() | selectedCharacter.GetComponent<Healer>()) & selectedSkill == 2){ 
+            effect = Instantiate(reinforcedEffectPrefab, selectedTargets[0].transform.position, Quaternion.identity);
+            reinforcedEffectList.Add(effect);
+            StartCoroutine(addReinforcementAnimation());
         }
 
         // applies skill
@@ -1062,6 +1070,17 @@ public class Combat : MonoBehaviour
 
     private IEnumerator addShieldAnimation(){
         SpriteRenderer sprite = shieldedEffectList.Last().GetComponent<SpriteRenderer>();
+        float opacity = 0f;
+        while (opacity < .75f){
+            opacity += .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        sprite.color = new Color(1f, 1f, 1f, .75f);
+    }
+
+    private IEnumerator addReinforcementAnimation(){
+        SpriteRenderer sprite = reinforcedEffectList.Last().GetComponent<SpriteRenderer>();
         float opacity = 0f;
         while (opacity < .75f){
             opacity += .1f;
@@ -1114,6 +1133,7 @@ public class Combat : MonoBehaviour
                                     characterScript.getStatusList().Add((Status.STRENGTHENED, s.Item2-1)); // makes the status last one more turn
                                 } else {
                                     characterScript.setDamageMultiplier(characterScript.getDamageMultiplier()/1.5f); // do not change '2' unless you change it in Healer and Fighter too
+                                    StartCoroutine(removeReinforcement());
                                 }
                                 break;
                         }
@@ -1173,6 +1193,18 @@ public class Combat : MonoBehaviour
             yield return new WaitForSeconds(.01f);
         }
         sprite.color = Color.white;
+    }
+
+    private IEnumerator removeReinforcement(){
+        SpriteRenderer sprite = reinforcedEffectList.ElementAt(0).GetComponent<SpriteRenderer>();
+        float opacity = .75f;
+        while (opacity > 0f){
+            opacity -= .1f;
+            sprite.color = new Color(1f, 1f, 1f, opacity);
+            yield return new WaitForSeconds(.01f);
+        }
+        Destroy(reinforcedEffectList.ElementAt(0));
+        reinforcedEffectList.RemoveAt(0);
     }
 
     public void automaticTargetSelection(){
