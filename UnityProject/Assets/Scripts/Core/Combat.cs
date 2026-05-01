@@ -260,7 +260,6 @@ public class Combat : MonoBehaviour
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
                     buttonScript.ClearAllBars();
-                    MusicManager.instance.StopMusic();
                     return;
         }
         if (PvP & !wait){ // only enters the loop when a turn is over

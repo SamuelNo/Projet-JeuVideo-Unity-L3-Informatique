@@ -177,8 +177,10 @@ MonoBehaviour:
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
   enemyDescription: "Monstre de rang B \\nR\xE9sistant aux attaques \xE0 distance.
-    \\nInflige des d\xE9g\xE2ts \xE0 distance."
+    \\nAttaque \xE0 distance et \xE9l\xE9mentaire."
   enemyName: Scary Tree
+  shieldEffectInstance: {fileID: 0}
+  buffEffectInstance: {fileID: 0}
 --- !u!1 &6232505616473213972
 GameObject:
   m_ObjectHideFlags: 0
