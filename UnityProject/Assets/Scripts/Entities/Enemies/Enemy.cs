@@ -44,6 +44,7 @@ abstract public class Enemy : MonoBehaviour
     public string enemyDescription;
     public string enemyName;
 
+    // Visual effects
     public GameObject shieldEffectInstance;
     public GameObject buffEffectInstance;
 
@@ -79,19 +80,23 @@ abstract public class Enemy : MonoBehaviour
     public int CostHeal { get => costHeal; set => costHeal = value; }
     public int CostBoost { get => costBoost; set => costBoost = value; }
     public int CostProtection { get => costProtection; set => costProtection = value; }
+
     // ---------- Methods ---------- //
     void Update()
     {
-    if (textInfoPV != null){    
-        Vector3 worldPos = transform.position + Vector3.up * offset.y; 
+        ///<summary> Updates the position of the textInfoPV GameObject to follow the enemy on the screen </summary>
+        if (textInfoPV != null){    
+            Vector3 worldPos = transform.position + Vector3.up * offset.y; 
         
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
     
-        textInfoPV.transform.position = screenPos;
-    }
+            textInfoPV.transform.position = screenPos;
+        }
     }
     protected virtual void Awake() 
-    {   this.gameObject.name = enemyName; // default name, can be changed in inspector
+    {   
+        ///<summary> Initializes the enemy's attributes and gets references to necessary components </summary>
+        this.gameObject.name = enemyName; // default name, can be changed in inspector
 
         buttonScript = UnityEngine.Object.FindAnyObjectByType<BattleUIController>(FindObjectsInactive.Exclude);
         if (selectionCircle != null) {
@@ -143,6 +148,7 @@ abstract public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        ///<summary> Handles the death of the enemy : plays death animation, disables collider, removes from scene after a short delay </summary>
         currentHP = 0;
 
         if (GetComponent<Collider2D>() != null) 
@@ -164,15 +170,17 @@ abstract public class Enemy : MonoBehaviour
     }
     private IEnumerator ClearTextAfterDelay(float delay, GameObject textObject) 
     {
+        ///<summary> Clears the text of the specified GameObject after a delay </summary>
         yield return new WaitForSeconds(delay);
         setTextInfoPV(""); // Clear the text after the delay 
     }
     public void UpdateBars() {
-    if (statBar != null) {
-        // Remplace par tes vrais noms de variables (ex: pv, pvMax...)
-        statBar.SetValues(currentHP, maxHP, currentMP, maxMP);
+        ///<summary> Updates the HP and MP bars of the enemy </summary>
+        if (statBar != null) {
+            statBar.SetValues(currentHP, maxHP, currentMP, maxMP);
+        }
     }
-}
+
     public float GetRankMultiplier()
     {
         ///<summary> A multiplier that will be applied to the base attack depending on the enemy's rank </summary>
@@ -193,6 +201,7 @@ abstract public class Enemy : MonoBehaviour
 
     public int GetMPCost(int baseCost)
     {
+        ///<summary> Returns the MP cost of a skill after applying the rank multiplier</summary>
         float multiplier = 1.0f;
 
         if (IsPhase2)
@@ -201,6 +210,7 @@ abstract public class Enemy : MonoBehaviour
         }
         return (int)(baseCost * GetRankMultiplier() * multiplier);
     }
+
     public void ReceiveDamage(int n){
         ///<param> n : amount of damage to be received by the enemy </param>
         ///<summary> Tries to dodge the attack, then reduces HP by n if dodge fails </summary>
@@ -335,6 +345,7 @@ abstract public class Enemy : MonoBehaviour
 
     public void EndTurnConsumeTemporaryEffects()
     {
+        /// <summary> Reduces the number of turns remaining for temporary effects and removes them if their duration is over </summary>
         if (buffTurnsRemaining > 0)
         {
             buffTurnsRemaining--;
@@ -360,6 +371,7 @@ abstract public class Enemy : MonoBehaviour
 
     public void UseMp(int amount)
     {
+        ///<summary> Tries to use the specified amount of MP, returns false if not enough MP </summary>
         if (CurrentMP < amount)
         {
             Debug.Log(gameObject.name + " : pas assez de MP.");
@@ -400,6 +412,7 @@ abstract public class Enemy : MonoBehaviour
 
     public void AddShieldEffect(GameObject prefab)
     {
+        ///<summary> Adds a shield effect to the character</summary>
         if (shieldEffectInstance != null) Destroy(shieldEffectInstance);
         Vector3 shieldEffectOffset = new Vector3(-1f, -0.7f, 0f); 
         shieldEffectInstance = Instantiate(prefab, transform.position + shieldEffectOffset, Quaternion.identity);
@@ -407,10 +420,16 @@ abstract public class Enemy : MonoBehaviour
     }
     public void RemoveShieldEffect()
     {
-        if (shieldEffectInstance != null) { Destroy(shieldEffectInstance); shieldEffectInstance = null; }
+        ///<summary> Removes the shield effect from the character</summary>
+        if (shieldEffectInstance != null) 
+        { 
+            Destroy(shieldEffectInstance); 
+            shieldEffectInstance = null; 
+        }
     }
     public void AddBuffEffect(GameObject prefab)
     {
+        ///<summary> Adds a buff effect to the character</summary >
         if (buffEffectInstance != null) Destroy(buffEffectInstance);
         Vector3 buffEffectOffset = new Vector3(-0.3f, -0.5f, 0f);
         buffEffectInstance = Instantiate(prefab, transform.position + buffEffectOffset, Quaternion.identity);
@@ -418,7 +437,12 @@ abstract public class Enemy : MonoBehaviour
     }
     public void RemoveBuffEffect()
     {
-        if (buffEffectInstance != null) { Destroy(buffEffectInstance); buffEffectInstance = null; }
+        ///<summary> Removes the buff effect from the character</summary>
+        if (buffEffectInstance != null) 
+        { 
+            Destroy(buffEffectInstance); 
+            buffEffectInstance = null; 
+        }
     }
 
     abstract public void ReceiveDamage(int attack, AttackType attackType, bool elemental);
