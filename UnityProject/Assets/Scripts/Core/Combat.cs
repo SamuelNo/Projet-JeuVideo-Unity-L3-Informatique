@@ -144,19 +144,36 @@ public class Combat : MonoBehaviour
                 GameObject m1 = SpawnUnit(0, allMapsSpawns[selectedStage].points[2], 2, -1);
                 GameObject m2 = SpawnUnit(1, allMapsSpawns[selectedStage].points[3], 3, -1);
                 enemyList = new GameObject[] { m1, m2 };
+                GameObject[] currentEnemies = { m1, m2 };
+                float newOffset = 2.5f;
+
+                foreach(GameObject m in currentEnemies) {
+                    Enemy e = m.GetComponent<Enemy>();
+                    if(e != null) {
+                        e.statBar.offset = new Vector3(0, newOffset, 0);
+                        e.offset = new Vector3(0, e.statBar.offset.y + 0.4f, 0);
+                    }
+                }
+                enemyList = currentEnemies;
             }
             if(selectedStage == 2){
                 GameObject m1 = SpawnUnit(3, allMapsSpawns[selectedStage].points[2], 2, -1);
                 GameObject m2 = SpawnUnit(2, allMapsSpawns[selectedStage].points[3], 3, -1);
                 GameObject m3 = SpawnUnit(4, allMapsSpawns[selectedStage].points[4], 4, -1);
                 GameObject[] currentEnemies = { m1, m2, m3 };
-                float newOffset = 1.5f;
+                float newOffset = 2.75f;
 
                 foreach(GameObject m in currentEnemies) {
                     Enemy e = m.GetComponent<Enemy>();
                     if(e != null) {
-                        e.statBar.offset = new Vector3(0, newOffset, 0);
-                        e.offset = new Vector3(0, newOffset+0.5f, 0);
+                        if(m == m2)
+                        {
+                            e.statBar.offset = new Vector3(0, 1f, 0);
+                            e.offset = new Vector3(0, e.statBar.offset.y + 0.4f, 0);
+                        } else {
+                            e.statBar.offset = new Vector3(0, newOffset, 0);
+                            e.offset = new Vector3(0, e.statBar.offset.y + 0.4f, 0);
+                        }
                     }
                 }
                 enemyList = currentEnemies;
@@ -260,7 +277,6 @@ public class Combat : MonoBehaviour
                     currentPhase = BattlePhase.WAITING;
                     buttonScript.ButtonAccess();
                     buttonScript.ClearAllBars();
-                    MusicManager.instance.StopMusic();
                     return;
         }
         if (PvP & !wait){ // only enters the loop when a turn is over
@@ -788,14 +804,24 @@ public class Combat : MonoBehaviour
                         // heal the ally with the lowest HP (including themselves)
                         if (target != null)
                         {
-                            // shows the target circle 
-                            target.GetComponent<Enemy>().ShowTargetCircle();
-                            if (!targetsWithCircle.Contains(target))
-                                targetsWithCircle.Add(target);
+                            Enemy targetEnemy = target.GetComponent<Enemy>();
+                            // only heal if the target exists and is not at full HP
+                            if (targetEnemy != null && targetEnemy.CurrentHP < targetEnemy.MaxHP)
+                            {
+                                // shows the target circle 
+                                targetEnemy.ShowTargetCircle();
+                                if (!targetsWithCircle.Contains(target))
+                                    targetsWithCircle.Add(target);
 
-                            enemy.Heal(target);
+                                enemy.Heal(target);
 
-                            buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a soigné "+target.name+".");
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a soigné "+target.name+".");
+                            }
+                            else
+                            {
+                                // target already full health — skip heal
+                                buttonScript.setInfoText("L'ennemi "+enemy.enemyName+" a tenté de soigner "+target.name+" mais il est déjà à pleine vie.");
+                            }
                         }
                         break;
 

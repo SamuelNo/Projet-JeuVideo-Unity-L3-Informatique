@@ -177,7 +177,7 @@ MonoBehaviour:
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
   enemyDescription: "Monstre de rang A \\nR\xE9sistant au corps \xE0 corps. \\nAttaque
-    \xE0 distance."
+    \xE0 distance et \xE9l\xE9mentaire."
   enemyName: Fireball
   shieldEffectInstance: {fileID: 0}
   buffEffectInstance: {fileID: 0}

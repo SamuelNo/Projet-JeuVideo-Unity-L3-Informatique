@@ -176,8 +176,8 @@ MonoBehaviour:
   isBuffed: 0
   buffTurnsRemaining: 0
   protectionTurnsRemaining: 0
-  enemyDescription: "Monstre de rang A \\nR\xE9sistant au corps \xE0 corps. \\nAttaque
-    \xE0 distance."
+  enemyDescription: "Monstre de rang B \\nR\xE9sistant au corps \xE0 corps. \\nAttaque
+    \xE0 distance et \xE9l\xE9mentaire."
   enemyName: Fire Spirit
   shieldEffectInstance: {fileID: 0}
   buffEffectInstance: {fileID: 0}

@@ -7,7 +7,7 @@ public class ButtonClickSound : MonoBehaviour
     [Tooltip("Glisse ton fichier son ici")]
     public AudioClip soundClip;
 
-    public static float globalVolume = 0.1f;
+    public static float globalVolume = 1f;
 
     void Start()
     {
