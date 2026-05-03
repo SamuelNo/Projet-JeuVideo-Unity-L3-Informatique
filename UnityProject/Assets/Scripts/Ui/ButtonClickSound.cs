@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// Plays a sound effect when a UI button is clicked, providing auditory feedback to the player.
+/// </summary>
 [RequireComponent(typeof(Button))]
 public class ButtonClickSound : MonoBehaviour
 {
-    [Tooltip("Glisse ton fichier son ici")]
+    [Tooltip("Glissez un son fichier son ici")]
     public AudioClip soundClip;
 
     public static float globalVolume = 1f;

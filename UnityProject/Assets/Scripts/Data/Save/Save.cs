@@ -45,6 +45,7 @@ public class Save : MonoBehaviour
     //  ----------  Methods  ---------- 
 
     public void loadFile() {
+        ///<summary> loads data from the file and updates the variables </summary>
         string rawData = read().Trim(); 
         if (string.IsNullOrEmpty(rawData)) return;
 

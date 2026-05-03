@@ -243,11 +243,6 @@ public class NeutralStrategy : IEnemyStrategy
             scoreProtection = int.MinValue;
         }
 
-        /*Debug.Log("ScoreTargeted = " + scoreTargeted);
-        Debug.Log("ScoreAOE = " + scoreAOE);
-        Debug.Log("ScoreHeal = " + scoreHeal);
-        Debug.Log("ScoreProtection = " + scoreProtection)*/
-
         if (scoreHeal >= scoreTargeted && scoreHeal >= scoreAOE && scoreHeal >= scoreProtection)
         {
             return EnemyBehaviour.Heal;

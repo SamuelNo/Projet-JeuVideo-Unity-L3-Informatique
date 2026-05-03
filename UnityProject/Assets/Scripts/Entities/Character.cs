@@ -136,6 +136,7 @@ abstract public class Character : MonoBehaviour
     }
     protected void Die()
     {
+        ///<summary> Handles the character's death by disabling its collider, playing a death animation, and eventually destroying the game object. </summary>
         currentHP = 0;
 
         if (GetComponent<Collider2D>() != null) 
@@ -158,6 +159,7 @@ abstract public class Character : MonoBehaviour
         setTextInfoPV(""); // Clear the text after the delay 
     }
     public void UpdateBars() {
+        ///<summary> Updates the health and mana bars above the character </summary>
     if (statBar != null) {
         // Remplace par tes vrais noms de variables (ex: pv, pvMax...)
         statBar.SetValues(currentHP, maxHP, currentMP, maxMP);

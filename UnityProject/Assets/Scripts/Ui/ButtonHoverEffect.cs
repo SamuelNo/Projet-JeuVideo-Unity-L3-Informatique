@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+/// <summary>
+/// Adds a hover and click effect to UI buttons by scaling them up on hover and down on click, providing visual feedback to the player.
+/// </summary>
 public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Vector3 tailleInitiale;

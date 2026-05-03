@@ -1,5 +1,7 @@
 using UnityEngine;
-
+/// <summary>
+/// Manages the custom cursor across scenes, ensuring it persists and is set correctly on game start.
+/// </summary>
 public class CursorManager : MonoBehaviour
 {
     public Texture2D cursorTexture;

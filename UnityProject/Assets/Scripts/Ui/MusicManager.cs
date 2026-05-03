@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// Manages background music across scenes, allowing for track switching and mute control.
+/// </summary>
 public class MusicManager : MonoBehaviour {
     public static MusicManager instance;
     private AudioSource audioSource;

@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+/// <summary>
+/// Handles button interactions in the main menu and character selection screens, communicating with the Principal script to update game state based on player choices.
+/// </summary>
 public class MenuButtons : MonoBehaviour
 {
     // ---------- Attributes ---------- //
 
     // script access
-    //private GameObject scriptsGameObject;
+
     private Principal principalScript;
 
     // player selection data
@@ -16,8 +18,6 @@ public class MenuButtons : MonoBehaviour
     // ---------- Initialisation ---------- //
 
     void Awake(){
-        //scriptsGameObject = GameObject.Find("Script"); // to access scripts (make sure to have a gameobject named "Script")
-        //principalScript = scriptsGameObject.GetComponent<Principal>(); // to access Principal script
         principalScript = Object.FindAnyObjectByType<Principal>(FindObjectsInactive.Exclude);
     }
 
@@ -99,17 +99,6 @@ public class MenuButtons : MonoBehaviour
     }
 
     // ----- PvM buttons ---------------
-    /*
-    public void stageButton(int stage){
-        ///<param> stage : the number refering to the stage </param> 
-        ///<summary> saves the stage selected by the player and moves the character towards said stage </summary>
-
-        principalScript.setSelectedStage(stage);
-        Debug.Log("Selected stage : " + principalScript.getSelectedStage());
-
-        StartCoroutine(principalScript.moveCharacter());
-    }
-    */
 
     public void choseStageButton(){
         ///<summary> moves on to the character selection </summary>

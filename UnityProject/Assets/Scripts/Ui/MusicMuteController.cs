@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI; 
-
+/// <summary>
+/// Controls the mute state of the music and updates the button's visual accordingly.
+/// </summary>
 public class MusicMuteController : MonoBehaviour
 {
     [Tooltip("Glisse ici ton bouton (pour modifier son composant Image)")]

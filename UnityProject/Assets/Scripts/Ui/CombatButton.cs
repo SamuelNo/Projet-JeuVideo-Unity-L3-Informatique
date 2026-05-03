@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI; 
-
+/// <summary>
+/// Manages the state of combat buttons in the battle UI, allowing them to be shown, blocked, or hidden based on the current game state.
+/// </summary>
 
 public class CombatButton : MonoBehaviour
 {
@@ -13,9 +15,9 @@ public class CombatButton : MonoBehaviour
         unityButton = GetComponent<Button>();
     }
 
-    // Update the button visibility and interactability from the given state.
     public void SetState(ButtonState newState)
     {
+        ///<summary> updates the button's state to the given new state, changing its visibility and interactability accordingly </summary>
         currentState = newState;
     
     

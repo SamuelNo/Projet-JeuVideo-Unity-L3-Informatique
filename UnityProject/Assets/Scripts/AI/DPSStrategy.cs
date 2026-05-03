@@ -326,11 +326,6 @@ public class DPSStrategy : IEnemyStrategy
 			scoreSpecial -= 50;
         }
 
-        /* Verification
-		Debug.Log("ScoreTargeted = " + scoreTargeted);
-		Debug.Log("ScoreAOE = " + scoreAOE);
-		Debug.Log("ScoreSpecial = " + scoreSpecial);*/
-
 
         // Priotize the attack with the highest score depending on the context
         if (scoreSpecial >= scoreTargeted && scoreSpecial >= scoreAOE)

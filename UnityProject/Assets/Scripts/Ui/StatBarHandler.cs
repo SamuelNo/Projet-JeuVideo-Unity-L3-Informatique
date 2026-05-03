@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// Manages the health and mana bars above characters during combat.
+/// </summary>
 public class StatBarHandler : MonoBehaviour 
 {
     public Image healthFill; 

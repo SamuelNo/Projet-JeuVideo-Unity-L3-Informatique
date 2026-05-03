@@ -4,7 +4,9 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEditor;
-
+/// <summary>
+/// Controls the battle UI, updating button states, displaying information, and communicating with the Combat script to reflect the current state of the battle and handle player interactions.
+/// </summary>
 
 public class BattleUIController : MonoBehaviour
 {
@@ -94,16 +96,19 @@ public class BattleUIController : MonoBehaviour
     }
     public void DisplayEndGame(string message) 
     {
+        ///<summary> displays the end game panel with the given message </summary>
         battleResultsPanel.SetActive(true);
         setResultText(message);
     } 
 
     public void GoToMenu() 
     {
+        ///<summary> returns to the main menu by loading the menu scene </summary>
         SceneManager.LoadScene("Menu_Scene");
     }
 
     public StatBarHandler CreateStatBar(Transform unitTransform) {
+        ///<summary> creates a health/mana bar above the given unit and returns its handler </summary>
         GameObject barGo = Instantiate(statBarPrefab, uiCanvasTransform);
         StatBarHandler handler = barGo.GetComponent<StatBarHandler>();
         handler.target = unitTransform;
@@ -112,6 +117,7 @@ public class BattleUIController : MonoBehaviour
     }
 
     public void ClearAllBars() {
+        ///<summary> clears all active stat bars from the UI </summary>
         foreach (var bar in activeBars) {
             if (bar != null) Destroy(bar.gameObject);
         }
@@ -246,6 +252,7 @@ public class BattleUIController : MonoBehaviour
     }
     public void OnClickYesEndGameChoice()
     {
+        ///<summary> handles the player's choice to end the game and return to the main menu </summary>
         Debug.Log("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
         setInstructionText("Vous avez cliqué sur 'Fin de la partie'. Retour au menu.");
         infoTextObject.GetComponent<UnityEngine.Component>().SendMessage("set_text","Fin du combat.");
@@ -254,6 +261,7 @@ public class BattleUIController : MonoBehaviour
     }
     public void OnClickNoEndGameChoice()
     {
+        ///<summary> handles the player's choice to continue playing after the end of the fight (for example, to watch a PvP fight continue after one player has won) </summary>
         Debug.Log("La partie continue");
         setInstructionText("La partie continue");
         choicePanel.SetActive(false);
@@ -263,6 +271,7 @@ public class BattleUIController : MonoBehaviour
         ButtonAccess();
     }
     public void ShowSkillTooltip(int index) {
+        ///<summary> shows the tooltip with the name and description of the skill corresponding to the given index (0 for basic attack, 1 for lvl 1 skill, etc.) </summary>
         GameObject selected = combatScript.getSelectedCharacter();
         if (selected == null) return;
 
@@ -277,12 +286,14 @@ public class BattleUIController : MonoBehaviour
     }
 
     public void HideSkillTooltip() {
+        ///<summary> hides the skill tooltip </summary>
         if(skillTooltip != null)
             skillTooltip.SetActive(false);
     }
     public void SetSkillUI(bool visible) {
-    if (skillTooltip != null) {
-        skillTooltip.SetActive(visible);
+        ///<summary> shows or hides the skill tooltip based on the given visibility parameter </summary>
+        if (skillTooltip != null) {
+            skillTooltip.SetActive(visible);
+        }
     }
-}
 }

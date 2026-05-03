@@ -1,26 +1,35 @@
 using UnityEngine;
 
+/// <summary>
+/// Represents enemy lineup and spawn positions for a battle stage.
+/// </summary>
 public class Stage
 {
-    // ---------- Attributes ---------- //
+    
 
     private GameObject[] enemyList;
     private Vector3[] positionList;
 
-    // ---------- Constructors ---------- //
+    
 
+    /// <summary>
+    /// Builds a stage from enemy references and their spawn positions.
+    /// </summary>
     public Stage(GameObject[] enemyList, Vector3[] positionList){
         this.enemyList = enemyList;
         this.positionList = positionList;
     }
 
+    /// <summary>
+    /// Builds an empty stage with no enemies and no positions.
+    /// </summary>
     public Stage(){
         this.enemyList = new GameObject[0];
         this.positionList = new Vector3[0];
     }
 
     
-    // ---------- Set and Get ---------- //
+    
 
     public void setEnemyList(GameObject[] list){ enemyList = list; }
     public void setPositionList(Vector3[] list){ positionList = list; }
@@ -29,52 +38,56 @@ public class Stage
     public Vector3[] getPositionList(){ return positionList; }
 
 
-    // ---------- Methods ---------- //
+    
 
+    /// <summary>
+    /// Resets and shows the stage entities at battle start.
+    /// </summary>
     public void start(GameObject[] characters){
-        ///<param> character : the characters chosen by the player </param>
-        ///<summary> puts all element of the stage in place and displays them </summary>
         reset(characters);
         show(characters);
     }
 
+    /// <summary>
+    /// Hides stage enemies and player characters.
+    /// </summary>
     public void hide(GameObject[] characters){
-        ///<param> character : the characters chosen by the player </param>
-        ///<summary> hide all elements of the stage </summary>
         
-        // hides the player's characters
+        
         characters[0].gameObject.SetActive(false);
         characters[1].gameObject.SetActive(false);
 
-        // hides the enemies
+        
         for (int i=0; i<enemyList.Length; i++){
             enemyList[i].gameObject.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// Restores enemies to their configured spawn positions.
+    /// </summary>
     private void reset(GameObject[] characters){
-        ///<param> character : the characters chosen by the player </param>
-        ///<summary> puts all elements of the stage in place </summary>
         
-        // places the player's characters
-        // characters[0].transform.position = 
-        // characters[1].transform.position = 
+        
+        
+        
 
-        // places the enemies
+        
         for (int i=0; i<enemyList.Length; i++){
             enemyList[i].transform.position = positionList[i];
         }
     }
 
+    /// <summary>
+    /// Shows stage enemies and player characters.
+    /// </summary>
     private void show(GameObject[] characters){
-        ///<param> character : the characters chosen by the player </param>
-        ///<summary> displays all elements of the stage </summary>
         
-        // shows the player's characters
+        
         characters[0].gameObject.SetActive(true);
         characters[1].gameObject.SetActive(true);
 
-        // shows the enemies
+        
         for (int i=0; i<enemyList.Length; i++){
             enemyList[i].gameObject.SetActive(true);
         }

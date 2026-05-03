@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+/// <summary>
+/// Displays skill information when hovering over skill buttons in the battle UI.
+/// </summary>
 
 public class SkillHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
